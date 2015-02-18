@@ -1,8 +1,12 @@
 <div class="column">  
     <div class="col-md-8">
-      <label class="line">Clan</label><input class="line" name="" type="text"/><label class="line">Experience Points</label><input class="line" name="" type="text"/><br/>
-      <label class="line">School</label><input class="line" name="" type="text"/><label class="line">Insight Rank</label><input class="line" name="" type="text"/><span>(Rings x 10 + skills)</span><br/>
+      <label class="line">Clan</label><input class="line" name="" type="text"/><label class="line">Experience Points</label><input class="line" name="experience_points" type="text" ng-model="character.experience_points"/>/<input class="line" name="experience_points" type="text" ng-model="character.experience_points_earned"><br/>
+      <label class="line">School</label><input class="line" name="" type="text"/><label class="line">Insight Rank</label><input class="line" name="insight_rank" type="text" ng-model="character.insight_rank"/><span>(Rings x 10 + skills)</span><br/>
      
+      <header>
+          <p>{{ character }}</p>
+      </header>
+
       <table class="rings-table">
         <tr>
             <th colspan="4" class="center" >EARTH</th>
@@ -11,23 +15,23 @@
         </tr>
         <tr>
             <td colspan="1" class="left">Stamina</td>
-            <td colspan="1"><input name="stamina" type="number" class="ring_input"></td>
+            <td colspan="1"><input name="stamina" type="number" min="0" class="ring_input" ng-model="character.stamina" ng-change="updateEarth()"></td>
             <td colspan="7"></td>
-            <td colspan="1"><input name="reflexes" type="number" class="ring_input"></td>
+            <td colspan="1"><input name="reflexes" type="number" min="0" class="ring_input" ng-model="character.reflexes" ng-change="updateAir()"></td>
             <td colspan="1" class="right">Reflexes</td>
         </tr>
         <tr>
             <td colspan="1" class="left">Willpower</td>
-            <td colspan="1"><input name="willpower" type="number" class="ring_input"></td>
+            <td colspan="1"><input name="willpower" type="number" min="0" class="ring_input" ng-model="character.willpower" ng-change="updateEarth()"></td>
             <td colspan="7"></td>
-            <td colspan="1"><input name="awareness" type="number" class="ring_input"></td>
+            <td colspan="1"><input name="awareness" type="number" min="0" class="ring_input" ng-model="character.awareness" ng-change="updateAir()"></td>
             <td colspan="1" class="right">Awareness<!--span class="x-small">(Empathy)</span--></td>
         </tr>
         <tr>
             <td colspan="3"></td>
-            <td colspan="1"><input name="earth_ring" type="number" class="ring_input"></td>
+            <td colspan="1"><input name="earth_ring" type="number" min="0" class="ring_input" ng-model="character.earth" ng-change="updateEarthRing(earth_ring)"></td>
             <td colspan="3"></td>
-            <td colspan="1"><input name="air_ring" type="number" class="ring_input"></td>
+            <td colspan="1"><input name="air_ring" type="number" min="0" class="ring_input" ng-model="character.air" ng-change="updateAirRing(air_ring)"></td>
             <td colspan="3"></td>
         </tr>
         <tr>
@@ -35,28 +39,28 @@
         </tr>
         <tr>
             <td colspan="3"></td>
-            <td colspan="1"><input name="water_ring" type="number" class="ring_input"></td>
+            <td colspan="1"><input name="water_ring" type="number" min="0" class="ring_input" ng-model="character.water" ng-change="updateWaterRing()"></td>
             <td colspan="3"></td>
-            <td colspan="1"><input name="fire_ring" type="number" class="ring_input"></td>
+            <td colspan="1"><input name="fire_ring" type="number" min="0" class="ring_input" ng-model="character.fire" ng-change="updateFileRing()"></td>
             <td colspan="3"></td>
         </tr>
         <tr>
             <td colspan="1" class="left">Strength</td>
-            <td colspan="1"><input name="strength" type="number" class="ring_input"></td>
+            <td colspan="1"><input name="strength" type="number" min="0" class="ring_input" ng-model="character.strength" ng-change="updateWater()"></td>
             <td colspan="7"></td>
-            <td colspan="1"><input name="agility" type="number" class="ring_input"></td>
+            <td colspan="1"><input name="agility" type="number" min="0" class="ring_input" ng-model="character.agility" ng-change="updateFire()"></td>
             <td colspan="1" class="right">Agility</td>
         </tr>
         <tr>
             <td colspan="1">Perception</td>
-            <td colspan="1"><input name="perception" type="number" class="ring_input"></td>
+            <td colspan="1"><input name="perception" type="number" min="0" class="ring_input" ng-model="character.perception" ng-change="updateWater()"></td>
             <td colspan="7"></td>
-            <td colspan="1"><input name="intelligence" type="number" class="ring_input"></td>
+            <td colspan="1"><input name="intelligence" type="number" min="0" class="ring_input" ng-model="character.intelligence" ng-change="updateFire()"></td>
             <td colspan="1" class="right">Inteligence</td>
         </tr>
         <tr>
             <th colspan="4" class="center">WATER</th>
-            <td colspan="3"><input name="void_ring" type="number" class="ring_input"></td>
+            <td colspan="3"><input name="void_ring" type="number" min="0" class="ring_input" ng-model="character.void" ng-change="updateVoid()"></td>
             <th colspan="4" class="center">FIRE</th>
         </tr>
         <tr>
@@ -134,7 +138,7 @@
    <aside class="col-md-4">
      <section class="bushido-stats">
        <h4>HONOR</h4>
-       <input type="number" name="honor-rank" class="stats-rank"/>
+       <input type="number" name="honor-rank" min="0" class="stats-rank" ng-model="character.honor"/>
        <input type="checkbox" name="honor"/>
        <input type="checkbox" name="honor"/>
        <input type="checkbox" name="honor"/>
@@ -146,7 +150,7 @@
        <input type="checkbox" name="honor"/>
        <input type="checkbox" name="honor"/>
        <h4>GLORY</h4>
-       <input type="number" name="glory-rank" class="stats-rank"/>
+       <input type="number" name="glory-rank" min="0" class="stats-rank" ng-model="character.glory"/>
        <input type="checkbox" name="glory"/>
        <input type="checkbox" name="glory"/>
        <input type="checkbox" name="glory"/>
@@ -158,7 +162,7 @@
        <input type="checkbox" name="glory"/>
        <input type="checkbox" name="glory"/>
        <h4>STATUS</h4>
-       <input type="number" name="status-rank" class="stats-rank"/>
+       <input type="number" name="status-rank" min="0" class="stats-rank" ng-model="character.status"/>
        <input type="checkbox" name="status"/>
        <input type="checkbox" name="status"/>
        <input type="checkbox" name="status"/>
@@ -170,7 +174,7 @@
        <input type="checkbox" name="status"/>
        <input type="checkbox" name="status"/>
        <h4>SHADOWLAND TAINT</h4>
-       <input type="number" name="taint-rank" class="stats-rank"/>
+       <input type="number" name="taint-rank" min="0" class="stats-rank" ng-model="character.taint"/>
        <input type="checkbox" name="taint"/>
        <input type="checkbox" name="taint"/>
        <input type="checkbox" name="taint"/>
