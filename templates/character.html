@@ -1,0 +1,263 @@
+<div class="column">  
+    <div class="col-md-8">
+      <label class="line">Clan</label><input class="line" name="" type="text"/><label class="line">Experience Points</label><input class="line" name="" type="text"/><br/>
+      <label class="line">School</label><input class="line" name="" type="text"/><label class="line">Insight Rank</label><input class="line" name="" type="text"/><span>(Rings x 10 + skills)</span><br/>
+     
+      <table class="rings-table">
+        <tr>
+            <th colspan="4" class="center" >EARTH</th>
+            <td colspan="3">&nbsp;</td>
+            <th colspan="4" class="center" >AIR</th>
+        </tr>
+        <tr>
+            <td colspan="1" class="left">Stamina</td>
+            <td colspan="1"><input name="stamina" type="number" class="ring_input"></td>
+            <td colspan="7"></td>
+            <td colspan="1"><input name="reflexes" type="number" class="ring_input"></td>
+            <td colspan="1" class="right">Reflexes</td>
+        </tr>
+        <tr>
+            <td colspan="1" class="left">Willpower</td>
+            <td colspan="1"><input name="willpower" type="number" class="ring_input"></td>
+            <td colspan="7"></td>
+            <td colspan="1"><input name="awareness" type="number" class="ring_input"></td>
+            <td colspan="1" class="right">Awareness<!--span class="x-small">(Empathy)</span--></td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="1"><input name="earth_ring" type="number" class="ring_input"></td>
+            <td colspan="3"></td>
+            <td colspan="1"><input name="air_ring" type="number" class="ring_input"></td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td colspan="11">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="1"><input name="water_ring" type="number" class="ring_input"></td>
+            <td colspan="3"></td>
+            <td colspan="1"><input name="fire_ring" type="number" class="ring_input"></td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td colspan="1" class="left">Strength</td>
+            <td colspan="1"><input name="strength" type="number" class="ring_input"></td>
+            <td colspan="7"></td>
+            <td colspan="1"><input name="agility" type="number" class="ring_input"></td>
+            <td colspan="1" class="right">Agility</td>
+        </tr>
+        <tr>
+            <td colspan="1">Perception</td>
+            <td colspan="1"><input name="perception" type="number" class="ring_input"></td>
+            <td colspan="7"></td>
+            <td colspan="1"><input name="intelligence" type="number" class="ring_input"></td>
+            <td colspan="1" class="right">Inteligence</td>
+        </tr>
+        <tr>
+            <th colspan="4" class="center">WATER</th>
+            <td colspan="3"><input name="void_ring" type="number" class="ring_input"></td>
+            <th colspan="4" class="center">FIRE</th>
+        </tr>
+        <tr>
+            <td colspan="4"></td>
+            <th colspan="3" class="center" >VOID</th>
+            <td colspan="4"></td>
+        </tr>
+        <tr>
+            <td class="center" colspan="11">
+                <input type="checkbox" name="void_box" class="void_box"/>
+                <input type="checkbox" name="void_box" class="void_box"/>
+                <input type="checkbox" name="void_box" class="void_box"/>
+                <input type="checkbox" name="void_box" class="void_box"/>
+                <input type="checkbox" name="void_box" class="void_box"/>
+                <input type="checkbox" name="void_box" class="void_box"/>
+                <input type="checkbox" name="void_box" class="void_box"/>
+                <input type="checkbox" name="void_box" class="void_box"/>
+                <input type="checkbox" name="void_box" class="void_box"/>
+            </td>
+        </tr>
+
+      </table>
+      <div class="col-md-8">
+        <table class="skills-table">
+          <tr>
+            <th>Skill Name</th><th>Rank</th><th>Trait</th><th>Roll</th><th>Emphasis & Mastery Abilities</th>
+          </tr>
+          <tr>
+              <td><input name="skill_name" type="text"/></td><td><input name="skill_rank" type="number"/></td><td><input name="skill_trait" type="text"/></td><td><input name="skill_roll" type="text"/></td><td><input name="emphasis-mastery" type="text"/></td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-8">
+        <table class="weapons-table">
+          <tr>
+            <th colspan="2">Weapon One</th><th colspan="2">Weapon Two</th>
+            
+            <th colspan="4" class="border-wide-left">Arrows</th>
+          </tr>
+          <tr>
+              <th class="left">Type</th><td><input name="weapon_one_type" type="text"/></td>
+              <th class="left">Type</th><td><input name="weapon_two_type" type="text"/></td>
+
+              <th class="left border-wide-left">Type</th><th class="left">Damage</th><th class="left">Quantity</th>
+          </tr>
+          <tr>
+              <th class="left">Attack Roll</th><td><input name="weapon_one_attack_roll" type="text"/></td>
+              <th class="left">Attack Roll</th><td><input name="weapon_two_attack_roll" type="text"/></td>
+              
+              <td class="border-wide-left"><input name="arrows_one_type" type="text"/></td><td><input name="arrows_one_damage" type="text"/></td><td><input name="arrows_one_quant" type="number"/></td>
+          </tr>
+          <tr>
+              <th class="left">Damage Roll</th><td><input name="weapon_one_damage_roll" type="text"/></td>
+              <th class="left">Damage Roll</th><td><input name="weapon_two_damage_roll" type="text"/></td>
+              
+              <td class="border-wide-left"><input name="arrows_two_type" type="text"/></td><td><input name="arrows_two_damage" type="text"/></td><td><input name="arrows_two_quant" type="number"/></td>
+          </tr>
+          <tr>
+              <th class="left">Bonus</th><td><input name="weapon_one_bonus" type="text"/></td>
+              <th class="left">Bonus</th><td><input name="weapon_two_bonus" type="text"/></td>
+              
+              <td class="border-wide-left"><input name="arrows_three_type" type="text"/></td><td><input name="arrows_three_damage" type="text"/></td><td><input name="arrows_three_quant" type="number"/></td>
+          </tr>
+          <tr>
+              <th class="left">Notes</th><td><input name="weapon_one_notes" type="text"/></td>
+              <th class="left">Notes</th><td><input name="weapon_two_notes" type="text"/></td>
+              
+              <td class="border-wide-left"><input name="arrows_four_type" type="text"/></td><td><input name="arrows_four_damage" type="text"/></td><td><input name="arrows_four_quant" type="number"/></td>
+          </tr>
+        </table>
+    </div>
+</div>
+
+<div="column">
+   <aside class="col-md-4">
+     <section class="bushido-stats">
+       <h4>HONOR</h4>
+       <input type="number" name="honor-rank" class="stats-rank"/>
+       <input type="checkbox" name="honor"/>
+       <input type="checkbox" name="honor"/>
+       <input type="checkbox" name="honor"/>
+       <input type="checkbox" name="honor"/>
+       <input type="checkbox" name="honor"/>
+       <input type="checkbox" name="honor"/>
+       <input type="checkbox" name="honor"/>
+       <input type="checkbox" name="honor"/>
+       <input type="checkbox" name="honor"/>
+       <input type="checkbox" name="honor"/>
+       <h4>GLORY</h4>
+       <input type="number" name="glory-rank" class="stats-rank"/>
+       <input type="checkbox" name="glory"/>
+       <input type="checkbox" name="glory"/>
+       <input type="checkbox" name="glory"/>
+       <input type="checkbox" name="glory"/>
+       <input type="checkbox" name="glory"/>
+       <input type="checkbox" name="glory"/>
+       <input type="checkbox" name="glory"/>
+       <input type="checkbox" name="glory"/>
+       <input type="checkbox" name="glory"/>
+       <input type="checkbox" name="glory"/>
+       <h4>STATUS</h4>
+       <input type="number" name="status-rank" class="stats-rank"/>
+       <input type="checkbox" name="status"/>
+       <input type="checkbox" name="status"/>
+       <input type="checkbox" name="status"/>
+       <input type="checkbox" name="status"/>
+       <input type="checkbox" name="status"/>
+       <input type="checkbox" name="status"/>
+       <input type="checkbox" name="status"/>
+       <input type="checkbox" name="status"/>
+       <input type="checkbox" name="status"/>
+       <input type="checkbox" name="status"/>
+       <h4>SHADOWLAND TAINT</h4>
+       <input type="number" name="taint-rank" class="stats-rank"/>
+       <input type="checkbox" name="taint"/>
+       <input type="checkbox" name="taint"/>
+       <input type="checkbox" name="taint"/>
+       <input type="checkbox" name="taint"/>
+       <input type="checkbox" name="taint"/>
+       <input type="checkbox" name="taint"/>
+       <input type="checkbox" name="taint"/>
+       <input type="checkbox" name="taint"/>
+       <input type="checkbox" name="taint"/>
+       <input type="checkbox" name="taint"/>
+     </section>
+
+     <table class="stats-table">
+       <tr>
+         <th colspan="4">Initiative</th>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">Insight Rank / Reflexes</td><td colspan="2"><input name="stats_insight_rank" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">Modifiers</td><td colspan="2"><input name="stats_inititiative_modifiers" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">Current Intiative</td><td colspan="2"><input name="stats_initiative" type="text"/></td>
+       </tr>
+       <tr>
+         <th colspan="4">Armor Tn</th>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">TN Bonus</th><td colspan="2"><input name="stats_tn_bonus" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">Quality</th><td colspan="2"><input name="stats_quality" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">Notes</th><td colspan="2"><input name="stats_notes" type="text"/></td>
+       </tr>
+       <tr>
+         <th colspan="4">Wounds</th>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">Earth x2 per level<br/>Earth x5 for Healthy</th><td colspan="2"><input name="stats_wounds" type="text"/></td>
+       </tr>
+       <tr>
+         <th>Wound Level</th><th>Penalties</th><th>Total</th><th>Current</th>
+       </tr>
+       <tr>
+           <th class="left">Healthy (+0)</th><td><input name="stats_healthy_penalties" type="text"/></td><td><input name="stats_healthy_total" type="text"/></td><td><input name="stats_health_current" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left">Nicked (+3)</th><td><input name="stats_nicked_penalties" type="text"/></td><td><input name="stats_nicked_total" type="text"/></td><td><input name="stats_nicked_current" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left">Grazed (+5)</th><td><input name="stats_grazed_penalties" type="text"/></td><td><input name="stats_grazed_total" type="text"/></td><td><input name="stats_grazed_current" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left">Hurt (+10)</th><td><input name="stats_hurt_penalties" type="text"/></td><td><input name="stats_hurt_total" type="text"/></td><td><input name="stats_hurt_current" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left">Injured (+15)</th><td><input name="stats_injured_penalties" type="text"/></td><td><input name="stats_injured_total" type="text"/></td><td><input name="stats_injured_current" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left">Crippled (+20)</th><td><input name="stats_crippled_penalties" type="text"/></td><td><input name="stats_crippled_total" type="text"/></td><td><input name="stats_crippled_current" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left">Down (+40)<br/><span>Must Spend Void to act</span></th><td><input name="stats_down_penalties" type="text"/></td><td><input name="stats_down_total" type="text"/></td><td><input name="stats_down_current" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left">Out<br/><span>Cannot Act</span></th><td><input name="stats_out_penalties" type="text"/></td><td><input name="stats_out_total" type="text"/></td><td><input name="stats_out_current" type="text"/></td>
+       </tr>
+       <tr>
+           <th colspan="4">Rate Of Wound Heal</th>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">Stamina x2 + Insight Rank</th><td colspan="2"><input name="stats_stamima_x2_+_insight_rank" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">Modifiers</th><td colspan="2"><input name="stats_heal_modifiers" type="text"/></td>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">Current Rate</th><td colspan="2"><input name="stats_current_heal_rate" type="text"/></td>
+       </tr>
+     </table>
+    </div>
+  </aside>
+</div>
+
+
+
+

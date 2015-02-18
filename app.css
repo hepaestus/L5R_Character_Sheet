@@ -1,0 +1,115 @@
+/* app css stylesheet */
+
+table.rings-table {
+   border: 1px solid black;
+   width: 40%;   
+   margin: 3em auto;
+   height: 310px; 
+   width: 310px; 
+}
+table.rings-table td, table.rings-table th {
+   font-size: .75em;
+   border: 1px solid #aaa;
+   width: 12.5%
+}
+table.rings-table th {
+}
+table.rings-table input {
+    width: 3em;
+    text-align:center;
+}
+input.ring_input {
+    border: 0;
+}
+
+.right {
+    text-align:right;
+}
+.left {
+    text-align:left;
+}
+.center {
+    text-align:center;
+}}
+
+input.void_box {
+    margin:0;
+    padding:0;
+}
+
+span.x-small {
+    font-size: .5em;
+}
+
+table.stats-table, table.weapons-table {
+    margin: 3em;
+    width: 100%;
+    border: 1px solid black;
+}
+table.stats-table th, table.weapons-table th {
+    text-align: center;
+    color: #fff;
+    background-color: #000;
+    font-weight: bold;
+    border: 1px solid white;
+    font-size: 80%;
+}
+table.stats-table th.left, table.weapons-table th.left {
+    text-align: center;
+    color: #fff;
+    background-color: #BFA994;
+    font-weight: bold;
+    border: 1px solid white;
+    font-size: 80%;
+}
+table.stats-table th span, table.weapons-table th span{
+    font-size: 0.5em;
+}
+table.stats-table td, table.weapons-table td {
+    border: 1px solid black;
+    font-size: 80%;
+}
+table.stats-table td input, table.weapons-table td input{
+    width: 100%;
+    border: 0px solid black;
+    text-align: center;
+}
+
+td.border-wide-left, th.border-wide-left {
+    border-left: 3px solid black;
+}
+
+label.line {
+    width: 15%;
+    text-align: right;
+}
+input.line {
+    border: 0px solid black;
+    border-bottom: 1px solid black;
+    text-align: center;
+}
+
+section.bushido-stats {
+    text-align:center;
+    margin: 0 3em 2em 0;
+}
+section.bushido-stats input.stats-rank{
+    text-align:center;
+    width: 3em;
+}
+
+table.skills-table input {
+    border: 0px;
+    border-bottom: 1px solid black;
+    margin-right: 3px;    
+}
+
+input[name="skill_rank"], input[name="skill_trait"], input[name="skill_roll"] {
+    width: 4em;
+    text-align: center;
+}
+input[name="skill_name"] {
+    width: 15em;
+}
+
+
