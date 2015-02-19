@@ -2,7 +2,7 @@
 (function(){
 
   // Declare app level module which depends on views, and components
-  var app = angular.module('myApp', [ 'ngRoute', ]);
+  var app = angular.module('myApp', [ 'ngRoute','ngCookies']);
 
 
   app.config(['$routeProvider', function($routeProvider) {
@@ -21,39 +21,67 @@
     .otherwise({redirectTo: '/'});
   }]);
 
+  app.controller('HomeController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
 
-  app.controller('HomeController', function($scope) {
-  
-  });
+  }]);
 
-  app.controller('CharacterController', function($scope) {
+  app.controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
     $scope.character = { 
       clan: "",
       school: "",
       experience_points: 0,
       experience_points_earned: 0,
-      insight_rank : 0, 
-      earth : 0,
-      air   : 0,
-      water : 0,
-      fire  : 0,
-      void  : 0,
-      stamina     : 0,
-      willpower   : 0,
-      reflexes    : 0,
-      awareness   : 0,
-      strength    : 0,
-      perception  : 0,
-      agility     : 0,
-      intelligence: 0,      
-      armor_tn : 0,
-      honor : 0,
-      glory : 0,
-      'status' : 0,
-      taint : 0,
+      insight_rank  : 0, 
+      earth         : 0,
+      air           : 0,
+      water         : 0,
+      fire          : 0,
+      void          : 0,
+      stamina       : 0,
+      stamina_s     : 0,
+      willpower     : 0,
+      willpower_s   : 0,
+      reflexes      : 0,
+      reflexes_s    : 0,
+      awareness     : 0,
+      awareness_s   : 0
+      strength      : 0,
+      strength_s    : 0,
+      perception    : 0,
+      perception_s  : 0,
+      agility       : 0,
+      agility_s     : 0,
+      intelligence  : 0,      
+      intelligence_s: 0,      
+      armor_tn      : 0,
+      honor         : 0,
+      glory         : 0,
+      'status'      : 0,
+      taint         : 0,
+    };        
+
+    $scope.loadCharacter = function() {
+      console.log("Load Character");
+      $scope.character = $cookieStore.get('character');      
+    }
+
+    $scope.saveCharacter = function() {
+      console.log("Save Character");
+      $cookieStore.put('character', $scope.character);
     };
 
-    $scope.updateEarth = function() {
+
+    $scope.updateEarth = function(attr, value) {      
+      console.log(attr + " : val: " + value);
+      if ( $scope.character[attr] > $scope.character[attr + "_s"] ) {
+          $scope.character.experience_points += ( value * 5 );
+          $scope.character[attr + "_s"] = $scope.character[attr];
+      } else if ( $scope.character[attr] < $scope.character[attr + "_s"] )
+          $scope.character.experience_points -= ( value * 5 );
+          $scope.character[attr + "_s"] = $scope.character[attr];
+      } else {
+          console.log("No Change to " + attr);
+      }
       if ( $scope.character.stamina === $scope.character.willpower) {
         $scope.character.earth = $scope.character.stamina;
       } else if ( $scope.character.willpower <  $scope.character.stamina ) {
@@ -63,7 +91,9 @@
       }
       $scope.updateRank();
     };
-    $scope.updateAir = function() {
+    $scope.updateAir = function(attr, value) {
+      console.log(attr + " : val: " + value);
+      $scope.character.experience_points -= ( value * 5 );
       if ( $scope.character.reflexes === $scope.character.awareness) {
         $scope.character.air = $scope.character.reflexes;
       } else if ( $scope.character.reflexes <  $scope.character.awareness ) {
@@ -73,7 +103,9 @@
       }
       $scope.updateRank();
     };
-    $scope.updateWater = function() {
+    $scope.updateWater = function(attr, value) {
+      console.log(attr + " : val: " + value);
+      $scope.character.experience_points -= ( value * 5 );
       if ( $scope.character.strength === $scope.character.perception) {
         $scope.character.water = $scope.character.strength;
       } else if ( $scope.character.strength <  $scope.character.perception ) {
@@ -83,7 +115,9 @@
       }
       $scope.updateRank();
     };
-    $scope.updateFire = function() {
+    $scope.updateFire = function(attr, value) {
+      console.log(attr + " : val: " + value);
+      $scope.character.experience_points -= ( value * 5 );
       if ( $scope.character.agility === $scope.character.intelligence) {
         $scope.character.fire = $scope.character.agility;
       } else if ( $scope.character.agility <  $scope.character.intelligence ) {
@@ -93,7 +127,9 @@
       }
       $scope.updateRank();
     };
-    $scope.updateVoid = function() {
+    $scope.updateVoid = function(attr, value) {
+      console.log(attr + " : val: " + value);
+      $scope.character.experience_points -= ( value * 6 );
       $scope.updateRank();
     };
      
@@ -102,7 +138,7 @@
       $scope.character.insight_rank = (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10)
     };
 
-  });
+  }]);
 
   app.controller('SkillsController', function($scope) {
     $scope.skillsMasterList = {
