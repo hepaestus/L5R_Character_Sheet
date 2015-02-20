@@ -159,6 +159,7 @@
   }]);
 
   app.controller('SkillsController', function($scope) {
+    $scope.clickedSkillRank = null;
     $scope.skillsMasterList = [
       // level, type, subtype, trait, ring, rank, roll, emphasis, description
       { level:'High', type:'Artisan', sub_type:'Origami', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'(paper folding) Pg. 135 Core Book'},
