@@ -98,18 +98,30 @@ section.bushido-stats input.stats-rank{
     width: 3em;
 }
 
-table.skills-table input {
+table.skill-table, table.skills-table td, table.skills.table th {
+    border: 1px solid #DDD;
+}
+
+table.skills-table input, table.skills-table td.list {
     border: 0px;
     border-bottom: 1px solid black;
     margin-right: 3px;    
+}
+
+td.skill_name {
+    width: 10em;
+}
+
+ul.add_skill_list li {
+    list-style-type: none;
 }
 
 input[name="skill_rank"], input[name="skill_trait"], input[name="skill_roll"] {
     width: 4em;
     text-align: center;
 }
-input[name="skill_name"] {
-    width: 15em;
+input[name="skill_type"], input[name="skill_sub_type"],  {
+    width: 10em;
 }
 
 

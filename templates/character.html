@@ -13,9 +13,9 @@
 
       <table class="rings-table">
         <tr>
-            <th colspan="4" class="center" >EARTH</th>
-            <td colspan="3">&nbsp;</td>
-            <th colspan="4" class="center" >AIR</th>
+            <th colspan="1" class="center" >EARTH</th>
+            <td colspan="9">&nbsp;</td>
+            <th colspan="1" class="center" >AIR</th>
         </tr>
         <tr>
             <td colspan="1" class="left">Stamina</td>
@@ -28,15 +28,15 @@
             <td colspan="1" class="left">Willpower</td>
             <td colspan="1"><input name="willpower" type="number" min="0" class="ring_input" ng-model="character.willpower" ng-change="updateEarth('willpower',character.willpower)"></td>
             <td colspan="7"></td>
-            <td colspan="1"><input name="awareness" type="number" min="0" class="ring_input" ng-model="character.awareness" ng-change="updateAir('awaremess',character.awareness)"></td>
+            <td colspan="1"><input name="awareness" type="number" min="0" class="ring_input" ng-model="character.awareness" ng-change="updateAir('awareness',character.awareness)"></td>
             <td colspan="1" class="right">Awareness<!--span class="x-small">(Empathy)</span--></td>
         </tr>
         <tr>
-            <td colspan="3"></td>
+            <td colspan="4"></td>
             <td colspan="1"><input name="earth_ring" type="number" min="0" class="ring_input" ng-model="character.earth" ng-change="updateEarthRing(character.earth)"></td>
-            <td colspan="3"></td>
+            <td colspan="1"></td>
             <td colspan="1"><input name="air_ring" type="number" min="0" class="ring_input" ng-model="character.air" ng-change="updateAirRing(character.air)"></td>
-            <td colspan="3"></td>
+            <td colspan="4"></td>
         </tr>
         <tr>
             <td colspan="11">&nbsp;</td>
@@ -51,26 +51,25 @@
         <tr>
             <td colspan="1" class="left">Strength</td>
             <td colspan="1"><input name="strength" type="number" min="0" class="ring_input" ng-model="character.strength" ng-change="updateWater('strength',character.strength)"></td>
-            <td colspan="7"></td>
+            <td colspan="3"></td>
+            <td colspan="1"><input name="void_ring" type="number" min="0" class="ring_input" ng-model="character.void" ng-change="updateVoid('void',character.void)"></td>
+            <td colspan="3"></td>
             <td colspan="1"><input name="agility" type="number" min="0" class="ring_input" ng-model="character.agility" ng-change="updateFire('agility',character.agility)"></td>
             <td colspan="1" class="right">Agility</td>
         </tr>
         <tr>
             <td colspan="1">Perception</td>
             <td colspan="1"><input name="perception" type="number" min="0" class="ring_input" ng-model="character.perception" ng-change="updateWater('perception',character.perception)"></td>
-            <td colspan="7"></td>
+            <td colspan="3"></td>
+            <th colspan="1" class="center" >VOID</th>
+            <td colspan="3"></td>
             <td colspan="1"><input name="intelligence" type="number" min="0" class="ring_input" ng-model="character.intelligence" ng-change="updateFire('intelligence',character.intelligence)"></td>
             <td colspan="1" class="right">Inteligence</td>
         </tr>
         <tr>
-            <th colspan="4" class="center">WATER</th>
-            <td colspan="3"><input name="void_ring" type="number" min="0" class="ring_input" ng-model="character.void" ng-change="updateVoid('void',character.void)"></td>
-            <th colspan="4" class="center">FIRE</th>
-        </tr>
-        <tr>
-            <td colspan="4"></td>
-            <th colspan="3" class="center" >VOID</th>
-            <td colspan="4"></td>
+            <th colspan="1" class="center">WATER</th>
+            <td colspan="9"></td>
+            <th colspan="1" class="center">FIRE</th>
         </tr>
         <tr>
             <td class="center" colspan="11">
@@ -87,13 +86,37 @@
         </tr>
 
       </table>
-      <div class="col-md-8">
+      <div class="col-md-8" ng-controller="SkillsController">
         <table class="skills-table">
           <tr>
             <th>Skill Name</th><th>Rank</th><th>Trait</th><th>Roll</th><th>Emphasis & Mastery Abilities</th>
           </tr>
+          <tr ng-repeat="each in character.skills" ng-show="character.skills">
+              <td class="skill_name">{{each.type}} - {{each.sub_type}} </td>
+              <td><form name="skill_rank_form"><input name="skill_rank" ng-model="character.skills[$index].rank" type="number" value="{{each.rank}}" min="0"  ng-click="updateSkillRank($index,form.skill_rank)"/></form></td>
+              <td>{{each.trait}}</td>
+              <td>{{each.roll}}</td>
+              <td>{{each.emphasis}}</td>
+          </tr>
           <tr>
-              <td><input name="skill_name" type="text"/></td><td><input name="skill_rank" type="number"/></td><td><input name="skill_trait" type="text"/></td><td><input name="skill_roll" type="text"/></td><td><input name="emphasis-mastery" type="text"/></td>
+              <td colspan="5"><input name="addASkill" ng-click="toggleShowSkillsList()" ></td>
+              <!-- 
+              <td class="skill_name">
+                  <input name="skill_type" ng-model="character.skills[$index].type" type="text"/> 
+                  <input name="skill_sub_type" ng-model="character.skills[$index].sub_type" type="text"/>
+              </td>
+              <td><input name="skill_rank" ng-model="character.skills[$index].rank" type="number" value="{{each.rank}}" min="0"  ng-click="updateSkillRank($index)"/></td>
+              <td><input name="skill_train" ng-model="character.skills[$index].trait" type="text" value="{{each.trait}}"/></td>
+              <td><input name="skill_roll" ng-model="character.skills[$index].roll" type="text" value="{{each.roll}}"/></td>
+              <td><input name="skill_emphasis_mastery" ng-model="character.skills[$index].empasis" type="text" value="{{each.emphasis}}" /></td>
+              -->
+          </tr>
+          <tr ng-show="showSkillsList"> 
+            <td colspan="5">
+              <ul class="add_skill_list">
+                  <li ng-repeat="each in skillsMasterList"><a href="" ng-click="addSkill($index)">{{each.type}} - {{each.sub_type}}</a></li>
+              </ul>
+            </td>
           </tr>
         </table>
       </div>

@@ -27,6 +27,7 @@
 
   app.controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
     $scope.character = { 
+      name: "",      
       clan: "",
       school: "",
       experience_points: 0,
@@ -37,6 +38,7 @@
       water         : 0,
       fire          : 0,
       void          : 0,
+      void_s        : 0,
       stamina       : 0,
       stamina_s     : 0,
       willpower     : 0,
@@ -44,7 +46,7 @@
       reflexes      : 0,
       reflexes_s    : 0,
       awareness     : 0,
-      awareness_s   : 0
+      awareness_s   : 0,
       strength      : 0,
       strength_s    : 0,
       perception    : 0,
@@ -58,6 +60,8 @@
       glory         : 0,
       'status'      : 0,
       taint         : 0,
+      skills        : [],
+      spells        : [],
     };        
 
     $scope.loadCharacter = function() {
@@ -70,18 +74,25 @@
       $cookieStore.put('character', $scope.character);
     };
 
-
-    $scope.updateEarth = function(attr, value) {      
-      console.log(attr + " : val: " + value);
+    $scope.updateExp = function(attr, value) {
+      var cost = 5;
+      if ( attr == 'void') {
+        cost = 6;
+      }
+      console.log(attr + " : val: " + value + " Old Val: " + $scope.character[attr + "_s"]);
       if ( $scope.character[attr] > $scope.character[attr + "_s"] ) {
-          $scope.character.experience_points += ( value * 5 );
+          $scope.character.experience_points -= ( value * cost );
           $scope.character[attr + "_s"] = $scope.character[attr];
-      } else if ( $scope.character[attr] < $scope.character[attr + "_s"] )
-          $scope.character.experience_points -= ( value * 5 );
+      } else if ( $scope.character[attr] < $scope.character[attr + "_s"] ) {
+          $scope.character.experience_points += ($scope.character[attr + "_s"] * cost );
           $scope.character[attr + "_s"] = $scope.character[attr];
       } else {
           console.log("No Change to " + attr);
       }
+    };
+
+    $scope.updateEarth = function(attr, value) {      
+      $scope.updateExp(attr,value);
       if ( $scope.character.stamina === $scope.character.willpower) {
         $scope.character.earth = $scope.character.stamina;
       } else if ( $scope.character.willpower <  $scope.character.stamina ) {
@@ -89,11 +100,11 @@
       } else if ( $scope.character.stamina < $scope.character.willpower ) {
         $scope.character.earth = $scope.character.stamina;
       }
-      $scope.updateRank();
+      $scope.updateInsightRank();
+      $scope.updateSkills(attr,'earth');
     };
     $scope.updateAir = function(attr, value) {
-      console.log(attr + " : val: " + value);
-      $scope.character.experience_points -= ( value * 5 );
+      $scope.updateExp(attr,value);
       if ( $scope.character.reflexes === $scope.character.awareness) {
         $scope.character.air = $scope.character.reflexes;
       } else if ( $scope.character.reflexes <  $scope.character.awareness ) {
@@ -101,11 +112,11 @@
       } else if ( $scope.character.awareness < $scope.character.reflexes ) {
         $scope.character.air = $scope.character.awareness;        
       }
-      $scope.updateRank();
+      $scope.updateInsightRank();
+      $scope.updateSkills(attr,'air');
     };
     $scope.updateWater = function(attr, value) {
-      console.log(attr + " : val: " + value);
-      $scope.character.experience_points -= ( value * 5 );
+      $scope.updateExp(attr,value);
       if ( $scope.character.strength === $scope.character.perception) {
         $scope.character.water = $scope.character.strength;
       } else if ( $scope.character.strength <  $scope.character.perception ) {
@@ -113,11 +124,11 @@
       } else if ( $scope.character.perception < $scope.character.strength ) {
         $scope.character.water = $scope.character.perception;        
       }
-      $scope.updateRank();
+      $scope.updateInsightRank();
+      $scope.updateSkills(attr,'water');
     };
     $scope.updateFire = function(attr, value) {
-      console.log(attr + " : val: " + value);
-      $scope.character.experience_points -= ( value * 5 );
+      $scope.updateExp(attr,value);
       if ( $scope.character.agility === $scope.character.intelligence) {
         $scope.character.fire = $scope.character.agility;
       } else if ( $scope.character.agility <  $scope.character.intelligence ) {
@@ -125,33 +136,59 @@
       } else if ( $scope.character.intelligence < $scope.character.agility ) {
         $scope.character.fire = $scope.character.intelligence;        
       }
-      $scope.updateRank();
+      $scope.updateInsightRank();
+      $scope.updateSkills(attr,'fire');
     };
     $scope.updateVoid = function(attr, value) {
-      console.log(attr + " : val: " + value);
-      $scope.character.experience_points -= ( value * 6 );
-      $scope.updateRank();
+      $scope.updateExp(attr,value);
+      $scope.updateInsightRank();
     };
      
-     
-    $scope.updateRank = function() { 
+    $scope.updateInsightRank = function() { 
       $scope.character.insight_rank = (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10)
+    };
+
+    $scope.updateSkills = function(attr,ring) {
+        for(var i = 0; i < $scope.character.skills.length; i++) {
+          if ($scope.character.skills[i].trait == attr) {
+            $scope.character.skills[i].roll = ( $scope.character.skills[i].rank + $scope.character[attr] ) + "K" + $scope.character[ring];
+          }
+        }
     };
 
   }]);
 
   app.controller('SkillsController', function($scope) {
-    $scope.skillsMasterList = {
-      'high': { 
-        'artisan': { 
-          'origami' : ['paper folding'],
-        },
-        'lore': ['history','ghosts','spellcraft'],
-      },
-      'bugei': {},
-      'merchant': {},
-      'low': {},
+    $scope.skillsMasterList = [
+      // level, type, subtype, trait, ring, rank, roll, emphasis, description
+      { level:'High', type:'Artisan', sub_type:'Origami', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'(paper folding) Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Bonsai', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'(the tending of tiny trees and plants) Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Gardening', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Ikebana', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'(flower aranging) Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Painting', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Poetry', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Sculpture', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Tattooing', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'Pg. 135 Core Book'},
+      { level:'High', type:'Acting', sub_type:'Social Skill', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'Pg. 135 Core Book'},
+    ];
+
+    $scope.showSkillList = false;
+    $scope.toggleShowSkillsList = function() {
+        $scope.showSkillsList = !$scope.showSkillsList;
+    }
+
+    $scope.addSkill = function(index) {
+      console.log("Skill Index: " + index);
+      var skill = $scope.skillsMasterList[index];
+      skill.roll = $scope.character[skill.trait] + "K" + $scope.character[skill.ring];      
+      $scope.character.skills.push(skill);       
+    };    
+
+    $scope.updateSkillRank = function(skill_index,val) {
+      console.log("Update Skill Index: " + skill_index + " Val: " + val );
+
     };
+
   });
 
   app.controller('SpellsController', function($scope) {
@@ -176,7 +213,9 @@
          ],
       },
       'air': { 
-        'one': [],
+        'one': [
+          { 'name':'Blessed Wind', 'ring':'air', 'level':'1', 'range':'Personal', 'area_of_affect':'10\' radius around the caster', 'duration':'Concentration', 'raises': 'Special(you may target another spell with this spell with 3 raises)', 'description':"Pg 167 Core Book" },
+        ],
         'two': [],
         'three': [],
         'four': [],
@@ -209,7 +248,6 @@
        }
     };
 
-          //{ 'name':'Blessed Wind', 'ring':'air', 'level':'1', 'range':'Personal', 'area_of_affect':'10\' radius around the caster', 'duration':'Concentration', 'raises': 'Special(you may target another spell with this spell with 3 raises)', 'description':"You summon a swirling aura of winds to protect you from ranged attacks. ..." },
   });
 
 })();
