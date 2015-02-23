@@ -20,7 +20,7 @@
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-  <!-- script src="bower_components/angular-sanitize/angular-sanitize.js"></script -->
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
   <script src="app.js"></script>
 </head>
 <body>
@@ -43,8 +43,11 @@
       </nav>
   </header>
    
-  <main ng-view>
-  </main>
+  <div id="wrapper" ng-controller="MainController">
+      <p>Debug Character:<pre style="width: 50%">{{ character }}</pre></p>
+      <main ng-view>
+      </main>
+  </div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>

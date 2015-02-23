@@ -9,8 +9,6 @@
       <label class="line">School</label><input class="line" name="school" type="text" ng-model="character.school"/>
       <label class="line">Insight Rank</label><input class="line" name="insight_rank" type="text" ng-model="character.insight_rank"/><span>(Rings x 10 + skills)</span><br/>
 
-      <p>Character:<pre>{{ character }}</pre></p>
-
       <table class="rings-table">
         <tr>
             <th colspan="1" class="center" >EARTH</th>
@@ -96,28 +94,29 @@
               <td class="skill_rank"><form name="skill_rank_form"><input name="skill_rank" ng-model="character.skills[$index].rank" type="number" value="{{each.rank}}" min="0"  ng-click="updateSkillRank($index)"/></form></td>
               <td>{{each.trait}}</td>
               <td class="skill_roll">{{each.roll}}</td>
-              <td>{{each.emphasis}}</td>
-	      <td class="" style="line-height: 60%"><span class="small">{{each.mastery}}</span></td>
-	      <td class="" style="line-height: 60%"><span class="small">{{each.description}}</span></td>
-	      <td><button ng-click="removeSkill($index)"><span class="glyphhicon glyphicons-remove">X</span></button></td>
+              <td><a href="" ng-hide="each.emphasis" ng-show="each.emphases[0]" ng-click="toggleShowEmphasesList($index)">Add</a><span ng-show="each.emphasis">{{each.emphasis}}</span></td>
+              <td class="skill_mastery" style="line-height: 60%"><span class="small" ng-bind-html="each.mastery"></span></td>
+	          <td class="skill_desc" style="line-height: 60%"><span class="small">{{each.description}}</span></td>
+	          <td class="skill_button"><button ng-click="removeSkill($index)"><span class="glyphhicon glyphicons-remove">X</span></button></td>
           </tr>
-          <tr>
-              <td colspan="8"><input name="addASkill" ng-click="toggleShowSkillsList()" ></td>
-              <!-- 
-              <td class="skill_name">
-                  <input name="skill_type" ng-model="character.skills[$index].type" type="text"/> 
-                  <input name="skill_sub_type" ng-model="character.skills[$index].sub_type" type="text"/>
-              </td>
-              <td><input name="skill_rank" ng-model="character.skills[$index].rank" type="number" value="{{each.rank}}" min="0"  ng-click="updateSkillRank($index)"/></td>
-              <td><input name="skill_train" ng-model="character.skills[$index].trait" type="text" value="{{each.trait}}"/></td>
-              <td><input name="skill_roll" ng-model="character.skills[$index].roll" type="text" value="{{each.roll}}"/></td>
-              <td><input name="skill_emphasis_mastery" ng-model="character.skills[$index].empasis" type="text" value="{{each.emphasis}}" /></td>
-              -->
+          <tr ng-hide="showEmphasesList">
+              <td colspan="8"><a href="" ng-click="toggleShowSkillsList()" >Add a Skill</a></td>
           </tr>
+          <tr ng-show="showEmphasesList"> 
+              <td colspan="4">Emphasis List</td>
+              <td colspan="3">
+              <ul class="add_skill_list">
+                  <li ng-repeat="emph in emphasesList">                      
+                  <a href="" ng-click="addEmphasis($index)">{{emph}}</a>
+                  <li>
+              </ul>
+            </td>
           <tr ng-show="showSkillsList"> 
             <td colspan="7">
               <ul class="add_skill_list">
-                  <li ng-repeat="each in skillsMasterList"><a href="" ng-click="addSkill($index)">{{each.type}} {{each.sub_type}}</a></li>
+                  <li ng-repeat="each in skillsMasterList">
+                      <a href="" ng-click="addSkill($index)">{{each.type}} {{each.sub_type}}</a>
+                  <li>
               </ul>
             </td>
           </tr>

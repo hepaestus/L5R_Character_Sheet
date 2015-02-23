@@ -2,9 +2,7 @@
 (function(){
 
   // Declare app level module which depends on views, and components
-  //var app = angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize']);
-  var app = angular.module('myApp', [ 'ngRoute', 'ngCookies' ]);
-
+  var app = angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize']);
 
   app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {
@@ -22,12 +20,8 @@
     .otherwise({redirectTo: '/'});
   }]);
 
-  app.controller('HomeController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
+  app.controller('MainController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
 
-  }]);
-
-  app.controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
-	  
     $scope.character = { 
       name: "",      
       clan: "",
@@ -66,6 +60,14 @@
       spells        : [],
     };        
 
+  }]);
+ 
+  app.controller('HomeController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
+
+  }]);
+
+  app.controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
+	  
     $scope.loadCharacter = function() {
       console.log("Load Character");
       $scope.character = $cookieStore.get('character');      
@@ -81,7 +83,7 @@
       if ( attr == 'void') {
         cost = 6;
       }
-      console.log(attr + " : val: " + value + " Old Val: " + $scope.character[attr + "_s"]);
+      //console.log(attr + " : val: " + value + " Old Val: " + $scope.character[attr + "_s"]);
       if ( $scope.character[attr] > $scope.character[attr + "_s"] ) {
           $scope.character.experience_points -= ( value * cost );
           $scope.character[attr + "_s"] = $scope.character[attr];
@@ -89,7 +91,7 @@
           $scope.character.experience_points += ($scope.character[attr + "_s"] * cost );
           $scope.character[attr + "_s"] = $scope.character[attr];
       } else {
-          console.log("No Change to " + attr);
+          //console.log("No Change to " + attr);
       }
     };
 
@@ -144,6 +146,7 @@
     $scope.updateVoid = function(attr, value) {
       $scope.updateExp(attr,value);
       $scope.updateInsightRank();
+      $scope.updateSkills(attr,'void');
     };
      
     $scope.updateInsightRank = function() { 
@@ -171,7 +174,7 @@
           text += "Level " + x + " : " + obj.masteries[x] + "<br />\n";
         }
       } 
-      console.log("Text: " + text);
+      //console.log("Text: " + text);
       return text;
     };
     
@@ -237,7 +240,7 @@
       { level:'Bugei', type:'Battle', sub_type:'', trait:'perception', ring:'water', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Mass Combat', 1:'Skirmish'}, get mastery() { return mastery(this); }, masteries:{5:'Character adds Battle Skill Rank to Initiative Score durring skirmishes'}, description:'Pg. 139 Core Book'},
       { level:'Bugei', type:'Defense', sub_type:'', trait:'reflexes', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{}, get mastery() { return mastery(this); }, masteries:{3:'Character may retain result of previous Defense / Reflexes roll rather than make a new roll if the Full Defense Stance is being maintained in subsequent rounds', 5:'Characters Armor TN is considered 3 higher than in the Defense and Full Defense stances', 7:'One Simple Action may be taken while in the Full Defense Stance(no attacks may be made)'}, description:'Pg. 139 Core Book'},
       { level:'Bugei', type:'Horsemanship', sub_type:'', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Gaijin Riding Horse', 1:'Rokugani Pony', 2:'Utaku Steed'}, get mastery() { return mastery(this); }, masteries:{3:'May utilize Full Attack Stance when on horseback', 5:'Mointing a horse is a Simple Action, Dismounting is a Free Action', 7:'Mounting a horse is a Free Action'}, description:'Pg. 139 Core Book'},
-      { level:'Bugei', type:'Hunting', sub_type:'', trait:'perception', ring:'water', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Survival', 1:'Tracking', 2:'Trailblazing'}, get mastery() { return mastery(this); }, masteries:{5:'1k0 Bonus to total of all Stealth Rools madein wilderness environments'}, description:'Pg. 140 Core Book'},
+      { level:'Bugei', type:'Hunting', sub_type:'', trait:'perception', ring:'water', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Survival', 1:'Tracking', 2:'Trailblazing'}, get mastery() { return mastery(this); }, masteries:{5:'1k0 Bonus to total of all Stealth Rolls made in wilderness environments'}, description:'Pg. 140 Core Book'},
       { level:'Bugei', type:'Iaijutsu', sub_type:'', trait:'reflexes', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Assessment', 1:'Focus'}, get mastery() { return mastery(this); }, masteries:{3:'Readying a katana is a Free Action', 5:'During an Iaijutsu Duel, the character gains one Free Raise on his Iaijutsu(Focus) / Void roll during the Focus Stage', 7:'During the Assessment of an Iaijutsu Duel, the character gains a bonus of +2k2 to the total of all Focus Rolls if his Assessment roll exceeds his opponent\'s by 10 or more (instead of the normal +1k1)'}, description:'Pg. 139 Core Book'},
       { level:'Bugei', type:'Juijitsu', sub_type:'', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Grappling', 1:'Improvised Weapons', 2:'Martial Arts'}, get mastery() { return mastery(this); }, masteries:{3:'Damage of all unarmed attacks is increases by +1k0', 5:'Use of Juijitsu confers a Free Raise toward initating Grapple', 7:'Damage of all unarmed attacks in increased by +0K1 (+1k1 total)'}, description:'Pg. 139 Core Book'},
       { level:'Bugei', type:'Weapons', sub_type:'', trait:'', ring:'', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{1:'Special'}, get mastery() { return mastery(this); }, masteries:{}, description:'Pg. 140 Core Book'},
@@ -260,7 +263,27 @@
     $scope.showSkillList = false;
     $scope.toggleShowSkillsList = function() {
         $scope.showSkillsList = !$scope.showSkillsList;
-    }
+    };
+
+    $scope.emphasesList = ["One", "Two"];
+    $scope.currentSkillIndex = null;
+    $scope.showEmphasesList = false;
+    $scope.toggleShowEmphasesList = function(skill_index = 0) {
+        $scope.currentSkillIndex = skill_index;
+        $scope.emphasesList = [];
+        for ( var i in $scope.character.skills[skill_index].emphases ) {
+            $scope.emphasesList.push( $scope.character.skills[skill_index].emphases[i] ) ;
+        }
+        //console.log("Emphases List : " + JSON.stringify($scope.emphasesList));
+        //console.log("Show Emphases List : " + $scope.showEmphasesList);
+        $scope.showEmphasesList = !$scope.showEmphasesList;
+    };
+
+    $scope.addEmphasis = function(emphasis_index) {
+      //console.log("Skill : " + $scope.currentSkillIndex + " Emphasis : " + emphasis_index);
+      $scope.character.skills[$scope.currentSkillIndex].emphasis = emphass_index;  
+      $scope.showEmphasesList = !$scope.showEmphasesList;
+    };
 
     $scope.addSkill = function(index) {
       var skill = $scope.skillsMasterList[index];
@@ -273,13 +296,20 @@
       $scope.character.skills.splice(index,1);
     };
 
+    $scope.addEmphasis = function(index) {
+      var emp = $scope.character.skills[$scope.currentSkillIndex].emphases[index];
+      //console.log("Add Emphasis Index : " + index + " to Skill Index : " + $scope.currentSkillIndex + " Emp: " + emp );
+      $scope.character.skills[$scope.currentSkillIndex].emphasis = emp;
+      $scope.toggleShowEmphasesList();
+    }
+
     $scope.updateSkillRank = function(index) {
       if ( $scope.character.skills[index].rank < $scope.character.skills[index].rank_s ) {
         var diff = $scope.character.skills[index].rank_s - $scope.character.skills[index].rank;
         $scope.character.experience_points += diff;
       } else if ( $scope.character.skills[index].rank > $scope.character.skills[index].rank_s ) {
         var diff = $scope.character.skills[index].rank - $scope.character.skills[index].rank_s;
-	$scope.character.experience_points -= diff;
+	    $scope.character.experience_points -= diff;
       }
       $scope.character.skills[index].rank_s = $scope.character.skills[index].rank;
       $scope.updateSkills($scope.character.skills[index].trait, $scope.character.skills[index].ring);
@@ -302,45 +332,45 @@
 
     $scope.spellsMasterList = {
       'universal': {
-        'one': [
+        '1': [
           { 'name':'Sense', 'ring':'all', 'level': '1', 'range':'Personal', 'area_of_affect':'50\' radius from the caster', 'duration':'Instantaneous', 'raises': 'Range(+10\')', 'description':"This spell can be cast in any of the four standard elements. It allows for the caster to sense the presense, quantity, and rough location of the elemental spirits (not evil spirits known as <i>kansen</i> of that element within the range of the spell. This is most frequently applied when looking for spirits with which to Commune (See Commune), but can also can be useful as a crude basic location device. For example, a caster lost in the wilderness could cast Snese(Water) in hopes of locating the sourceof drinking water." },
           { 'name':'Summon', 'ring':'all', 'level': '1', 'range':'30\'', 'area_of_affect':'1 cubic foot of summoned matterial', 'duration':'Permanent', 'raises': 'Range(+10\'), Quantity(+1 cubic foot), Composition of Material(1-4 raises as outlined below)', 'description':"s spell can be cast in any of the tour standard elements. It allows the caster to summon a modest quantity (one cubic foot) of the chosen element. The summoned matter appears (usually in a rough ball shape] in any open space within the spell\'s range. This cannot place the summoned material inside another physical object or living creature. The summoned element will behave in a normal and mundane matter — earth falls to the ground, water soaks anything it lands on, air blows away, and ﬁre winks out unless there is something present for it to burn. In general it is impossible to use this spell effectively in combat, although clever shugenja may find a few modest combat uses. such as using Summon [Fire] to ignite a foe soaked in cooking oil. More commonly, the Spell’s value is in simpler functions. such as summoning Water while in a desert, or summoning Fire to light a campfire without flint and tinder. Raises may be used with this spell to summon a more speciﬁc type of the appropriate element, such as wood or iron with Earth, or tea with Water. The GM should choose how many Raises (generally anywhere from 1 to 4) this requires. However, these Raises cannot be used to create rare or precious materials (such as gold) or spiritually powerful substances (such as jade or crystal)." },
           { 'name':'Commune', 'ring':'all', 'level': '1', 'range':'20\'', 'area_of_affect':'self', 'duration':'Concentration', 'raises': 'See Desc.', 'description':"This spell can be cast in any element save Void. It allows the caster to speak with one of the local elemental kami, asking it a few questions, which is will answer honestly to the best of it's ability. ..." },
          ],
       },
       'air': { 
-        'one': [
+        '1': [
           { 'name':'Blessed Wind', 'ring':'air', 'level':'1', 'range':'Personal', 'area_of_affect':'10\' radius around the caster', 'duration':'Concentration', 'raises': 'Special(you may target another spell with this spell with 3 raises)', 'description':"Pg 167 Core Book" },
         ],
-        'two': [],
-        'three': [],
-        'four': [],
-        'five': [],
-        'six': [],
+        '2': [],
+        '3': [],
+        '4': [],
+        '5': [],
+        '6': [],
       },
       'water': {
-        'one': [],
-        'two': [],
-        'three': [],
-        'four': [],
-        'five': [],
-        'six': [],
+        '1': [],
+        '2': [],
+        '3': [],
+        '4': [],
+        '5': [],
+        '6': [],
       },
       'fire': {
-        'one': [],
-        'two': [],
-        'three': [],
-        'four': [],
-        'five': [],
-        'six': [],
+        '1': [],
+        '2': [],
+        '3': [],
+        '4': [],
+        '5': [],
+        '6': [],
       },
       'earth': {
-        'one': [],
-        'two': [],
-        'three': [],
-        'four': [],
-        'five': [],
-        'six': [],
+        '1': [],
+        '2': [],
+        '3': [],
+        '4': [],
+        '5': [],
+        '6': [],
        }
     };
 
