@@ -1,7 +1,7 @@
 /* app css stylesheet */
 
 table.rings-table {
-   border: 1px solid black;
+   border: 0px solid black;
    width: 40%;   
    margin: 3em auto;
    height: 310px; 
@@ -9,7 +9,7 @@ table.rings-table {
 }
 table.rings-table td, table.rings-table th {
    font-size: .75em;
-   border: 1px solid #aaa;
+   border: 0px solid #aaa;
    width: 12.5%
 }
 table.rings-table th {
@@ -17,9 +17,19 @@ table.rings-table th {
 table.rings-table input {
     width: 3em;
     text-align:center;
+    background: rbg(0,0,0,123);
 }
 input.ring_input {
     border: 0;
+    background: rbg(0,0,0,123);
+}
+
+table.rings-table {
+    background: url("images/mountain.png") no-repeat scroll 60px 30px, 
+                url("images/air.png") no-repeat scroll 175px 25px, 
+                url("images/water.png") no-repeat scroll 12px 137px,
+                url("images/fire.png") no-repeat scroll 203px 134px,
+                url("images/void.png") no-repeat scroll 115px 175px rgba(0, 0, 0, 0);
 }
 
 .right {
@@ -37,7 +47,10 @@ input.void_box {
     padding:0;
 }
 
-span.x-small {
+.small {
+    font-size: .75em;
+}
+.x-small {
     font-size: .5em;
 }
 
@@ -97,20 +110,33 @@ section.bushido-stats input.stats-rank{
     text-align:center;
     width: 3em;
 }
-
+table.skill-table {
+  width:100%;
+}
 table.skill-table, table.skills-table td, table.skills.table th {
     border: 1px solid #DDD;
+    padding: 3px;
 }
 
-table.skills-table input, table.skills-table td.list {
+table.skills-table input, table.skill-table td, table.skills-table td.list {
     border: 0px;
     border-bottom: 1px solid black;
     margin-right: 3px;    
 }
 
-td.skill_name {
-    width: 10em;
+.skill_name, .skill_mastery {
+    width: 15em;
 }
+.skill_trait {
+    width: 5em;
+}
+.skill_rank{
+    width: 3em;
+}
+.skill_desc {
+    width: 8em;
+}
+
 
 ul.add_skill_list li {
     list-style-type: none;
