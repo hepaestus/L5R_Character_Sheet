@@ -48,10 +48,12 @@ input.void_box {
 }
 
 .small {
-    font-size: .75em;
+    font-size: 0.75em;
+    line-height: 0.85em;
 }
 .x-small {
-    font-size: .5em;
+    font-size: 0.5em;
+    line-height: 0.60em;
 }
 
 table.stats-table, table.weapons-table {
@@ -150,4 +152,15 @@ input[name="skill_type"], input[name="skill_sub_type"],  {
     width: 10em;
 }
 
+table.spell {
+    width: 33%;
+    margin: 5px;
+}
+table.spell td {
+    border: 1px solid black;    
+}
+table.spell th {
+    background-color: #BFA994;
+    border: 1px solid black;    
+}
 

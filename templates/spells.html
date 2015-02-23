@@ -3,3 +3,45 @@
   </header>
 
   <p>Spells Page</p>
+  <a href="" ng-click="toggleShowSpellsList()">Add Spell</a>
+  <ul ng-show="showSpellsList">
+      <li ng-repeat="spell in spellsMasterList">
+          <a href="" ng-click="addSpell($index)">{{spell.name}} - Level:{spell.level}}</a>
+          <ul>
+              <li>Ring {{spell.ring}}
+              <li><span ng-bind-html="spell.description"></span></li>
+          </ul>
+      </li>
+  </ul>
+
+  <h1>Known Spells</h1>
+  <div ng-repeat="each in character.spells">
+      <div class="spell_tables">
+          <table class="spell">
+            <tr>
+                 <th>Name</th>
+                 <td>{{each.name}}</td>
+                 <th>M. Level</th>
+                 <td>{{each.level}}</td>
+            </tr>
+            <tr>
+                 <th>Element</th>
+                 <td>{{each.ring}}</td>
+                 <th>Duration</th>
+                 <td>{{each.duration}}</td>
+            </tr>
+            <tr>
+                 <th>Area</th>
+                 <td>{{each.area_of_affect}}</td>
+                 <th>Range</th>
+                 <td>{{each.range}}</td>
+            </tr>
+            <tr>
+                 <th rowspan=3>Effect</th>
+                 <td rowspan=3 colspan=3 class="small"> 
+                     <span ng-bind-html="each.description"></span>
+                 </td>
+            </tr>
+          </table>
+      </div>
+  </div>

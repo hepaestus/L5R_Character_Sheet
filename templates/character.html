@@ -100,7 +100,10 @@
 	          <td class="skill_button"><button ng-click="removeSkill($index)"><span class="glyphhicon glyphicons-remove">X</span></button></td>
           </tr>
           <tr ng-hide="showEmphasesList">
-              <td colspan="8"><a href="" ng-click="toggleShowSkillsList()" >Add a Skill</a></td>
+              <td colspan="8"><a href="" ng-click="toggleShowSkillsList()">Add a Skill</a></td>
+              <!-- td colspan="7" ng-show="showSkillsList">
+                  <label for="search">Search:</label><input name="search" type="search" ng-model="skillSearchText"/>
+              </td -->
           </tr>
           <tr ng-show="showEmphasesList"> 
               <td colspan="4">Emphasis List</td>
@@ -113,7 +116,7 @@
             </td>
           <tr ng-show="showSkillsList"> 
             <td colspan="7">
-              <ul class="add_skill_list">
+              <ul class="add_skill_list">                  
                   <li ng-repeat="each in skillsMasterList">
                       <a href="" ng-click="addSkill($index)">{{each.type}} {{each.sub_type}}</a>
                   <li>
