@@ -2,7 +2,8 @@
 (function(){
 
   // Declare app level module which depends on views, and components
-  var app = angular.module('myApp', [ 'ngRoute','ngCookies']);
+  //var app = angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize']);
+  var app = angular.module('myApp', [ 'ngRoute', 'ngCookies' ]);
 
 
   app.config(['$routeProvider', function($routeProvider) {
@@ -26,6 +27,7 @@
   }]);
 
   app.controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
+	  
     $scope.character = { 
       name: "",      
       clan: "",
@@ -159,18 +161,100 @@
   }]);
 
   app.controller('SkillsController', function($scope) {
+
     $scope.clickedSkillRank = null;
+
+    var mastery = function(obj) {
+      var text = '';
+      for(var x in obj.masteries ) {
+        if ( obj.rank >= x ) {
+          text += "Level " + x + " : " + obj.masteries[x] + "<br />\n";
+        }
+      } 
+      console.log("Text: " + text);
+      return text;
+    };
+    
     $scope.skillsMasterList = [
-      // level, type, subtype, trait, ring, rank, roll, emphasis, description
-      { level:'High', type:'Artisan', sub_type:'Origami', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'(paper folding) Pg. 135 Core Book'},
-      { level:'High', type:'Artisan', sub_type:'Bonsai', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'(the tending of tiny trees and plants) Pg. 135 Core Book'},
-      { level:'High', type:'Artisan', sub_type:'Gardening', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'Pg. 135 Core Book'},
-      { level:'High', type:'Artisan', sub_type:'Ikebana', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'(flower aranging) Pg. 135 Core Book'},
-      { level:'High', type:'Artisan', sub_type:'Painting', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'Pg. 135 Core Book'},
-      { level:'High', type:'Artisan', sub_type:'Poetry', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'Pg. 135 Core Book'},
-      { level:'High', type:'Artisan', sub_type:'Sculpture', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'Pg. 135 Core Book'},
-      { level:'High', type:'Artisan', sub_type:'Tattooing', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'Pg. 135 Core Book'},
-      { level:'High', type:'Acting', sub_type:'Social Skill', trait:'awareness', ring:'air', rank:0, roll:'', emphasis:'', description:'Pg. 135 Core Book'},
+      // level, type, subtype, trait, ring, rank, roll, emphasis, emphases{}, get mastery(), masteries{}, description
+      { level:'Debug', type:'Debug', sub_type:'debug', trait:'void', ring:'void', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'E Zero', 1:'E One', 2:'E Two'}, get mastery() { return mastery(this); }, masteries:{ 3:'M Three', 5:'M Five', 7:'M Seven'}, description:'debug description'},
+      { level:'High', type:'Artisan', sub_type:'', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, emphases: {0:'Bonsai', 1:'Gardening', 2:'Ikebana', 3:'Painting', 4:'Poetry', 5:'Sculpture', 6:'Tattooing'}, description:'Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Origami', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Bonsai', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Gardening', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Ikebana', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'(flower aranging) Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Painting', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Poetry', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Sculpture', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 135 Core Book'},
+      { level:'High', type:'Artisan', sub_type:'Tattooing', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 135 Core Book'},
+      { level:'High', type:'Acting', sub_type:'Social Skill', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 135 Core Book'},
+      { level:'High', type:'Caligraphy', sub_type:'', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Cipher', 1:'High Rokugani'}, get mastery() { return mastery(this); }, masteries: { 5: "+10 to break a code or cipher"}, description:'Pg. 135 Core Book'},
+      { level:'High', type:'Coutier', sub_type:'Social Skill', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', empasis:null, emphases:{0: "Gossip", 1: "Manipulation", 2:"Rhetoric" }, get mastery() { return mastery(this); }, masteries:{3:"+3 Insight Above Normal", 5:"1k0 bonus to all contested Courtier Rolls", 7:"+7 Insight Above normal (In addition to the bonus from rank 3)" }, description:'Pg. 135 Core Book'},
+      { level:'High', type:'Divination', sub_type:'', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases: {0:"Astrology", 1:"Kawaru"}, get mastery() { return mastery(this); }, masteries:{5:"A second roll may be made without spending a void point"}, description:'Pg. 135 Core Book'},
+      { level:'High', type:'Etiquette', sub_type:'Social Skill', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, emphases: { 0:"Bureaucracy", 1:"Conversation", 2:"Courtesy"}, get mastery() { return mastery(this); }, masteries: {3:"+3 Insight above normal", 5:"+1k0 bonus to all contested Etiquette rols", 7:"+7 Insight Above normal (In addition to the bonus from rank 3)"}, description:'Pg. 136 Core Book'},
+      { level:'High', type:'Games', sub_type:'Fortunes and Winds', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 136 Core Book'},
+      { level:'High', type:'Games', sub_type:'Go', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 136 Core Book'},
+      { level:'High', type:'Games', sub_type:'Kemari', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 136 Core Book'},
+      { level:'High', type:'Games', sub_type:'Kemari', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 136 Core Book'},
+      { level:'High', type:'Games', sub_type:'Letters', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 136 Core Book'},
+      { level:'High', type:'Games', sub_type:'Sadane', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 136 Core Book'},
+      { level:'High', type:'Games', sub_type:'Shoji', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 136 Core Book'},
+      { level:'High', type:'Investigation', sub_type:'', trait:'perception', ring:'water', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Interrogation', 1:'Notice', 2:'Search'}, get mastery() { return mastery(this); }, masteries:{3:'Second attempt without increase in TN',5:'+5 bonus to any contested roll unsing Investigation',7:'A third attempt to use Search emphasis even if second attempt fails may be made'}, description:'Pg. 136 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Anatomy', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Architecture', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Bushido', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Great Clan (Choose One)', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Elements', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Gaijin Culture', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Ghosts', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Heraldry', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'History', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Maho*', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Nature', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Non-Human Culture', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Omens', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Shadowslands*', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Shugenja', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Spirit Realms', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Theology', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'Underworld*', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Low Skill, Pg. 137 Core Book'},
+      { level:'High', type:'Lore', sub_type:'War*', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Low Skill, Pg. 137 Core Book'},
+      { level:'High', type:'Medicine', sub_type:'', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Antidotes', 1:'Disease', 2:'Herbalism', 3:'Non-Humans', 4:'Wound Treatment'}, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Meditation', sub_type:'', trait:'void', ring:'void', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Fasting', 1:'Void Recovery'}, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Perform', sub_type:'Biwa', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Perform', sub_type:'Dance', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Perform', sub_type:'Drums', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Perform', sub_type:'Flute', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Perform', sub_type:'Oratory', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Perform', sub_type:'Puppeteer', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Perform', sub_type:'Samisen', trait:'agiltity', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Perform', sub_type:'Song', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Perform', sub_type:'Story Telling', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, description:'Pg. 137 Core Book'},
+      { level:'High', type:'Sincerity', sub_type:'Social Skill', trait:'awareness', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Honesty', 1:'Deceit'}, get mastery() { return mastery(this); }, masteries:{5:'+5 Bonus to all contested rolls using Sincerity'}, description:'Pg. 138 Core Book'},
+      { level:'High', type:'Spellcraft', sub_type:'', trait:'intelligence', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Importune', 1:'Spell Research'}, get mastery() { return mastery(this); }, masteries:{5:'+1k0 on Spellcasting rolls'}, description:'Pg. 138 Core Book'},
+      { level:'High', type:'Tea Ceremony', sub_type:'', trait:'void', ring:'void', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{}, get mastery() { return mastery(this); }, masteries:{5:'All participants regain 2 void points'}, description:'Pg. 139 Core Book'},
+      { level:'Bugei', type:'Athletics', sub_type:'', trait:'strength', ring:'water', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Climbing', 1:'Running', 2:'Swimming', 3:'Throwing'}, get mastery() { return mastery(this); }, masteries:{ 3:'Moderate terrain no longer impedes movement, and difficult terrain reduces water ring my 1 instead of 2', 5:'Character no longer suffers movement penalties regarless of terrain', 7:'Add 5 feet to the total of one Move Action per round.'}, description:'Pg. 139 Core Book'},
+      { level:'Bugei', type:'Battle', sub_type:'', trait:'perception', ring:'water', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Mass Combat', 1:'Skirmish'}, get mastery() { return mastery(this); }, masteries:{5:'Character adds Battle Skill Rank to Initiative Score durring skirmishes'}, description:'Pg. 139 Core Book'},
+      { level:'Bugei', type:'Defense', sub_type:'', trait:'reflexes', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{}, get mastery() { return mastery(this); }, masteries:{3:'Character may retain result of previous Defense / Reflexes roll rather than make a new roll if the Full Defense Stance is being maintained in subsequent rounds', 5:'Characters Armor TN is considered 3 higher than in the Defense and Full Defense stances', 7:'One Simple Action may be taken while in the Full Defense Stance(no attacks may be made)'}, description:'Pg. 139 Core Book'},
+      { level:'Bugei', type:'Horsemanship', sub_type:'', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Gaijin Riding Horse', 1:'Rokugani Pony', 2:'Utaku Steed'}, get mastery() { return mastery(this); }, masteries:{3:'May utilize Full Attack Stance when on horseback', 5:'Mointing a horse is a Simple Action, Dismounting is a Free Action', 7:'Mounting a horse is a Free Action'}, description:'Pg. 139 Core Book'},
+      { level:'Bugei', type:'Hunting', sub_type:'', trait:'perception', ring:'water', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Survival', 1:'Tracking', 2:'Trailblazing'}, get mastery() { return mastery(this); }, masteries:{5:'1k0 Bonus to total of all Stealth Rools madein wilderness environments'}, description:'Pg. 140 Core Book'},
+      { level:'Bugei', type:'Iaijutsu', sub_type:'', trait:'reflexes', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Assessment', 1:'Focus'}, get mastery() { return mastery(this); }, masteries:{3:'Readying a katana is a Free Action', 5:'During an Iaijutsu Duel, the character gains one Free Raise on his Iaijutsu(Focus) / Void roll during the Focus Stage', 7:'During the Assessment of an Iaijutsu Duel, the character gains a bonus of +2k2 to the total of all Focus Rolls if his Assessment roll exceeds his opponent\'s by 10 or more (instead of the normal +1k1)'}, description:'Pg. 139 Core Book'},
+      { level:'Bugei', type:'Juijitsu', sub_type:'', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Grappling', 1:'Improvised Weapons', 2:'Martial Arts'}, get mastery() { return mastery(this); }, masteries:{3:'Damage of all unarmed attacks is increases by +1k0', 5:'Use of Juijitsu confers a Free Raise toward initating Grapple', 7:'Damage of all unarmed attacks in increased by +0K1 (+1k1 total)'}, description:'Pg. 139 Core Book'},
+      { level:'Bugei', type:'Weapons', sub_type:'', trait:'', ring:'', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{1:'Special'}, get mastery() { return mastery(this); }, masteries:{}, description:'Pg. 140 Core Book'},
+      { level:'Bugei', type:'Chain Weapons', sub_type:'Weapon Skill', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Kusarigama', 1:'Kyoketsu-shogi', 2:'Manrikusari'}, get mastery() { return mastery(this); }, masteries:{3:'Chain weapons made be used to initiate grapple (See Book of Earth)', 5:'Wielding a chain weapon gains a 1k0 on Contested Rolls against opponents who are tangled or Grappled via their weapon', 7:'Use of chain weapon confers one Free Raise toward use of Disarm or Knockdown Maneuvers'}, description:'Pg. 141 Core Book'},
+      { level:'Bugei', type:'Heavy Weapons', sub_type:'Weapon Skill', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Dai Tsuchi', 1:'Masakari', 2:'Ono', 3:'Tetsubo'}, get mastery() { return mastery(this); }, masteries:{3:'Opponents with a Reduction Rating have their rating reduced by 2 when attacked with heavy weapon', 5:'Use of Heavy Weapon confers on Free Raise toward use of Knockdown Maneuver', 7:'Damage dice explode on a result of 9 and 10 when using heavy weapons'}, description:'Pg. 141 Core Book'},
+      { level:'Bugei', type:'Kenjustu', sub_type:'Weapon Skill', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Katana', 1:'Ninja-to', 2:'No-dachi', 3:'Parangu', 4:'Scimitar', 5:'Wakizashi'}, get mastery() { return mastery(this); }, masteries:{3:'Total damage rolls is increased by 1k0', 5:'Sword can be readied as a Free Action', 7:'Damage dice explode on a 9 and 10'}, description:'Pg. 141 Core Book'},
+      { level:'Bugei', type:'Knives', sub_type:'Weapon Skill', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Aiguchi', 1:'Jitte', 2:'Kama', 3:'Sai', 4:'Tanto'}, get mastery() { return mastery(this); }, masteries:{3:'No Off-hand penalties', 5:'Use or a sai or jitte confers one Free Raise towards the Disarm Maneuver', 7:'Use of any knife confers a Free Raise towards use of the Extra Attack Maneuver'}, description:'(Tanojutsu) Pg. 141 Core Book'},
+      { level:'Bugei', type:'Kyujutsu', sub_type:'Weapon Skill', trait:'reflexes', ring:'air', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Dai-kyu', 1:'Han-kyu', 2:'Yumi'}, get mastery() { return mastery(this); }, masteries:{3:'Striging bow is a Simple Action', 5:'Max range of any bow increased by 50%', 7:'Strength of bow increased by 1'}, description:'Pg. 142 Core Book'},
+      { level:'Bugei', type:'Ninjutsu (agility)', sub_type:'Weapon Skill', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Blowgun', 1:'Shuriken', 2:'Tsubute'}, get mastery() { return mastery(this); }, masteries:{3:'Damage increase by 1k1', 5:'Dice on Damage Rolls Exlode on 10 despite being Nijutsu Weapons', 7:'Damage on ninjutsu weapons increased by +0k1 (+1k1 total)'}, description:'Low Skill. Pg. 142 Core Book'},
+      { level:'Bugei', type:'Ninjutsu (reflexes)', sub_type:'Weapon Skill', trait:'reflexes', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Blowgun', 1:'Shuriken', 2:'Tsubute'}, get mastery() { return mastery(this); }, masteries:{3:'Damage increase by 1k1', 5:'Dice on Damage Rolls Exlode on 10 despite being Nijutsu Weapons', 7:'Damage on ninjutsu weapons increased by +0k1 (+1k1 total)'}, description:'Low Skill. Pg. 142 Core Book'},
+      { level:'Bugei', type:'Polearms', sub_type:'Weapon Skill', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Bisento', 1:'Nagamaki', 2:'Naginata', 3:'Sasumata', 4:'Sodegarami'}, get mastery() { return mastery(this); }, masteries:{3:'During 1st round of skirmish, polearm gains +5 bonus to Initiative Score', 5:'Damage rolls vs. mounted or significantly larger opponents increased by +1k0', 7:'Polearms readied as a free action'}, description:'Pg. 143 Core Book'},
+      { level:'Bugei', type:'Spears', sub_type:'Weapon Skill', trait:'agility', ring:'fire', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{0:'Mai Chong', 1:'Kumade', 2:'Lance', 3:'Nage-yare', 4:'Yari'}, get mastery() { return mastery(this); }, masteries:{3:'', 5:'', 7:''}, description:'Pg. 143 Core Book'},
+      { level:'Bugei', type:'', sub_type:'', trait:'', ring:'', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{}, get mastery() { return mastery(this); }, masteries:{}, description:'Pg. 143 Core Book'},
+      { level:'Bugei', type:'', sub_type:'', trait:'', ring:'', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{}, get mastery() { return mastery(this); }, masteries:{}, description:'Pg. 143 Core Book'},
+      { level:'Bugei', type:'', sub_type:'', trait:'', ring:'', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{}, get mastery() { return mastery(this); }, masteries:{}, description:'Pg. 143 Core Book'},
+      { level:'Bugei', type:'', sub_type:'', trait:'', ring:'', rank:0, rank_s:0, roll:'', emphasis:null, emphases:{}, get mastery() { return mastery(this); }, masteries:{}, description:'Pg. 143 Core Book'},
+
     ];
 
     $scope.showSkillList = false;
@@ -179,15 +263,26 @@
     }
 
     $scope.addSkill = function(index) {
-      console.log("Skill Index: " + index);
       var skill = $scope.skillsMasterList[index];
       skill.roll = $scope.character[skill.trait] + "K" + $scope.character[skill.ring];      
       $scope.character.skills.push(skill);       
+      $scope.toggleShowSkillsList();
     };    
 
-    $scope.updateSkillRank = function(skill_index,val) {
-      console.log("Update Skill Index: " + skill_index + " Val: " + val );
+    $scope.removeSkill = function(index) {
+      $scope.character.skills.splice(index,1);
+    };
 
+    $scope.updateSkillRank = function(index) {
+      if ( $scope.character.skills[index].rank < $scope.character.skills[index].rank_s ) {
+        var diff = $scope.character.skills[index].rank_s - $scope.character.skills[index].rank;
+        $scope.character.experience_points += diff;
+      } else if ( $scope.character.skills[index].rank > $scope.character.skills[index].rank_s ) {
+        var diff = $scope.character.skills[index].rank - $scope.character.skills[index].rank_s;
+	$scope.character.experience_points -= diff;
+      }
+      $scope.character.skills[index].rank_s = $scope.character.skills[index].rank;
+      $scope.updateSkills($scope.character.skills[index].trait, $scope.character.skills[index].ring);
     };
 
   });
