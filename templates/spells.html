@@ -22,23 +22,33 @@
                  <th>Name</th>
                  <td>{{each.name}}</td>
                  <th>M. Level</th>
-                 <td>{{each.level}}</td>
+                 <td class="center">{{each.level}}</td>
+                 <th>Roll</th>
+                 <td class="center">{{each.roll}}</td>
             </tr>
             <tr>
                  <th>Element</th>
                  <td>{{each.ring}}</td>
                  <th>Duration</th>
-                 <td>{{each.duration}}</td>
+                 <td class="center" colspan="3">{{each.duration}}</td>
             </tr>
             <tr>
                  <th>Area</th>
                  <td>{{each.area_of_affect}}</td>
                  <th>Range</th>
-                 <td>{{each.range}}</td>
+                 <td class="center" colspan="3">{{each.range}}</td>
+            </tr>
+            <tr>
+                 <th>Raises</th>
+                 <td colspan="5" class="small"> 
+                     <span ng-bind-html="each.raises"></span>
+                 </td>
             </tr>
             <tr>
                  <th rowspan=3>Effect</th>
-                 <td rowspan=3 colspan=3 class="small"> 
+            </tr>
+            <tr>
+                 <td rowspan=3 colspan=5 class="small"> 
                      <span ng-bind-html="each.description"></span>
                  </td>
             </tr>

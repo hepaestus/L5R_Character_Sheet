@@ -28,6 +28,7 @@
       school: "",
       experience_points: 0,
       experience_points_earned: 0,
+      school_rank   : 1, 
       insight_rank  : 0, 
       earth         : 0,
       air           : 0,
@@ -58,6 +59,7 @@
       taint         : 0,
       skills        : [],
       spells        : [],
+      spell_affinity: ['air','water'],
     };        
 
   }]);
@@ -79,7 +81,7 @@
     };
 
     $scope.updateExp = function(attr, value) {
-      var cost = 5;
+      var cost = 4;
       if ( attr == 'void') {
         cost = 6;
       }
@@ -150,7 +152,11 @@
     };
      
     $scope.updateInsightRank = function() { 
-      $scope.character.insight_rank = (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10)
+      var skillRanks = 0;
+      for(var i = 0; i < $scope.character.skills.length; i++) {
+          skillRanks += $scope.character.skills[i].rank;
+      }
+      $scope.character.insight_rank = skillRanks + (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10)
     };
 
     $scope.updateSkills = function(attr,ring) {
@@ -295,6 +301,7 @@
 
     $scope.removeSkill = function(index) {
       $scope.character.skills.splice(index,1);
+      $scope.updateInsightRank();
     };
 
     $scope.addEmphasis = function(index) {
@@ -316,17 +323,39 @@
       }
       $scope.character.skills[index].rank_s = $scope.character.skills[index].rank;
       $scope.updateSkills($scope.character.skills[index].trait, $scope.character.skills[index].ring);
+      $scope.updateInsightRank();
     };
 
   });
 
   app.controller('SpellsController', function($scope) {
 
+    var spellRoll = function(obj) {
+      var roll = '';
+      var spell_ring = obj.ring;
+      var school_rank = $scope.character.school_rank;
+      var ring_val = "Ring"
+      var affinity = "+Affinity+"; 
+      if ( spell_ring != 'all' ) {
+        ring_val = $scope.character[spell_ring];
+      }
+      if ( $scope.character.spell_affinity.indexOf( spell_ring ) >= 0 ) {
+          affinity = 1;
+      }
+      roll = ring_val + ( affinity + school_rank ) + 'K' + ring_val;
+      console.log("Spell Roll: " + roll);
+      return roll;
+    };
+
     $scope.spellsMasterList = [
-      { id:0, name:'Sense', ring:'all', level: '1', range:'Personal', area_of_affect:'50\' radius from the caster', duration:'Instantaneous', raises: 'Range(+10\')', description:'This spell can be cast in any of the four standard elements. It allows for the caster to sense the presense, quantity, and rough location of the elemental spirits (not evil spirits known as <i>kansen</i> of that element within the range of the spell. This is most frequently applied when looking for spirits with which to Commune (See Commune), but can also can be useful as a crude basic location device. For example, a caster lost in the wilderness could cast Snese(Water) in hopes of locating the sourceof drinking water.' },
-      { id:1, name:'Summon', ring:'all', level: '1', range:'30\'', area_of_affect:'1 cubic foot of summoned matterial', duration:'Permanent', raises: 'Range(+10\'), Quantity(+1 cubic foot), Composition of Material(1-4 raises as outlined below)', description:'This spell can be cast in any of the tour standard elements. It allows the caster to summon a modest quantity (one cubic foot) of the chosen element. The summoned matter appears (usually in a rough ball shape] in any open space within the spell\'s range. This cannot place the summoned material inside another physical object or living creature. The summoned element will behave in a normal and mundane matter — earth falls to the ground, water soaks anything it lands on, air blows away, and ﬁre winks out unless there is something present for it to burn. In general it is impossible to use this spell effectively in combat, although clever shugenja may find a few modest combat uses. such as using Summon [Fire] to ignite a foe soaked in cooking oil. More commonly, the Spell\’s value is in simpler functions. such as summoning Water while in a desert, or summoning Fire to light a campfire without flint and tinder. Raises may be used with this spell to summon a more speciﬁc type of the appropriate element, such as wood or iron with Earth, or tea with Water. The GM should choose how many Raises (generally anywhere from 1 to 4) this requires. However, these Raises cannot be used to create rare or precious materials (such as gold) or spiritually powerful substances (such as jade or crystal).' },
-      { id:2, name:'Commune', ring:'all', level: '1', range:'20\'', area_of_affect:'self', duration:'Concentration', raises: 'See Desc.', description:'This spell can be cast in any element save Void. It allows the caster to speak with one of the local elemental kami, asking it a few questions, which is will answer honestly to the best of it\'s ability. ...' },
-      { id:3, name:'Blessed Wind', ring:'air', level:'1', range:'Personal', area_of_affect:'10\' radius around the caster', duration:'Concentration', raises:'Special(you may target another spell with this spell with 3 raises)', description:'Pg 167 Core Book' },
+      { id:0, name:'Sense', ring:'all', level: '1', range:'Personal', area_of_affect:'50\' radius from the caster', duration:'Instantaneous', raises: 'Range(+10\')', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the four standard elements. It allows for the caster to sense the presense, quantity, and rough location of the elemental spirits (not evil spirits known as <i>kansen</i> of that element within the range of the spell. This is most frequently applied when looking for spirits with which to Commune (See Commune), but can also can be useful as a crude basic location device. For example, a caster lost in the wilderness could cast Snese(Water) in hopes of locating the sourceof drinking water.' },
+      { id:1, name:'Summon', ring:'all', level: '1', range:'30\'', area_of_affect:'1 cubic foot of summoned matterial', duration:'Permanent', raises: 'Range(+10\'), Quantity(+1 cubic foot), Composition of Material(1-4 raises as outlined below)', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the tour standard elements. It allows the caster to summon a modest quantity (one cubic foot) of the chosen element. The summoned matter appears (usually in a rough ball shape] in any open space within the spell\'s range. This cannot place the summoned material inside another physical object or living creature. The summoned element will behave in a normal and mundane matter — earth falls to the ground, water soaks anything it lands on, air blows away, and ﬁre winks out unless there is something present for it to burn. In general it is impossible to use this spell effectively in combat, although clever shugenja may find a few modest combat uses. such as using Summon [Fire] to ignite a foe soaked in cooking oil. More commonly, the Spell\’s value is in simpler functions. such as summoning Water while in a desert, or summoning Fire to light a campfire without flint and tinder. Raises may be used with this spell to summon a more speciﬁc type of the appropriate element, such as wood or iron with Earth, or tea with Water. The GM should choose how many Raises (generally anywhere from 1 to 4) this requires. However, these Raises cannot be used to create rare or precious materials (such as gold) or spiritually powerful substances (such as jade or crystal).' },
+      { id:2, name:'Commune', ring:'all', level: '1', range:'20\'', area_of_affect:'self', duration:'Concentration', raises: 'See Desc.', get roll() { return spellRoll(this); }, description:'This spell can be cast in any element save Void. It allows the caster to speak with one of the local elemental kami, asking it a few questions, which is will answer honestly to the best of it\'s ability. ...' },
+      { id:3, name:'Blessed Wind', ring:'air', level:'1', range:'Personal', area_of_affect:'10\' radius around the caster', duration:'Concentration', raises:'Special(you may target another spell with this spell with 3 raises)', get roll() { return spellRoll(this); }, description:'Pg 167 Core Book' },
+      { id:4, name:'', ring:'air', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:'Pg 167 Core Book' },
+      { id:5, name:'', ring:'earth', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:'Pg 167 Core Book' },
+      { id:6, name:'', ring:'water', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:'Pg 167 Core Book' },
+      { id:7, name:'', ring:'fire', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:'Pg 167 Core Book' },
     ];
 
     $scope.showSpellsList = false;

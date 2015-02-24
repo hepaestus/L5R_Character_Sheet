@@ -1,13 +1,13 @@
 <div class="column">  
     <div class="col-md-8">
-    <!--
       <button ng-click="saveCharacter()">Save Changes Locally</button>
       <button ng-click="loadCharacter()">Load Character</button><br/>
-    -->
-      <label class="line">Clan</label><input class="line" name="clan" type="text" ng-model="character.clan"/>
-      <label class="line">Experience Points</label><input class="line" name="experience_points" type="text" ng-model="character.experience_points"/>/<input class="line" name="experience_points_earned" type="text" ng-model="character.experience_points_earned"><br/>
-      <label class="line">School</label><input class="line" name="school" type="text" ng-model="character.school"/>
-      <label class="line">Insight Rank</label><input class="line" name="insight_rank" type="text" ng-model="character.insight_rank"/><span>(Rings x 10 + skills)</span><br/>
+      <label class="line">Clan</label><input class="line clan" class="clan" name="clan" type="text" ng-model="character.clan"/>
+      <label class="line">Experience Points</label><input class="line experience_points" name="experience_points" type="number" ng-model="character.experience_points"/>
+      <label class="line">Total Earned</label><input class="line experience_points_earned" name="experience_points_earned" type="number" ng-model="character.experience_points_earned"><br/>
+      <label class="line">School</label><input class="line school" name="school" type="text" ng-model="character.school"/>
+      <label class="line">School Rank</label><input class="line school_rank" name="school" type="number" ng-model="character.school_rank"/>
+      <label class="line">Insight Rank</label><input class="line insight_rank" name="insight_rank" type="number" ng-model="character.insight_rank"/><span>(Rings x 10 + skills)</span><br/>
 
       <table class="rings-table">
         <tr>
@@ -94,7 +94,7 @@
               <td class="skill_rank"><form name="skill_rank_form"><input name="skill_rank" ng-model="character.skills[$index].rank" type="number" value="{{each.rank}}" min="0"  ng-click="updateSkillRank($index)"/></form></td>
               <td>{{each.trait}}</td>
               <td class="skill_roll">{{each.roll}}</td>
-              <td><a href="" ng-hide="each.emphasis" ng-show="each.emphases[0]" ng-click="toggleShowEmphasesList($index)">Add</a><span ng-show="each.emphasis">{{each.emphasis}}</span></td>
+              <td><a href="" class="small" ng-hide="each.emphasis" ng-show="each.emphases[0]" ng-click="toggleShowEmphasesList($index)">Add</a><span ng-show="each.emphasis">{{each.emphasis}}</span></td>
               <td class="skill_mastery" style="line-height: 60%"><span class="small" ng-bind-html="each.mastery"></span></td>
 	          <td class="skill_desc" style="line-height: 60%"><span class="small">{{each.description}}</span></td>
 	          <td class="skill_button"><button ng-click="removeSkill($index)"><span class="glyphhicon glyphicons-remove">X</span></button></td>

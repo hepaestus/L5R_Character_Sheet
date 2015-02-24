@@ -1,5 +1,12 @@
 /* app css stylesheet */
 
+input.clan, input.school {
+    width: 10em;
+}
+input.experience_points, input.experience_points_earned, input.school_rank, input.insight_rank {
+    width: 4em;
+}
+
 table.rings-table {
    border: 0px solid black;
    width: 40%;   
@@ -155,6 +162,7 @@ input[name="skill_type"], input[name="skill_sub_type"],  {
 table.spell {
     width: 33%;
     margin: 5px;
+    border: 1px solid black;    
 }
 table.spell td {
     border: 1px solid black;    
