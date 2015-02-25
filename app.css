@@ -1,9 +1,9 @@
 /* app css stylesheet */
 
-input.clan, input.school {
+input.clan, input.school, input.name {
     width: 10em;
 }
-input.experience_points, input.experience_points_earned, input.school_rank, input.insight_rank {
+input.experience_points, input.experience_points_earned, input.school_rank, input.insight_rank, input.insight {
     width: 4em;
 }
 

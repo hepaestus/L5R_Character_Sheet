@@ -28,10 +28,10 @@
       school: "",
       experience_points: 0,
       experience_points_earned: 0,
-      get initiative() { return ((this.school_rank + this.reflexes) + "K" + this.reflexes); },
+      get initiative() { return ((this.insight_rank + this.reflexes) + "K" + this.reflexes); },
       get current_tn() { return ((this.reflexes * 5 ) + 5); },
-      school_rank   : 1, 
-      insight_rank  : 0, 
+      insight       : 0, 
+      insight_rank  : 1, 
       earth         : 0,
       air           : 0,
       water         : 0,
@@ -54,7 +54,8 @@
       agility_s     : 0,
       intelligence  : 0,      
       intelligence_s: 0,      
-      armor_tn      : 0,
+      armor         : { rating:0 },
+      get armor_tn() { return ( 5 * this.reflexes + 5 + this.armor.rating); },
       honor         : 0,
       glory         : 0,
       'status'      : 0,
@@ -158,7 +159,7 @@
       for(var i = 0; i < $scope.character.skills.length; i++) {
           skillRanks += $scope.character.skills[i].rank;
       }
-      $scope.character.insight_rank = skillRanks + (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10)
+      $scope.character.insight = skillRanks + (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10)
     };
 
     $scope.updateSkills = function(attr,ring) {
@@ -317,11 +318,11 @@
       if ( $scope.character.skills[index].rank < $scope.character.skills[index].rank_s ) {
         var diff = $scope.character.skills[index].rank_s - $scope.character.skills[index].rank;
         $scope.character.experience_points += diff;
-        $scope.character.insight_rank -= diff;
+        $scope.character.insight -= diff;
       } else if ( $scope.character.skills[index].rank > $scope.character.skills[index].rank_s ) {
         var diff = $scope.character.skills[index].rank - $scope.character.skills[index].rank_s;
 	    $scope.character.experience_points -= diff;
-        $scope.character.insight_rank += diff;
+        $scope.character.insight += diff;
       }
       $scope.character.skills[index].rank_s = $scope.character.skills[index].rank;
       $scope.updateSkills($scope.character.skills[index].trait, $scope.character.skills[index].ring);
@@ -335,7 +336,7 @@
     var spellRoll = function(obj) {
       var roll = '';
       var spell_ring = obj.ring;
-      var school_rank = $scope.character.school_rank;
+      var insight_rank = $scope.character.insight_rank;
       var ring_val = "Ring"
       var affinity = "+Affinity+"; 
       if ( spell_ring != 'all' ) {
@@ -344,7 +345,7 @@
       if ( $scope.character.spell_affinity.indexOf( spell_ring ) >= 0 ) {
           affinity = 1;
       }
-      roll = ring_val + ( affinity + school_rank ) + 'K' + ring_val;
+      roll = ring_val + ( affinity + insight_rank ) + 'K' + ring_val;
       console.log("Spell Roll: " + roll);
       return roll;
     };
