@@ -90,15 +90,15 @@
           <tr>
 		  <th class="skill_name">Skill Name</th><th class="skill_rank">Rank</th><th class="skill_trait">Trait</th><th class="skill_roll">Roll</th><th class="skill_emphasis">Emphasis</th><th class="skill_mastery">Mastery Abilities</th><th class="skill_desc">Desc.</th><th class="skill_button"></th>
           </tr>
-          <tr ng-repeat="each in character.skills" ng-show="character.skills">
-              <td class="skill_name">{{each.type}} {{each.sub_type}} </td>
-              <td class="skill_rank"><form name="skill_rank_form"><input name="skill_rank" ng-model="character.skills[$index].rank" type="number" value="{{each.rank}}" min="0"  ng-click="updateSkillRank($index)"/></form></td>
-              <td>{{each.trait}}</td>
+          <tr ng-repeat="each in character.skills track by each.id" ng-show="character.skills">
+              <td class="skill_name">{{each.id}} : {{each.skill.type}} {{each.skill.sub_type}} </td>
+              <td class="skill_rank"><input name="skill_rank" ng-model="character.skills[each.id].rank" type="number" min="0" ng-click="updateSkillRank(each.id)"/></td>
+              <td>{{each.skill.trait}}</td>
               <td class="skill_roll">{{each.roll}}</td>
-              <td><a href="" class="small" ng-hide="each.emphasis" ng-show="each.emphases[0]" ng-click="toggleShowEmphasesList($index)">Add</a><span ng-show="each.emphasis">{{each.emphasis}}</span></td>
-              <td class="skill_mastery" style="line-height: 60%"><span class="small" ng-bind-html="each.mastery"></span></td>
-	          <td class="skill_desc" style="line-height: 60%"><span class="small">{{each.description}}</span></td>
-	          <td class="skill_button"><button ng-click="removeSkill($index)"><span class="glyphhicon glyphicons-remove">X</span></button></td>
+              <td><a href="" class="small" ng-hide="each.skill.emphasis" ng-show="each.skill.emphases != {}" ng-click="toggleShowEmphasesList(each.id)">Add</a><span ng-show="each.emphasis">{{each.skill.emphasis}}</span></td>
+              <td class="skill_mastery" style="line-height: 60%"><span class="small" ng-bind-html="each.skill.mastery"></span></td>
+	          <td class="skill_desc" style="line-height: 60%"><span class="small">{{each.skill.description}}</span></td>
+	          <td class="skill_button"><button ng-click="removeSkill(each.id)"><span class="glyphhicon glyphicons-remove">X</span></button></td>
           </tr>
           <tr ng-hide="showEmphasesList">
               <td colspan="8"><a href="" ng-click="toggleShowSkillsList()">Add a Skill</a></td>
@@ -119,7 +119,7 @@
             <td colspan="7">
               <ul class="add_skill_list">                  
                   <li ng-repeat="each in skillsMasterList">
-                      <a href="" ng-click="addSkill($index)">{{each.type}} {{each.sub_type}}</a>
+                      <a href="" ng-click="addSkill(each.id)">{{each.type}} {{each.sub_type}}</a>
                   <li>
               </ul>
             </td>
