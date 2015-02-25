@@ -28,6 +28,8 @@
       school: "",
       experience_points: 0,
       experience_points_earned: 0,
+      get initiative() { return ((this.school_rank + this.reflexes) + "K" + this.reflexes); },
+      get current_tn() { return ((this.reflexes * 5 ) + 5); },
       school_rank   : 1, 
       insight_rank  : 0, 
       earth         : 0,
