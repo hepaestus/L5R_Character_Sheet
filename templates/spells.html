@@ -6,10 +6,10 @@
   <a href="" ng-click="toggleShowSpellsList()">Add Spell</a>
   <ul ng-show="showSpellsList">
       <li ng-repeat="spell in spellsMasterList">
-          <a href="" ng-click="addSpell($index)">{{spell.name}} - Level:{spell.level}}</a>
+          <a href="" ng-click="addSpell(spell.id)">{{getSpell(spell.id,'name')}} - Level:{{ getSpell(spell.id,'level')}}</a>
           <ul>
-              <li>Ring {{spell.ring}}
-              <li><span ng-bind-html="spell.description"></span></li>
+              <li>Ring {{getSpell(spell.id,'ring')}}
+              <li><span ng-bind-html="getSpell(spell.id,'description')"></span></li>
           </ul>
       </li>
   </ul>
@@ -20,28 +20,28 @@
           <table class="spell">
             <tr>
                  <th>Name</th>
-                 <td>{{each.name}}</td>
+                 <td>{{getSpell(each.id,'name')}}</td>
                  <th>M. Level</th>
-                 <td class="center">{{each.level}}</td>
+                 <td class="center">{{getSpell(each.id,'level')}}</td>
                  <th>Roll</th>
-                 <td class="center">{{each.roll}}</td>
+                 <td class="center">{{getSpell(each.id,'roll')}}</td>
             </tr>
             <tr>
                  <th>Element</th>
-                 <td>{{each.ring}}</td>
+                 <td>{{getSpell(each.id,'ring')}}</td>
                  <th>Duration</th>
-                 <td class="center" colspan="3">{{each.duration}}</td>
+                 <td class="center" colspan="3">{{getSpell(each.id,'duration')}}</td>
             </tr>
             <tr>
                  <th>Area</th>
-                 <td>{{each.area_of_affect}}</td>
+                 <td>{{getSpell(each.id,'area_of_affect')}}</td>
                  <th>Range</th>
-                 <td class="center" colspan="3">{{each.range}}</td>
+                 <td class="center" colspan="3">{{getSpell(each.id,'range')}}</td>
             </tr>
             <tr>
                  <th>Raises</th>
                  <td colspan="5" class="small"> 
-                     <span ng-bind-html="each.raises"></span>
+                     <span ng-bind-html="getSpell(each.id,'raises')"></span>')
                  </td>
             </tr>
             <tr>
@@ -49,7 +49,7 @@
             </tr>
             <tr>
                  <td rowspan=3 colspan=5 class="small"> 
-                     <span ng-bind-html="each.description"></span>
+                     <span ng-bind-html="getSpell(each.id,'description')"></span>')
                  </td>
             </tr>
           </table>

@@ -54,8 +54,8 @@
       agility_s     : 0,
       intelligence  : 0,      
       intelligence_s: 0,      
-      armor         : { rating:0 },
-      get armor_tn() { return ( 5 * this.reflexes + 5 + this.armor.rating); },
+      armor         : { rating:0, bonus:0, notes:""},
+      get armor_tn() { return ( 5 * this.reflexes + 5 + this.armor.rating + this.armor.bonus ); },
       honor         : 0,
       glory         : 0,
       'status'      : 0,
@@ -63,6 +63,10 @@
       skills        : [],
       spells        : [],
       spell_affinity: ['air','water'],
+      get wounds() { return ( ((this.earth * 2) * this.insight_rank) + " : " + (this.earth * 5)); },
+      get healing() { return ( this.stamina * 2 + this.insight_rank ); },
+      healing_modifiers:0,
+      get current_heal_rate() { return ( (this.stamina * 2) + this.insight_rank + this.healing_modifiers + " per day" ); },
     };        
 
     var mastery = function(obj) {
@@ -72,14 +76,14 @@
           text += "Level " + x + " : " + obj.masteries[x] + "<br />\n";
         }
       } 
-      //console.log("Text: " + text);
+      console.log("Text: " + text);
       return text;
     };
     
     $scope.skillsMasterList = [
       // id:, level, type, subtype, trait, ring, rank, roll, emphasis, emphases{}, get mastery(), masteries{}, description
       { id:1000, level:'Debug', type:'Debug', sub_type:'debug', trait:'void', ring:'void', emphases:{0:'E Zero', 1:'E One', 2:'E Two'}, get mastery() { return mastery(this); }, masteries:{ 3:'M Three', 5:'M Five', 7:'M Seven'}, description:'debug description'},
-      { id:0, level:'High', type:'Artisan', sub_type:'', trait:'awareness', ring:'air', emphases: {0:'Bonsai', 1:'Gardening', 2:'Ikebana', 3:'Painting', 4:'Poetry', 5:'Sculpture', 6:'Tattooing'}, description:'Pg. 135 Core Book'},
+      { id:0, level:'High', type:'Artisan', sub_type:'', trait:'awareness', ring:'air', emphases: {0:'Bonsai', 1:'Gardening', 2:'Ikebana', 3:'Origami', 4:'Painting', 5:'Poetry', 6:'Sculpture', 7:'Tattooing'}, description:'Pg. 135 Core Book'},
       { id:1, level:'High', type:'Artisan', sub_type:'Origami', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
       { id:2, level:'High', type:'Artisan', sub_type:'Bonsai', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
       { id:3, level:'High', type:'Artisan', sub_type:'Gardening', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
@@ -251,57 +255,42 @@
     $scope.updateInsightRank = function() { 
       var skillRanks = 0;
       for(var i = 0; i < $scope.character.skills.length; i++) {
+        if ( $scope.character.skills[i] != undefined ) {
           skillRanks += $scope.character.skills[i].rank;
+        }
       }
       $scope.character.insight = skillRanks + (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10);
     };
 
-    $scope.getSkill = function(id, attr=null) {
-        for( var i = 0 ; i < $scope.skillsMasterList.length; i++) {
-            if ( $scope.skillsMasterList[i].id === id ) {
-                if ( attr === null ) {
-                    //console.log("Return skill: " + JSON.stringify($scope.skillsMasterList[i]) );
-                    return $scope.skillsMasterList[i];
-                } else {
-                    //console.log("Return attr: " + $scope.skillsMasterList[i][attr] );
-                    return $scope.skillsMasterList[i][attr];
-                }
-            }
-        }
-        return "(error)";
-    }
-    //$scope.updateSkills = function(attr,ring) {
-    //    for(var i = 0; i < $scope.character.skills.length; i++) {
-    //      if ($scope.character.skills[i].trait == attr) {
-    //        $scope.character.skills[i].roll = ( $scope.character.skills[i].rank + $scope.character[attr] ) + "K" + $scope.character[ring];
-    //      }
-    //    }
-    //};
 
   }]);
 
   app.controller('SkillsController', function($scope) {
 
     $scope.clickedSkillRank = null;
-
-
     $scope.showSkillList = false;
     $scope.skillSearchText = "";
+    $scope.skillSearchFilterHigh = "type = 'high'";
+    $scope.skillSearchFilterLow = "type = 'low'";
+    $scope.skillSearchFilterBugei = "type = 'bugei'";
+    $scope.skillSearchFilterMerchant = "type = 'merchant'";
+    $scope.skillSearchFilterLow = "type = 'low'";
+
     $scope.toggleShowSkillsList = function() {
         $scope.showSkillsList = !$scope.showSkillsList;
+        $scope.skillSearchText = ""
     };
 
     $scope.emphasesList = ["One", "Two"];
-    $scope.currentSkillIndex = null;
     $scope.currentSkillId = null;
     $scope.showEmphasesList = false;
 
     $scope.toggleShowEmphasesList = function(skill_id = 0) {
         //console.log("Skill Id : " + skill_id);
-        $scope.currentSkillIndex = skill_id;
-        //console.log("Current Skill Index : " + $scope.currentSkillIndex);
+        $scope.currentSkillId = skill_id;
+        //console.log("Current Skill Id : " + $scope.currentSkillId);
         $scope.emphasesList = [];
-        var skill = $scope.getSkill(skill_id);
+        var skill = $scope.getSkillFromMasterList(skill_id);
         for ( var i in skill.emphases ) {
             $scope.emphasesList.push( skill.emphases[i] ) ;
         }
@@ -309,14 +298,10 @@
     };
 
     $scope.addEmphasis = function(emphasis_index) {
-      var skill = getCharacterSkillById($scope.currentSkillIndex);
+      var skill = getCharacterSkillById($scope.currentSkillId);
       skill.empasis = empasis_index;
-      replaceCharacterSkillById($scope.currentSkillIndex, skill);
+      replaceCharacterSkillById($scope.currentSkillId, skill);
       $scope.toggleShowEmphasisList();
-    };
-
-    var getASkill = function(skill_id, attr=null) { 
-      return $scope.getSkillFromMasterList(skill_id, attr); 
     };
 
     var getSkillRoll = function(skill_id, skill_rank) {
@@ -327,86 +312,133 @@
       return roll;
     };
 
+    var skillMastery = function(obj) {
+      //console.log("get Mastery of skill : " + obj.id + " with rank of " + obj.rank);
+      var master_skill = $scope.getSkillFromMasterList(obj.id);
+      //console.log("Master Skill: " + JSON.stringify(master_skill));
+      //console.log("Master Skill Masteries: " + JSON.stringify(master_skill.masteries));
+      var text = '';
+      for(var x in master_skill.masteries ) {
+        if ( obj.rank >= x ) {
+          text += "Level " + x + " : " + master_skill.masteries[x] + "<br />\n";
+        }
+      } 
+      //console.log("Text: " + text);
+      return text;
+    };
+
     $scope.addSkill = function(skill_id) {
+      //console.log("Before Skills1 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
       var skill = $scope.getSkillFromMasterList(skill_id);
-      //var new_skill = { id: skill_id, rank: 0, emphasis:null, get roll() { return (getSkillRoll(this.id)); } , get skill() { return (getASkill(this.id)); } };
-      //var new_skill = { id: skill_id, rank: 0, rank_s: 0, emphasis:null, get roll() { return (getSkillRoll(this.id, this.rank)); } , get skill() { return (getASkill(this.id)); } };
-      var new_skill = { id: skill_id, rank: 0, rank_s: 0, emphasis:null, get roll() { return (getSkillRoll(this.id, this.rank)); } };// get skill() { return (getASkill(this.id)); } };
+      var new_skill = { id:skill_id, rank:0, rank_s:0, emphasis:null, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
+      console.log("Make Sure Skill " + skill_id + " does not exist");
       if ( getCharacterSkillById(skill_id) === null) {
+        //console.log("Add Skill " + skill_id );
+        //console.log("Before Skills2 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
         $scope.character.skills.push(new_skill);       
+        //console.log("After Skills1 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
         $scope.toggleShowSkillsList();
+      } else {
+        //console.log("skill " + skill_id + " already exists");
       }
+        //console.log("After Skills2 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
     };    
+
+    $scope.getSkill = function(skill_id, attr=null) { 
+        //console.log("Get : " + attr);
+        return $scope.getSkillFromMasterList(skill_id, attr);
+    };
 
     $scope.getSkillFromMasterList = function(skill_id, attr=null) {
         for(var i=0; i < $scope.skillsMasterList.length; i++) {
             if ( $scope.skillsMasterList[i].id === skill_id ) {
                 if (attr === null) {
+                    //console.log("Return skill: " + JSON.stringify($scope.skillsMasterList[i]) );
                     return $scope.skillsMasterList[i];
+                } else if ( attr === 'mastery') {
+                    console.log("Get Mastery FOO: ");
+                    return $scope.skillsMasterList[i].mastery;
                 } else {
+                    //console.log("Return attr: " + $scope.skillsMasterList[i][attr] );
                     return $scope.skillsMasterList[i][attr];
                 }
             }
         }
+        return "(error)";
     };
    
     $scope.removeSkill = function(id) {
        replaceCharacterSkillById(id, null);
     };
 
-    $scope.addEmphasis = function(index) {
-      var skill = $scope.getSkillFromMasterList($scope.currentSkillIndex);
-      //var emp = $scope.character.skills[$scope.currentSkillIndex].emphases[index];
-      var emp = skill.emphases[index];
+    $scope.addEmphasis = function(emp_index) {
+      var master_skill = $scope.getSkillFromMasterList($scope.currentSkillId);
+      var emp = master_skill.emphases[emp_index];      
+      var skill = getCharacterSkillById($scope.currentSkillId);
       skill.emphasis = emp;
-      console.log("Add Emphasis Index : " + index + " to Skill Index : " + $scope.currentSkillIndex + "Emp: " + emp + " Emphasis: " + skill.emphasis );
-      console.log(skill.emphasis);
-      //$scope.character.skills[$scope.currentSkillIndex].emphasis = emp;
-      replaceCharacterSkillById($scope.currentSkillIndex, skill);
+      //console.log("Add Emphasis Index : " + emp_index + " to Character Skill Id : " + $scope.currentSkillId + "Emp: " + emp + " Emphasis: " + skill.emphasis );
+      //console.log(skill.emphasis);
+      replaceCharacterSkillById($scope.currentSkillId, skill);
       $scope.toggleShowEmphasesList();
     }
     
     var getCharacterSkillById = function(skill_id) {        
-        for(var i = 0; i < $scope.character.skills.length; i++) {
-            if ( $scope.character.skills[i].id === skill_id ) {
-                return $scope.character.skills[i];
-            }
+      //console.log("Before Skills : " + JSON.stringify($scope.character.skills) + " (getCharacterSkillById)");
+      for(var i = 0; i < $scope.character.skills.length; i++) {
+        //console.log("Each Skill " + JSON.stringify($scope.character.skills[i]));
+        if ( $scope.character.skills[i] != undefined ) {
+          if ( $scope.character.skills[i].id === skill_id ) {
+            //console.log("Afterr Skills : " + JSON.stringify($scope.character.skills) + " (getCharacterSkillById)");
+            //console.log("Skill " + skill_id + " FOUND (getcharacterskillbyid)");
+            return $scope.character.skills[i];
+          }
         }
-        return null;
+      }
+      //console.log("Skill " + skill_id + " Not Found (getcharacterskillbyid)");
+      return null;
     };
 
-    var replaceCharacterSkillById = function(skill_id, skill) {
-        for(var i = 0; i < $scope.character.skills.length; i++) {
-            console.log( JSON.stringify($scope.character.skills[i]) );
-            console.log("Skill Id : " + $scope.character.skills[i].id );
-            if ( $scope.character.skills[i].id === skill_id ) {
-                console.log("i:" + i);
-                if ( skill === null ) {
-                  //console.log("Remove Skill");
-                  $scope.character.skills.splice(i,1);
-                } else {
-                  //console.log("Replace Skill");
-                  $scope.character.skills.splice(i,1);
-                  $scope.character.skills.push(skill);
-                }
+    var replaceCharacterSkillById = function(skill_id, skill=null) {
+      for(var i = 0; i < $scope.character.skills.length; i++) {
+        if ( $scope.character.skills[i] != undefined ) {
+          //console.log("Skill : " + JSON.stringify($scope.character.skills[i]) + "  Skill Id : " + $scope.character.skills[i].id + "  i:" + i + "(replaceCharacterSkillById)");
+          if ( $scope.character.skills[i].id === skill_id ) {
+            if ( skill === null ) {
+              //console.log("Remove Skill");
+              $scope.character.skills.splice(i,1);
+              return;
+            } else {
+              //console.log("Replace Skill");
+              $scope.character.skills.splice(i,1,skill);
+              //console.log("Before Skills : " + JSON.stringify($scope.character.skills) + " (replaceCharacterSkillById)");
+              //$scope.character.skills.push(skill);
+              //console.log("After Skills : " + JSON.stringify($scope.character.skills) + " (replaceCharacterSkillById)");
+              return;
             }
+          }
         }
+      }
     }
 
     $scope.updateSkillRank = function(id) {
+      //console.log("Before Skills : " + JSON.stringify($scope.character.skills) + " (updateSkillRank)");
       var skill = getCharacterSkillById(id);
-      if ( skill.rank < skill.rank_s ) {
-        var diff = skill.rank_s - skill.rank;
-        $scope.character.experience_points += diff;
-        $scope.character.insight -= diff;
-      } else if ( skill.rank > skill.rank_s ) {
-        var diff = skill.rank - skill.rank_s;
-	$scope.character.experience_points -= diff;
-        $scope.character.insight += diff;
+      if ( skill != null && skill.id >= 0 ) { 
+        if ( skill.rank < skill.rank_s ) {
+          var diff = skill.rank_s - skill.rank;
+          $scope.character.experience_points += diff;
+          $scope.character.insight -= diff;
+        } else if ( skill.rank > skill.rank_s ) {
+          var diff = skill.rank - skill.rank_s;
+	      $scope.character.experience_points -= diff;
+          $scope.character.insight += diff;
+        }
+        skill.rank_s = skill.rank;
+        replaceCharacterSkillById(id, skill);
+        $scope.updateInsightRank();
+      } else {
+        //console.log("Skill Not Found (updateskillrank)");
       }
-      skill.rank_s = skill.rank;
-      replaceCharacterSkillById(id, skill);
-      $scope.updateInsightRank();
     };
 
   });
@@ -432,29 +464,29 @@
 
     $scope.spellsMasterList = [
       { id:0, name:'Sense', ring:'all', level: '1', range:'Personal', area_of_affect:'50\' radius from the caster', duration:'Instantaneous', raises: 'Range(+10\')', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the four standard elements. It allows for the caster to sense the presense, quantity, and rough location of the elemental spirits (not evil spirits known as <i>kansen</i> of that element within the range of the spell. This is most frequently applied when looking for spirits with which to Commune (See Commune), but can also can be useful as a crude basic location device. For example, a caster lost in the wilderness could cast Snese(Water) in hopes of locating the sourceof drinking water.' },
-      { id:1, name:'Summon', ring:'all', level: '1', range:'30\'', area_of_affect:'1 cubic foot of summoned matterial', duration:'Permanent', raises: 'Range(+10\'), Quantity(+1 cubic foot), Composition of Material(1-4 raises as outlined below)', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the tour standard elements. It allows the caster to summon a modest quantity (one cubic foot) of the chosen element. The summoned matter appears (usually in a rough ball shape] in any open space within the spell\'s range. This cannot place the summoned material inside another physical object or living creature. The summoned element will behave in a normal and mundane matter ‚Äî earth falls to the ground, water soaks anything it lands on, air blows away, and Ô¨Åre winks out unless there is something present for it to burn. In general it is impossible to use this spell effectively in combat, although clever shugenja may find a few modest combat uses. such as using Summon [Fire] to ignite a foe soaked in cooking oil. More commonly, the Spell\‚Äôs value is in simpler functions. such as summoning Water while in a desert, or summoning Fire to light a campfire without flint and tinder. Raises may be used with this spell to summon a more speciÔ¨Åc type of the appropriate element, such as wood or iron with Earth, or tea with Water. The GM should choose how many Raises (generally anywhere from 1 to 4) this requires. However, these Raises cannot be used to create rare or precious materials (such as gold) or spiritually powerful substances (such as jade or crystal).' },
+      { id:1, name:'Summon', ring:'all', level: '1', range:'30\'', area_of_affect:'1 cubic foot of summoned matterial', duration:'Permanent', raises: 'Range(+10\'), Quantity(+1 cubic foot), Composition of Material(1-4 raises as outlined below)', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the tour standard elements. It allows the caster to summon a modest quantity (one cubic foot) of the chosen element. The summoned matter appears (usually in a rough ball shape] in any open space within the spell\'s range. This cannot place the summoned material inside another physical object or living creature. The summoned element will behave in a normal and mundane matter; earth falls to the ground, water soaks anything it lands on, air blows away, and fire winks out unless there is something present for it to burn. In general it is impossible to use this spell effectively in combat, although clever shugenja may find a few modest combat uses. such as using Summon [Fire] to ignite a foe soaked in cooking oil. More commonly, the Spell\'s value is in simpler functions. such as summoning Water while in a desert, or summoning Fire to light a campfire without flint and tinder. Raises may be used with this spell to summon a more specfic type of the appropriate element, such as wood or iron with Earth, or tea with Water. The GM should choose how many Raises (generally anywhere from 1 to 4) this requires. However, these Raises <strong>cannot</strong> be used to create rare or precious materials (such as gold) or spiritually powerful substances (such as jade or crystal).' },
       { id:2, name:'Commune', ring:'all', level: '1', range:'20\'', area_of_affect:'self', duration:'Concentration', raises: 'See Desc.', get roll() { return spellRoll(this); }, description:'This spell can be cast in any element save Void. It allows the caster to speak with one of the local elemental kami, asking it a few questions, which is will answer honestly to the best of it\'s ability. ...' },
       { id:3, name:'Blessed Wind', ring:'air', level:'1', range:'Personal', area_of_affect:'10\' radius around the caster', duration:'Concentration', raises:'Special(you may target another spell with this spell with 3 raises)', get roll() { return spellRoll(this); }, description:'Pg 167 Core Book' },
-      { id:4, name:'By the Light of the Moon', ring:'air', level:'1', range:'Touch', area_of_affect:'One Object', duration:'1 hour', raises:'Area (+5ë radius), Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'You call upon the kami to reveal that which has been hide den. All concealed objects within the area of effect appear as slightly luminous outlines to you. Any nonómagical conceale ment is revealed, including secret compartments, trap doors. concealed weapons, etc. Only you can see the presence of these objects. Pg 167 Core Book' },
-      { id:5, name:'Cloak of Night', ring:'air', level:'1', range:'Touch', area_of_affect:'One Object', duration:'1 hour', raises:'Duration (+1 hour)', get roll() { return spellRoll(this); }, description:'You can call upon the kami to wrap an object in their embrace, hiding it from the sight of mortal beings. You may target any one nonelivingë object smaller than you. This object becomes invisible to the naked eye. Attempts to perceive it magically will automatically succeed if the Mastery Level of the spell used is higher than that of this spell. Spells of equal Mastery Level require a Contested Air Roll to detect the hidden object. The object is still physically present and can be touched, smelled, or sensed with any normal sense other than vision. Pg 167 Core Book' },
+      { id:4, name:'By the Light of the Moon', ring:'air', level:'1', range:'Touch', area_of_affect:'One Object', duration:'1 hour', raises:'Area (+5 radius), Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'You call upon the kami to reveal that which has been hide den. All concealed objects within the area of effect appear as slightly luminous outlines to you. Any non-magical conceale ment is revealed, including secret compartments, trap doors. concealed weapons, etc. Only you can see the presence of these objects. Pg 167 Core Book' },
+      { id:5, name:'Cloak of Night', ring:'air', level:'1', range:'Touch', area_of_affect:'One Object', duration:'1 hour', raises:'Duration (+1 hour)', get roll() { return spellRoll(this); }, description:'You can call upon the kami to wrap an object in their embrace, hiding it from the sight of mortal beings. You may target any one noneliving object smaller than you. This object becomes invisible to the naked eye. Attempts to perceive it magically will automatically succeed if the Mastery Level of the spell used is higher than that of this spell. Spells of equal Mastery Level require a Contested Air Roll to detect the hidden object. The object is still physically present and can be touched, smelled, or sensed with any normal sense other than vision. Pg 167 Core Book' },
       { id:6, name:'Legacy of Kaze-No-Kame', ring:'air', level:'1', range:'School Rank x 10 Miles', area_of_affect:'One known individual within range', duration:'Special', raises:'Area (+1 individual), Range (+10 miles)', get roll() { return spellRoll(this); }, description:'You are able to call upon the spirits of the wind to take form as a bird and carry a message for you. The bird that is created by this spell appears perfectly normal in all regards. but if it takes any damage it dissipates into wind immediately, ending the spell. Upon creating the bird, you may speak to it, giving it a spoken message of up to one minute in length. The bird will then fly away to deliver the message to the person (or persons) specified when the spell is cast. The bird will fly to their location, deliver the message via a whisper (it can be overheard by others, but not easily), and then disappear. If the bird is unable to reach the individual, but they are within range (if they are within a building with no windows. for instance) it will remain outside waiting for up to one week before disappearing. If the person specified by the spell is not within range, the bird will fly away in a random direction and disappear when it is out of your line of sight. Pg 167 Core Book' },
       { id:7, name:'Nature\'s Touch', ring:'air', level:'1', range:'10\'', area_of_affect:'One Creature', duration:'Special', raises:'Range(+10\')', get roll() { return spellRoll(this); }, description:'You are able to use the spirits of the wind to speak to an animal and ensure that it understands what you are saying. This spell works only on natural animals, and will not work with Shadowlands creatures or creatures from other realms. It does not guarantee that the animal will regard you positively or that it will fulfill requests made of it, but the creature will understand anything you tell it (within its ability to do so. naturally political relationships will have no meaning to a horse, no matter how many times you explain them). This spell lasts as long as you maintain your full and undivided attention on the animal and continue speaking to it. Pg 167 Core Book' },
       { id:8, name:'Tempest of Air', ring:'air', level:'1', range:'Personal', area_of_affect:'A cone 75\' long and 15\' wide at its end', duration:'Instantaneous', raises:'Area (+5\' to the width of the cone), Damage (+lk0), Range (+5\' to the length of the cone), Special (+5 to Air TN against Knockdown per Raise)', get roll() { return spellRoll(this); }, description:'You summon a powcr?al gust of air emanating front your position that crashes into all in its path, knocking them to the ground. All targets within the area of effect suffer lkl Wounds and must make a Contested Roll using their Earth against your Air. Every target that fails suffers Knockdown. Pg 167 Core Book' },
-      { id:9, name:'Token of Memory', ring:'air', level:'1', range:'10\'', area_of_affect:'One small (1 cubic foot or smaller) illusory object', duration:'1 hour', raises:'Area (+1 cubic foot in size of illusory object), Duration (+1 hour)', get roll() { return spellRoll(this); }, description:'You can create a flawless illusion of one object. The item ape pears real in every way up until the spell expires, at which point it disappears. If you are attempting to create a specifc, familiar object, such as another samuraiís katana, you must declare one Raise, and that individual may make a Contested Roll using his Perception against the total of your Spell Casting Roll to detect the forgery. Images created by this spell are completely stationary. and if placed in a situation where they must move [such as floating in water], disappear instantly. An image of a katana could be created sitting on a rack, for example, but not in a samurai\'s obi because it would not be able to move with the samurai. Objects created with this spell have no true physical substance and cannot hear weight or inflict damage.Pg 167 Core Book' },
-      { id:10, name:'To Seek the Truth', ring:'air', level:'1', range:'Personal / Touch', area_of_affect:'One individual touched [may be the caster]', duration:'5 minutes', raises:'Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'You call upon the wind to purge the mind of your target, granting him clarity. This spell may negate temporary mental or social penalties suffered as a result of a mechanical effect, including Techniques, Wound Ranks, or other spells. The TN of the Spell Casting Roll made to cast this spell is increased by an amount equal to the Technique Rank, Wound Rankë or spell Mastery Level used to create the penalty in the first place. Disadvantages permanently possessed by an individual may not be countered using this spell. Pg 168 Core Book' },
+      { id:9, name:'Token of Memory', ring:'air', level:'1', range:'10\'', area_of_affect:'One small (1 cubic foot or smaller) illusory object', duration:'1 hour', raises:'Area (+1 cubic foot in size of illusory object), Duration (+1 hour)', get roll() { return spellRoll(this); }, description:'You can create a flawless illusion of one object. The item ape pears real in every way up until the spell expires, at which point it disappears. If you are attempting to create a specifc, familiar object, such as another samurai\'s katana, you must declare one Raise, and that individual may make a Contested Roll using his Perception against the total of your Spell Casting Roll to detect the forgery. Images created by this spell are completely stationary. and if placed in a situation where they must move [such as floating in water], disappear instantly. An image of a katana could be created sitting on a rack, for example, but not in a samurai\'s obi because it would not be able to move with the samurai. Objects created with this spell have no true physical substance and cannot hear weight or inflict damage.Pg 167 Core Book' },
+      { id:10, name:'To Seek the Truth', ring:'air', level:'1', range:'Personal / Touch', area_of_affect:'One individual touched [may be the caster]', duration:'5 minutes', raises:'Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'You call upon the wind to purge the mind of your target, granting him clarity. This spell may negate temporary mental or social penalties suffered as a result of a mechanical effect, including Techniques, Wound Ranks, or other spells. The TN of the Spell Casting Roll made to cast this spell is increased by an amount equal to the Technique Rank, Wound Rank or spell Mastery Level used to create the penalty in the first place. Disadvantages permanently possessed by an individual may not be countered using this spell. Pg 168 Core Book' },
       { id:11, name:'Way of Deception', ring:'air', level:'1', range:'20\'', area_of_affect:'One illusory duplicate of the caster', duration:'Concentration +5 minutes', raises:'Area [+1 duplicate per 2 Raises]. Range [+5 feet], Special [see below]', get roll() { return spellRoll(this); }, description:'You can entreat the capricious spirits of the wind to create a perfect duplicate image of you a short distance away. The illusion exactly refects your appearance at the time the spell is cast, including your clothing and any equipment. The illusion may appear anywhere within the spell\'s range, and will perform whatever actions you perform while it is in effect. (If you sit down, for instance, your duplicate will sit down as well, even if there is nothing to sit on.) Once you leave the normal range of the spell, the duplicate disappears. if you make two Raises on the Spell Casting Roll, you may leave the area of effect and the illusion will remain in whatever position it was in when you left for as long as you continue concentrating on maintaining the spell. Pg 168 Core Book' },
       { id:12, name:'Yari or Air', ring:'air', level:'1', range:'Personal or 20\'', area_of_affect:'One created weapon', duration:'5 minutes', raises:'Damage (+lk0). Duration (+5 minutes). Range (+5 feet)', get roll() { return spellRoll(this); }, description:'You summon a swirling weapon of pure air. only visible as a foggy outline. The weapon\'s default form is a yari. but one Raise can change its form to any other spear of your choosing. The weapon has DR lkl. if you do not possess the Spears Skill, you may instead use your School Rank in its place. If you do possess the Spears Skill, using this weapon grants you one Free Raise that can only he used on the Feint or Increased Damage Maneuvers. This weapon disappears if is lost from your hand. instead of summoning the yari for yourself, you may cause it to appear in the hands of an ally within 20 feet. He is treated as the caster for all purposes of the spell, but he does not gain the Free Raise bonus. Pg 168 Core Book' },
       { id:13, name:'Benten\s Touch', ring:'air', level:'2', range:'Personal / Touch', area_of_affect:'Target individual [may be the caster]', duration:'1 hour', raises:'Range (may increase range to 5\' with a single Raise)', get roll() { return spellRoll(this); }, description:'By calling upon the air kami [0 whisper suggestions to others, you may cause them to perceive the target of this spell more positively than they otherwise might. The target of this spell gains a bonus of +lkl. plus your Air Ring, to the total of all Social Skill rolls made for the duration of the spell. Pg 168 Core Book' },
-      { id:14, name:'Call Upon the Wind', ring:'air', level:'2', range:'Personal or 20\'', area_of_affect:'Target individual [may he the caster]', duration:'1 minute', raises:'Duration (+1 minute), Range (+5í)', get roll() { return spellRoll(this); }, description:'The winds can lift and buoy, carrying even the heaviest burden into the skies for short periods. The target of this spell gains a limited form of ?ight. allowing him to move through the air unimpeded. The target of the spell may make Free Move Actions. but not Simple Move Actions, and may never move more than lO\' per round. Heavy winds can interfere with this movement or prevent it altogether. At the end of the spell\'s duration. the target drifts harmlessly to the ground. no matter how high he might be. Pg 168 Core Book' },
+      { id:14, name:'Call Upon the Wind', ring:'air', level:'2', range:'Personal or 20\'', area_of_affect:'Target individual [may he the caster]', duration:'1 minute', raises:'Duration (+1 minute), Range (+5)', get roll() { return spellRoll(this); }, description:'The winds can lift and buoy, carrying even the heaviest burden into the skies for short periods. The target of this spell gains a limited form of ?ight. allowing him to move through the air unimpeded. The target of the spell may make Free Move Actions. but not Simple Move Actions, and may never move more than lO\' per round. Heavy winds can interfere with this movement or prevent it altogether. At the end of the spell\'s duration. the target drifts harmlessly to the ground. no matter how high he might be. Pg 168 Core Book' },
       { id:15, name:'Hidden Visage', ring:'air', level:'2', range:'Personal', area_of_affect:'Self', duration:'5 minutes', raises:'Area of Effect (another person in line of sight can be targeted by this spell by making three Raises), Duration (+5 minutes)', get roll() { return spellRoll(this); }, description:'Air kami are mischievous and capricious, and enjoy anything they perceive as a joke. You may call upon them to create a subtle illusion, altering your facial featuresjust enough that you appear to he a different person. This spell does not allow you to impersonate specific individuals, or even people radically different from you. You appear as a person of the same age. build, race. and gender. The differences are subtle, enough so that you could be mistaken for your own brother or cousin. Pg 168 Core Book' },
       { id:16, name:'The Kami\s Whisper', ring:'air', level:'2', range:'50\'', area_of_affect:'10\' radius', duration:'1 round', raises:'Area (+5\' radius), Duration (+1 round), Range (+5\')', get roll() { return spellRoll(this); }, description:'The kami of the wind can carry whispers for great distances. and can even create them if properly entreated. You can petition the kami to create a false sound, either a voice or a natural sound such as an animal\'s growl or runing water. for example. The sound can he no louder than a normal speaking voice, and cannot impersonate a specific person\'s voice. if used to create the sound of a voice. the spell is limited to twenty words. Pg 169 Core Book' },
-      { id:17, name:'Mists of Illusion', ring:'air', level:'2', range:'20\'', area_of_affect:'10\' radius', duration:'1 minute', raises:'Area (+5\'). Duration (+1 minute). Range (+5\')', get roll() { return spellRoll(this); }, description:'With greater ?uency with the kami comes the ability to craft increasingly convincing images from the stuff of the wind itself. You may create illusions of any object, individual. or image that you can imagine. These images are stationary. and they must fit within the spellís area of effect, but they can he as simple or complex as desired. These illusions are visual only. with no auditory component. no odors. etc. Pg 169 Core Book' },
+      { id:17, name:'Mists of Illusion', ring:'air', level:'2', range:'20\'', area_of_affect:'10\' radius', duration:'1 minute', raises:'Area (+5\'). Duration (+1 minute). Range (+5\')', get roll() { return spellRoll(this); }, description:'With greater ?uency with the kami comes the ability to craft increasingly convincing images from the stuff of the wind itself. You may create illusions of any object, individual. or image that you can imagine. These images are stationary. and they must fit within the spell\'s area of effect, but they can he as simple or complex as desired. These illusions are visual only. with no auditory component. no odors. etc. Pg 169 Core Book' },
       { id:18, name:'Secrets on the Wind', ring:'air', level:'2', range:'10 miles', area_of_affect:'20\' radius', duration:'Concentration', raises:'Area (+5\' radius). Range (+5 miles)', get roll() { return spellRoll(this); }, description:'The kami can carry whispers across an Empire. if properly enrtreated to do so. This spell requires you to perform a preparation ritual in order to cast it effectively. The ritual requires ten minutes of uninterrupted meditation in the area designated as the spell\'s area of effect. Any time within the 48 hours immediatly following this ritual, you may cast this spell. and overhear anything being said in the prepared area. If your concentration is disrupted, the effect ends and may not be renewed without an additional preparation ritual. Only one area may be prepared via this ritual at one time. Pg 169 Core Book' },
       { id:19, name:'Whispering Wind', ring:'air', level:'2', range:'20\'', area_of_affect:'Target Individual', duration:'Instantaneous', raises:'Range (+5\')', get roll() { return spellRoll(this); }, description:'The air kami see very little difference between speech and thought. and can perceive both with relative ease. By compare ing the two, the kami can determine if what has been spoken is true or a lie. Unfortunately, they have notoriously short attention spans, and thus can only assess extremely recent conversations. By invoking this spell, you may determine if the last thing said by the target was true or false. The kami have no concept of personal opinion, however, and if the target truly believes what he said was true. the kami will believe it as well. Pg 169 Core Book' },
       { id:20, name:'Wolf\'s Proposal', ring:'air', level:'2', range:'Personal', area_of_affect:'Self', duration:'20 minutes', raises:'Area (may target another with 2 Raises), Duration (+5 minutes) Special (+1 Honor Rank per two Raises)', get roll() { return spellRoll(this); }, description:'This spell. crafted to facilitate initial relations between groups. is easily twisted to nefarious purposes. It calls the kami to ereate a subtle aura of suggestion around the caster, one that does not disguise the caster but rather causes others to perceive him as slightly more benevolent than perhaps he truly is. For the duration this spell. your Honor Rank is considered three ranks higher for the purposes of any Lore: Bushido rolls made to determine your Honor Rank. Pg 168 Core Book' },
       { id:21, name:'Essence of Air', ring:'air', level:'3', range:'Personal', area_of_affect:'Self', duration:'1 round', raises:'Duration (+1 round)', get roll() { return spellRoll(this); }, description:'Air can be merged with the essence of a mortal, and doing so can impart tremendous abilities, albeit at great risk to the. caster. You mix with the wind itselfand become insubstantial. You may not interact with any physical objects while insubó stantial, although you do remain on the ground, and you may pass through solid objects at a rate of one foot per round. Your Water Ring is considered halved [rounded down] while you remain insubstantial, and you may not cast any other spells until you return to solidity. Pg 169 Core Book' },
       { id:22, name:'The Eye Shall Not See', ring:'air', level:'3', range:'Personal or Touch', area_of_affect:'Self or Target Individual', duration:'Concentration', raises:'none', get roll() { return spellRoll(this); }, description:'You call upon the kami to create an, area of distraction surrounding you. drawing all attention away from you and your actions. The kami whisper in the ears of those within 20\' of you [or of the target if you cast the spell on someone else], causing them to be conveniently distracted from your presence. You are not invisible. but those within 20\' of you will not see you as long as you do not make any loud noises or otherwise draw attention to yourself. Those outside that distance are not distracted, however, and will see you perfectly well regardless of your action or inaction.  Pg 168 Core Book' },
-      { id:23, name:'Mask of Wind', ring:'air', level:'3', range:'Personal', area_of_affect:'Self', duration:'1 hour', raises:'Area (may target another with two Raises), Duration (+10 minutes)', get roll() { return spellRoll(this); }, description:'A skilled shugenja can petition the kami to create incredibly elaborate illusions to obscure oneës identity and appearance. You may use this spell to adopt the appearance of any humanoid creature of approximately the same size. up to one foot taller or shorter than you. You could use this spell to assume the guise of a kenku. for example. because they are roughly the same size as humans. A goblin or an ogre would be impossible, however, because they are too short and too large, respectively.  Pg 170 Core Book' },
+      { id:23, name:'Mask of Wind', ring:'air', level:'3', range:'Personal', area_of_affect:'Self', duration:'1 hour', raises:'Area (may target another with two Raises), Duration (+10 minutes)', get roll() { return spellRoll(this); }, description:'A skilled shugenja can petition the kami to create incredibly elaborate illusions to obscure one\'s identity and appearance. You may use this spell to adopt the appearance of any humanoid creature of approximately the same size. up to one foot taller or shorter than you. You could use this spell to assume the guise of a kenku. for example. because they are roughly the same size as humans. A goblin or an ogre would be impossible, however, because they are too short and too large, respectively.  Pg 170 Core Book' },
       { id:24, name:'Striking the Storm', ring:'air', level:'3', range:'Personal', area_of_affect:'Self', duration:'3 rounds', raises:'Duration (+1 round)', get roll() { return spellRoll(this); }, description:'The most powerful winds can turn aside not only arrows. but steel as well. You may summon a buffet of winds that surrounds you in an unrelenting cocoon of swirling air. Your Armor TN is increased by +20 against both melee and ranged attacks. The force of the winds surrounding you prevents you from hearing others ifthey speak to you, however. Pg 170 Core Book' },
       { id:25, name:'Summoning the Gale', ring:'air', level:'3', range:'50\'', area_of_affect:'Target individual (may be the caster)', duration:'Concentration', raises:'Range (+5\')', get roll() { return spellRoll(this); }, description:'Swirling winds can he commanded to circle a designated target, preventing ranged attacks being made in either direction. This spell affects an area thirty feet around the target in all directions. Everyone within the affected area gains at +15 bonus to their Armor TN against ranged attacks. However. everyone within the area also suffers a penalty of -3k3 to all ranged attack rolls. Pg 170 Core Book' },
       { id:26, name:'Summon Fog', ring:'air', level:'3', range:'100\'', area_of_affect:'50\' radius', duration:'1 minute', raises:'Area (+5\' radius), Duration (+1 minute), Range (+10)', get roll() { return spellRoll(this); }, description:'The kami can be petitioned to coalesce in an area as they do on the coast, creating a thick. obscuring fog. Within the area affected by your spell, the Visibility is decreased to a meager ?ve feet. Fabrics and other absorbent materials within the spell\'s area of effect will become damp or even wet if they remain within it long enough. Small sources of open flame, such as candles, might be extinguished as well, at the GM\'s discretion. The moistness of fog is extremely damaging to rice paper. Pg 170 Core Book' },
@@ -465,12 +497,11 @@
       { id:31, name:'Know the Mind', ring:'air', level:'4', range:'10\'', area_of_affect:'Target Individual', duration:'3 rounds', raises:'Duration (+1 round), Range (+5\')', get roll() { return spellRoll(this); }, description:'Although the ultimate secrets of the human mind are hidden even to the winds, air kami can pluck the most immediate thoughts from the minds of others and whisper them to those who carry their favor. For the duration of this spell, you essentially hear the surface thoughts of the spell\'s target. You only learn things they are actively thinking about. For example, if you asked the name of the target\'s daughter, that name would appear in their mind instantly even if they had no intention of speaking it aloud. A Contested Roll using your Perception against the target\'s Awareness will also allow you to assess their true emotional state, regardless of how they appear physically. Pg 171 Core Book' },
       { id:32, name:'Netsuke of Wind', ring:'air', level:'4', range:'Touch', area_of_affect:'One hand-held object', duration:'1 hour', raises:'Duration (+10 minutes)', get roll() { return spellRoll(this); }, description:'Although it requires great favor, the air kami are willing to coalesce into a solid form for a short period of time if they are fond enough of the priest asking them. You may create a small object out ofthe air itself, something that can be held in one or both hands and that does not weigh more than twenty pounds at the most. This creation is an illusion, but it can be used functionally, including inficting damage if it is a weapon. The object disappears completely at the end of the spell\'s duration. Pg 171 Core Book' },
       
-      
-      { id:31, name:'', ring:'air', level:'4', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:'Pg 168 Core Book' },
-      { id:13, name:'', ring:'air', level:'2', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:'Pg 168 Core Book' },
-      { id:5, name:'', ring:'earth', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:'Pg 167 Core Book' },
-      { id:6, name:'', ring:'water', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:'Pg 167 Core Book' },
-      { id:7, name:'', ring:'fire', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:'Pg 167 Core Book' },
+      { id:31, name:'', ring:'air', level:'4', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 172 Core Book' },
+      { id:40, name:'', ring:'air', level:'2', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 180 Core Book' },
+      { id:50, name:'', ring:'earth', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 180 Core Book' },
+      { id:60, name:'', ring:'water', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 180 Core Book' },
+      { id:70, name:'', ring:'fire', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 180 Core Book' },
     ];
 
     $scope.showSpellsList = false;
@@ -478,10 +509,47 @@
       $scope.showSpellsList = !$scope.showSpellsList;
     };
 
-    $scope.addSpell = function(index) {      
-      $scope.character.spells.push( $scope.spellsMasterList[index]) ;
-      $scope.toggleShowSpellsList();
+    $scope.getSpell = function (spell_id,attr=null) {
+        return $scope.getSpellFromMasterList(spell_id, attr);
     };
+    
+    $scope.getSpellFromMasterList = function(spell_id, attr=null) {
+        for(var i=0; i < $scope.spellsMasterList.length; i++) {
+            if ( $scope.spellsMasterList[i].id === spell_id ) {
+                if (attr === null) {
+                    return $scope.spellsMasterList[i];
+                } else {
+                    return $scope.spellsMasterList[i][attr];
+                }
+            }
+        }
+        return "(error)";
+    };
+
+    $scope.addSpell = function(spell_id) {      
+      var master_spell = $scope.getSpellFromMasterList(spell_id);
+      var new_id = master_spell.id;
+      //var new_roll = master_spell.roll;      
+      //var new_spell = {id:new_id, roll:new_roll};
+      var new_spell = {id:new_id}; // roll:new_roll};
+      //$scope.character.spells.push( $scope.spellsMasterList[index]) ;
+      if ( getCharacterSpellById(spell_id) === null) {
+        $scope.character.spells.push( new_spell ) ;
+        $scope.toggleShowSpellsList();
+      }
+    };
+
+    var getCharacterSpellById = function(spell_id) {        
+      for(var i = 0; i < $scope.character.spells.length; i++) {
+        if ( $scope.character.spells[i] != undefined ) {
+          if ( $scope.character.spells[i].id === spell_id ) {
+            return $scope.character.spells[i];
+          }
+        }
+      }
+      return null;
+    };
+
 
   });
 

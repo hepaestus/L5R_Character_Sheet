@@ -91,20 +91,25 @@
 		  <th class="skill_name">Skill Name</th><th class="skill_rank">Rank</th><th class="skill_trait">Trait</th><th class="skill_roll">Roll</th><th class="skill_emphasis">Emphasis</th><th class="skill_mastery">Mastery Abilities</th><th class="skill_desc">Desc.</th><th class="skill_button"></th>
           </tr>
           <tr ng-repeat="each in character.skills track by $index" ng-show="character.skills">
-              <td class="skill_name">{{each.id}}:{{ getSkill(each.id,'type')}} {{ getSkill(each.id,'sub_type')}} </td>
-              <td class="skill_rank"><input name="skill_rank" ng-model="character.skills[each.id].rank" type="number" min="0" ng-click="updateSkillRank(each.id)"/></td>
+              <td class="skill_name">{{$index}}-{{each.id}}:{{ getSkill(each.id,'type')}} {{ getSkill(each.id,'sub_type')}} </td>
+              <td class="skill_rank"><input name="skill_rank" ng-model="character.skills[$index].rank" type="number" min="0" ng-click="updateSkillRank(each.id)"/></td>
               <td>{{getSkill(each.id,'trait')}}</td>
               <td class="skill_roll">{{each.roll}}</td>
-              <td><a href="" class="small" ng-hide="each.emphasis" ng-show="getSkill(each.id,'emphases') != {}" ng-click="toggleShowEmphasesList(each.id)">Add</a><span ng-show="each.emphasis">{{each.emphasis}}</span></td>
-              <td class="skill_mastery" style="line-height: 60%"><span class="small" ng-bind-html="each.skill.mastery"></span></td>
+              <td><a href="" class="small" ng-hide="each.emphasis" ng-show="getSkill(each.id,'emphases')" ng-click="toggleShowEmphasesList(each.id)">Add</a><span ng-show="each.emphasis">{{each.emphasis}}</span></td>
+              <td class="skill_mastery" style="line-height: 60%"><span class="small" ng-bind-html="each.mastery"></span></td>
 	          <td class="skill_desc" style="line-height: 60%"><span class="small">{{getSkill(each.id,'description')}}</span></td>
 	          <td class="skill_button"><button ng-click="removeSkill(each.id)"><span class="glyphhicon glyphicons-remove">X</span></button></td>
           </tr>
           <tr ng-hide="showEmphasesList">
-              <td colspan="8"><a href="" ng-click="toggleShowSkillsList()">Add a Skill</a></td>
-              <!-- td colspan="7" ng-show="showSkillsList">
+              <td colspan="8"><a href="" ng-click="toggleShowSkillsList()">Add a Skill</a>              
+              <span ng-show="showSkillsList">
                   <label for="search">Search:</label><input name="search" type="search" ng-model="skillSearchText"/>
-              </td -->
+                  <!-- label for="search">High:</label><input name="type_high" type="checkbox" ng-model="skillSearch.filterHigh"/>
+                  <label for="search">Bugei:</label><input name="type_bugei" type="checkbox" ng-model="skillSearch.filterBugei"/>
+                  <label for="search">Merchant:</label><input name="type_merchant" type="checkbox" ng-model="skillSearch.filterMerchant"/>
+                  <label for="search">Low:</label><input name="type_low" type="checkbox" ng-model="skillSearch.filterLow"/ -->
+              </span>
+              </td>
           </tr>
           <tr ng-show="showEmphasesList"> 
               <td colspan="4">Emphasis List</td>
@@ -118,7 +123,7 @@
           <tr ng-show="showSkillsList"> 
             <td colspan="7">
               <ul class="add_skill_list">                  
-                  <li ng-repeat="each in skillsMasterList">
+                  <li ng-repeat="each in skillsMasterList | filter:skillSearchText "> <!-- | filter:skillSearchFilterHigh | filter:skillSearchFilterBugei"> -->
                       <a href="" ng-click="addSkill(each.id)">{{each.type}} {{each.sub_type}}</a>
                   <li>
               </ul>
@@ -237,7 +242,7 @@
          <th colspan="4">Armor Tn</th>
        </tr>
        <tr>
-           <th class="left" colspan="2">TN Bonus</th><td colspan="2"><input name="stats_tn_bonus" ng-model="character.armor_tn" type="text"/></td>
+           <th class="left" colspan="2">TN Bonus</th><td colspan="2"><input name="stats_tn_bonus" ng-model="character.armor_tn" type="number"/></td>
        </tr>
        <tr>
            <th class="left" colspan="2">Quality</th><td colspan="2"><input name="stats_quality" type="text"/></td>
@@ -249,7 +254,7 @@
          <th colspan="4">Wounds</th>
        </tr>
        <tr>
-           <th class="left" colspan="2">Earth x2 per level<br/>Earth x5 for Healthy</th><td colspan="2"><input name="stats_wounds" type="text"/></td>
+           <th class="left" colspan="2">Earth x2 per level<br/>Earth x5 for Healthy</th><td colspan="2"><input name="stats_wounds" ng-model="character.wounds" type="text"/></td>
        </tr>
        <tr>
          <th>Wound Level</th><th>Penalties</th><th>Total</th><th>Current</th>
@@ -282,13 +287,13 @@
            <th colspan="4">Rate Of Wound Heal</th>
        </tr>
        <tr>
-           <th class="left" colspan="2">Stamina x2 + Insight Rank</th><td colspan="2"><input name="stats_stamima_x2_+_insight_rank" type="text"/></td>
+           <th class="left" colspan="2">Stamina x2 + Insight Rank</th><td colspan="2"><input name="stats_stamima_x2_+_insight_rank" ng-model="character.healing" type="number"/></td>
        </tr>
        <tr>
-           <th class="left" colspan="2">Modifiers</th><td colspan="2"><input name="stats_heal_modifiers" type="text"/></td>
+           <th class="left" colspan="2">Modifiers</th><td colspan="2"><input name="stats_heal_modifiers" ng-model="character.healing_modifiers" type="number"/></td>
        </tr>
        <tr>
-           <th class="left" colspan="2">Current Rate</th><td colspan="2"><input name="stats_current_heal_rate" type="text"/></td>
+           <th class="left" colspan="2">Current Rate</th><td colspan="2"><input name="stats_current_heal_rate" ng-model="character.current_heal_rate" type="text"/></td>
        </tr>
      </table>
     </div>
