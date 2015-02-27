@@ -377,6 +377,8 @@
 
     var replaceCharacterSkillById = function(skill_id, skill) {
         for(var i = 0; i < $scope.character.skills.length; i++) {
+            console.log( JSON.stringify($scope.character.skills[i]) );
+            console.log("Skill Id : " + $scope.character.skills[i].id );
             if ( $scope.character.skills[i].id === skill_id ) {
                 console.log("i:" + i);
                 if ( skill === null ) {
@@ -384,7 +386,8 @@
                   $scope.character.skills.splice(i,1);
                 } else {
                   //console.log("Replace Skill");
-                  $scope.character.skills.splice(i,1,skill);
+                  $scope.character.skills.splice(i,1);
+                  $scope.character.skills.push(skill);
                 }
             }
         }
@@ -393,12 +396,12 @@
     $scope.updateSkillRank = function(id) {
       var skill = getCharacterSkillById(id);
       if ( skill.rank < skill.rank_s ) {
-        var diff = $scope.character.skills[index].rank_s - $scope.character.skills[index].rank;
+        var diff = skill.rank_s - skill.rank;
         $scope.character.experience_points += diff;
         $scope.character.insight -= diff;
       } else if ( skill.rank > skill.rank_s ) {
         var diff = skill.rank - skill.rank_s;
-	    $scope.character.experience_points -= diff;
+	$scope.character.experience_points -= diff;
         $scope.character.insight += diff;
       }
       skill.rank_s = skill.rank;

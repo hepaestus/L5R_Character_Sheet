@@ -90,8 +90,8 @@
           <tr>
 		  <th class="skill_name">Skill Name</th><th class="skill_rank">Rank</th><th class="skill_trait">Trait</th><th class="skill_roll">Roll</th><th class="skill_emphasis">Emphasis</th><th class="skill_mastery">Mastery Abilities</th><th class="skill_desc">Desc.</th><th class="skill_button"></th>
           </tr>
-          <tr ng-repeat="each in character.skills" ng-show="character.skills">
-              <td class="skill_name">{{each.id}} : {{ getSkill(each.id,'type')}} {{ getSkill(each.id,'sub_type')}} </td>
+          <tr ng-repeat="each in character.skills track by $index" ng-show="character.skills">
+              <td class="skill_name">{{each.id}}:{{ getSkill(each.id,'type')}} {{ getSkill(each.id,'sub_type')}} </td>
               <td class="skill_rank"><input name="skill_rank" ng-model="character.skills[each.id].rank" type="number" min="0" ng-click="updateSkillRank(each.id)"/></td>
               <td>{{getSkill(each.id,'trait')}}</td>
               <td class="skill_roll">{{each.roll}}</td>
