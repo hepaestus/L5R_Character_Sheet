@@ -20,7 +20,33 @@
     .otherwise({redirectTo: '/'});
   }]);
 
-  app.controller('MainController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
+  app.controller('MainController', ['$scope', '$cookieStore', '$modal', function($scope, $cookieStore, $modal) {
+
+    $scope.open = function() {
+      var modalInstance = $modal.open({
+        templateUrl: 'templates/character_load.html',
+        controller: 'ModalInstanceController',
+      });
+
+      modalInstance.result.then(function (selectedItem) {
+        $scope.selected = selectedItem;
+      }, function () {
+        console.log('Modal dismissed at: ' + new Date());
+      });
+    };
+  
+    $scope.ok = function () {
+      console.log("Close Window");
+      $modalInstance.close();
+    };
+
+    $scope.cancel = function () {
+      console.log("Cancel Window");
+      $modalInstance.dismiss('cancel');
+    };
+
+    $scope.saved_characters_array = [];
+    $scope.saved_characters_date_array = [];
 
     $scope.character = { 
       name: "",      
@@ -184,64 +210,38 @@
 
   }]);
 
-  app.controller('ModalInstanceController', ['$scope', '$modalInstance', function ($scope, $modalInstance, items) {
-    $scope.items = items;
-    $scope.selected = {
-      item: $scope.items[0]
-    };
+  app.controller('ModalInstanceController', ['$scope', '$modal', function ($scope, $modal) {
 
-    $scope.ok = function () {
-      $modalInstance.close($scope.selected.item);
-    };
-
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
   }]);
 
-  app.controller('CharacterController', ['$scope', '$cookieStore', '$modal', function($scope, $cookieStore, $modal) {
+  app.controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore ) {
 	  
-    $scope.open = function() {
-      var modalInstance = $modal.open({
-        templateUrl: 'templates/character_load.html',
-        controller: 'CharacterController',
-      });
-
-      modalInstance.result.then(function (selectedItem) {
-        $scope.selected = selectedItem;
-      }, function () {
-        console.log('Modal dismissed at: ' + new Date());
-      });
-    }
-  
-
-    $scope.saved_characters_array = [];
     $scope.loadCharacter = function() {
-      $scope.open();
-      console.log("Load Saved Characters");
       var saved_character_cookie_array = $cookieStore.get('characters');
       for ( var i = 0; i < saved_character_cookie_array.length; i++) {
-        console.log("Getting : " + saved_character_cookie_array[i]);        
+        console.log("Getting Character " +i+ " : " + saved_character_cookie_array[i]);        
         var character = $cookieStore.get(saved_character_cookie_array[i]);         
         if ( character ) {
+          console.log("Found : " + character.name);        
           $scope.saved_characters_array.push(character);         
-          console.log("Getting : " + character.name);        
         }
       }
+      $scope.open();
     }
 
     $scope.saveCharacter = function() {
-      console.log("Save Character");
       var d = new Date();
       var date_string = d.toString().replace(/ /g, "_");
+      var date_string = d.toString().replace(/:/g, "-");
       console.log("Date : " + date_string );
+
       var stored_chars = $cookieStore.get('characters');
       if ( stored_chars != null ) {
-        $scope.saved_characters_array.push(stored_chars);
+        $scope.saved_characters_date_array.push(stored_chars);
       }
-      $scope.saved_characters_array.push('character_' + date_string);
-      console.log("Saved Characters: " + $scope.saved_characters_array);
-      $cookieStore.put('characters', $scope.saved_characters_array  ); 
+      $scope.saved_characters_date_array.push('character_' + date_string);
+      console.log("Saved Character Dates: " + $scope.saved_characters_date_array);
+      $cookieStore.put('characters', $scope.saved_characters_date_array  ); 
       $cookieStore.put('character_' + date_string, $scope.character); 
     };
 
