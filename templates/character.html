@@ -10,6 +10,27 @@
       <label class="line">School</label><input class="line school" name="school" type="text" ng-model="character.school"/>
       <label class="line">Insight</label><input class="line insight" name="insight" type="number" ng-model="character.insight"/><span>(Rings x 10 + skills)</span><br/>
 
+      <div ng-controller="ModalInstanceController">
+          <script type="text/ng-template" id="modal_character_load.html">
+              <div class="modal-header">
+                  <h3 class="modal-title">Saved Characters</h3>
+              </div>
+              <div class="modal-body">
+                  <ul>
+                      <li ng-repeat="item in saved_characters_array">
+                          <a ng-click="selected.item = item">{{ item }}</a>
+                      </li>
+                  </ul>
+                  Selected: <b>{{ selected.item }}</b>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn btn-primary" ng-click="ok()">OK</button>
+                  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+              </div>
+          </script>
+          <div ng-show="selected">Selection from a modal: {{ selected }}</div>
+      </div>
+
       <table class="rings-table">
         <tr>
             <th colspan="1" class="center" >EARTH</th>

@@ -2,7 +2,7 @@
 (function(){
 
   // Declare app level module which depends on views, and components
-  var app = angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize']);
+  var app = angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap']);
 
   app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {
@@ -184,16 +184,65 @@
 
   }]);
 
-  app.controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
+  app.controller('ModalInstanceController', ['$scope', '$modalInstance', function ($scope, $modalInstance, items) {
+    $scope.items = items;
+    $scope.selected = {
+      item: $scope.items[0]
+    };
+
+    $scope.ok = function () {
+      $modalInstance.close($scope.selected.item);
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+  }]);
+
+  app.controller('CharacterController', ['$scope', '$cookieStore', '$modal', function($scope, $cookieStore, $modal) {
 	  
+    $scope.open = function() {
+      var modalInstance = $modal.open({
+        templateUrl: 'templates/character_load.html',
+        controller: 'CharacterController',
+      });
+
+      modalInstance.result.then(function (selectedItem) {
+        $scope.selected = selectedItem;
+      }, function () {
+        console.log('Modal dismissed at: ' + new Date());
+      });
+    }
+  
+
+    $scope.saved_characters_array = [];
     $scope.loadCharacter = function() {
-      console.log("Load Character");
-      $scope.character = $cookieStore.get('character');      
+      $scope.open();
+      console.log("Load Saved Characters");
+      var saved_character_cookie_array = $cookieStore.get('characters');
+      for ( var i = 0; i < saved_character_cookie_array.length; i++) {
+        console.log("Getting : " + saved_character_cookie_array[i]);        
+        var character = $cookieStore.get(saved_character_cookie_array[i]);         
+        if ( character ) {
+          $scope.saved_characters_array.push(character);         
+          console.log("Getting : " + character.name);        
+        }
+      }
     }
 
     $scope.saveCharacter = function() {
       console.log("Save Character");
-      $cookieStore.put('character', $scope.character);
+      var d = new Date();
+      var date_string = d.toString().replace(/ /g, "_");
+      console.log("Date : " + date_string );
+      var stored_chars = $cookieStore.get('characters');
+      if ( stored_chars != null ) {
+        $scope.saved_characters_array.push(stored_chars);
+      }
+      $scope.saved_characters_array.push('character_' + date_string);
+      console.log("Saved Characters: " + $scope.saved_characters_array);
+      $cookieStore.put('characters', $scope.saved_characters_array  ); 
+      $cookieStore.put('character_' + date_string, $scope.character); 
     };
 
     $scope.updateExp = function(attr, value) {
@@ -210,9 +259,7 @@
           $scope.character[attr + "_s"] = $scope.character[attr];
       } else {
           //console.log("No Change to " + attr);
-      }
-    };
-
+      } }; 
     $scope.updateEarth = function(attr, value) {      
       $scope.updateExp(attr,value);
       if ( $scope.character.stamina === $scope.character.willpower) {
