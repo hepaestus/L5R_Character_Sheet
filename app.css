@@ -56,11 +56,13 @@ input.void_box {
 
 .small {
     font-size: 0.75em;
-    line-height: 0.85em;
+    line-height: 0.95em;
+    padding: 3px;
 }
 .x-small {
-    font-size: 0.5em;
-    line-height: 0.60em;
+    font-size: 0.50em;
+    line-height: 0.70em;
+    padding: 3px;
 }
 
 table.stats-table, table.weapons-table {
@@ -166,9 +168,19 @@ table.spell {
 }
 table.spell td {
     border: 1px solid black;    
+    padding: 5px;
+    font-size: 85%;
 }
 table.spell th {
     background-color: #BFA994;
     border: 1px solid black;    
+    padding: 5px;
+    font-size: 85%;
 }
 
+td.spell_name {
+    width: 40%;
+}
+td.spell_roll {
+    width: 40%;
+}

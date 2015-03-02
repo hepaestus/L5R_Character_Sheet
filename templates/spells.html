@@ -2,17 +2,22 @@
       <h1>Spells</h1>
   </header>
 
-  <p>Spells Page</p>
+  <p>Updated Spells Page</p>
   <a href="" ng-click="toggleShowSpellsList()">Add Spell</a>
-  <ul ng-show="showSpellsList">
-      <li ng-repeat="spell in spellsMasterList">
-          <a href="" ng-click="addSpell(spell.id)">{{getSpell(spell.id,'name')}} - Level:{{ getSpell(spell.id,'level')}}</a>
-          <ul>
-              <li>Ring {{getSpell(spell.id,'ring')}}
-              <li><span ng-bind-html="getSpell(spell.id,'description')"></span></li>
-          </ul>
+  <div ng-show="showSpellsList">
+    <label>Search</label><input name="spellSearchFilter.text" ng-model="spellSearchFilter.$" type="search"/>
+    <label>Level</label><input name="spellSearchFilter.level" ng-model="spellSearchFilter.level" type="number" min='1' max='6'/>
+    <label>Ring</label><input name="spellSearchFilter.ring" ng-model="spellSearchFilter.ring" type="text"/>
+    <ul>
+      <li ng-repeat="spell in spellsMasterList | filter:spellSearchFilter">
+        <a href="" ng-click="addSpell(spell.id)">{{spell.name}} - Level:{{spell.level}}</a>
+        <ul>
+          <li>Ring {{spell.ring}}</li>
+          <li><span ng-bind-html="spell.description"></span></li>
+         </ul>
       </li>
-  </ul>
+    </ul>
+  </div>
 
   <h1>Known Spells</h1>
   <div ng-repeat="each in character.spells">
@@ -20,8 +25,8 @@
           <table class="spell">
             <tr>
                  <th>Name</th>
-                 <td>{{getSpell(each.id,'name')}}</td>
-                 <th>M. Level</th>
+		 <td class="spell_name">{{getSpell(each.id,'name')}} ({{getSpell(each.id,'type')}})</td>
+                 <th>M.Lvl.</th>
                  <td class="center">{{getSpell(each.id,'level')}}</td>
                  <th>Roll</th>
                  <td class="center">{{getSpell(each.id,'roll')}}</td>
