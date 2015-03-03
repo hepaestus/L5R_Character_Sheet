@@ -58,28 +58,28 @@
       get current_tn() { return ((this.reflexes * 5 ) + 5); },
       insight       : 0, 
       insight_rank  : 1, 
-      earth         : 0,
-      air           : 0,
-      water         : 0,
-      fire          : 0,
-      void          : 0,
-      void_s        : 0,
-      stamina       : 0,
-      stamina_s     : 0,
-      willpower     : 0,
-      willpower_s   : 0,
-      reflexes      : 0,
-      reflexes_s    : 0,
-      awareness     : 0,
-      awareness_s   : 0,
-      strength      : 0,
-      strength_s    : 0,
-      perception    : 0,
-      perception_s  : 0,
-      agility       : 0,
-      agility_s     : 0,
-      intelligence  : 0,      
-      intelligence_s: 0,      
+      earth         : 2,
+      air           : 2,
+      water         : 2,
+      fire          : 2,
+      void          : 2,
+      void_s        : 2,
+      stamina       : 2,
+      stamina_s     : 2,
+      willpower     : 2,
+      willpower_s   : 2,
+      reflexes      : 2,
+      reflexes_s    : 2,
+      awareness     : 2,
+      awareness_s   : 2,
+      strength      : 2,
+      strength_s    : 2,
+      perception    : 2,
+      perception_s  : 2,
+      agility       : 2,
+      agility_s     : 2,
+      intelligence  : 2,      
+      intelligence_s: 2,      
       armor         : { rating:0, bonus:0, notes:""},
       get armor_tn() { return ( 5 * this.reflexes + 5 + this.armor.rating + this.armor.bonus ); },
       honor         : 0,
@@ -367,6 +367,7 @@
       if ( skill ) {
         skill.empasis = empasis_index;
         replaceCharacterSkillById($scope.currentSkillId, skill);
+	$scope.character.experience_points -= 2;
         $scope.toggleShowEmphasisList();
       }
     };
@@ -504,11 +505,11 @@
       if ( skill != null && skill.id >= 0 ) { 
         if ( skill.rank < skill.rank_s ) {
           var diff = skill.rank_s - skill.rank;
-          $scope.character.experience_points += diff;
+          $scope.character.experience_points += skill.rank_s;
           $scope.character.insight -= diff;
         } else if ( skill.rank > skill.rank_s ) {
           var diff = skill.rank - skill.rank_s;
-	      $scope.character.experience_points -= diff;
+	  $scope.character.experience_points -= skill.rank;
           $scope.character.insight += diff;
         }
         skill.rank_s = skill.rank;
