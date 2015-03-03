@@ -30,30 +30,31 @@
                  <td class="center">{{getSpell(each.id,'level')}}</td>
                  <th>Roll</th>
                  <td class="center">{{getSpell(each.id,'roll')}}</td>
+                 <td class="remove"><button ng-click="removeSpell(each.id)"><span class="glyphicon glyphicon-remove"></span></button>
             </tr>
             <tr>
                  <th>Element</th>
                  <td>{{getSpell(each.id,'ring')}}</td>
                  <th>Duration</th>
-                 <td class="center" colspan="3">{{getSpell(each.id,'duration')}}</td>
+                 <td class="center" colspan="4">{{getSpell(each.id,'duration')}}</td>
             </tr>
             <tr>
                  <th>Area</th>
                  <td>{{getSpell(each.id,'area_of_affect')}}</td>
                  <th>Range</th>
-                 <td class="center" colspan="3">{{getSpell(each.id,'range')}}</td>
+                 <td class="center" colspan="4">{{getSpell(each.id,'range')}}</td>
             </tr>
             <tr>
                  <th>Raises</th>
-                 <td colspan="5" class="small"> 
+                 <td colspan="6" class="small"> 
                      <span ng-bind-html="getSpell(each.id,'raises')"></span>')
                  </td>
             </tr>
             <tr>
-                 <th rowspan=3>Effect</th>
+                 <th rowspan="3">Effect</th>
             </tr>
             <tr>
-                 <td rowspan=3 colspan=5 class="small"> 
+                 <td rowspan="3" colspan="6" class="small"> 
                      <span ng-bind-html="getSpell(each.id,'description')"></span>')
                  </td>
             </tr>

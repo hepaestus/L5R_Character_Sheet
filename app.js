@@ -22,32 +22,30 @@
 
   app.controller('MainController', ['$scope', '$cookieStore', '$modal', function($scope, $cookieStore, $modal) {
 
-    $scope.open = function() {
+    $scope.test = "Main Controller";
+
+    $scope.saved_characters_array = [];
+    
+    $scope.open = function(size) {
       var modalInstance = $modal.open({
         templateUrl: 'templates/character_load.html',
         controller: 'ModalInstanceController',
+        size: size,
+        resolve: { 
+          saved_characters_array: function() {
+            return $scope.saved_characters_array;
+          }
+        },
       });
+      console.log('Modal Opened at: ' + new Date());
 
       modalInstance.result.then(function (selectedItem) {
-        $scope.selected = selectedItem;
+        $scope.selected = selectedItem;        
       }, function () {
         console.log('Modal dismissed at: ' + new Date());
       });
     };
   
-    $scope.ok = function () {
-      console.log("Close Window");
-      $modalInstance.close();
-    };
-
-    $scope.cancel = function () {
-      console.log("Cancel Window");
-      $modalInstance.dismiss('cancel');
-    };
-
-    $scope.saved_characters_array = [];
-    $scope.saved_characters_date_array = [];
-
     $scope.character = { 
       name: "",      
       clan: "",
@@ -56,7 +54,7 @@
       experience_points_earned: 0,
       get initiative() { return ((this.insight_rank + this.reflexes) + "K" + this.reflexes); },
       get current_tn() { return ((this.reflexes * 5 ) + 5); },
-      insight       : 0, 
+      insight       : 100, 
       insight_rank  : 1, 
       earth         : 2,
       air           : 2,
@@ -119,7 +117,7 @@
       { id:7, level:'High', type:'Artisan', sub_type:'Sculpture', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
       { id:8, level:'High', type:'Artisan', sub_type:'Tattooing', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
       { id:9, level:'High', type:'Acting', sub_type:'Social Skill', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
-      { id:10, level:'High', type:'Caligraphy', sub_type:'', trait:'intelligence', ring:'fire', emphases:{0:'Cipher', 1:'High Rokugani'}, get mastery() { return mastery(this); }, masteries: { 5: "+10 to break a code or cipher"}, description:'Pg. 135 Core Book'},
+      { id:10, level:'High', type:'Calligraphy', sub_type:'', trait:'intelligence', ring:'fire', emphases:{0:'Cipher', 1:'High Rokugani'}, get mastery() { return mastery(this); }, masteries: { 5: "+10 to break a code or cipher"}, description:'Pg. 135 Core Book'},
       { id:11, level:'High', type:'Coutier', sub_type:'Social Skill', trait:'awareness', ring:'air', empasis:null, emphases:{0: "Gossip", 1: "Manipulation", 2:"Rhetoric" }, get mastery() { return mastery(this); }, masteries:{3:"+3 Insight Above Normal", 5:"1k0 bonus to all contested Courtier Rolls", 7:"+7 Insight Above normal (In addition to the bonus from rank 3)" }, description:'Pg. 135 Core Book'},
       { id:12, level:'High', type:'Divination', sub_type:'', trait:'intelligence', ring:'fire', emphases: {0:"Astrology", 1:"Kawaru"}, get mastery() { return mastery(this); }, masteries:{5:"A second roll may be made without spending a void point"}, description:'Pg. 135 Core Book'},
       { id:13, level:'High', type:'Etiquette', sub_type:'Social Skill', trait:'awareness', ring:'air', emphases: { 0:"Bureaucracy", 1:"Conversation", 2:"Courtesy"}, get mastery() { return mastery(this); }, masteries: {3:"+3 Insight above normal", 5:"+1k0 bonus to all contested Etiquette rols", 7:"+7 Insight Above normal (In addition to the bonus from rank 3)"}, description:'Pg. 136 Core Book'},
@@ -208,24 +206,45 @@
  
   app.controller('HomeController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
 
+    $scope.test = "Home Controller";
+
+
   }]);
 
-  app.controller('ModalInstanceController', ['$scope', '$modal', function ($scope, $modal) {
+  app.controller('ModalInstanceController', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+     
+    $scope.test = "ModalInstance Controller";
+
+    $scope.ok = function () {
+      console.log("OK - Close Window");
+      $modalInstance.close();
+    };
+
+    $scope.cancel = function () {
+      console.log("Cancel Window");
+      $modalInstance.dismiss('cancel');
+    };    
 
   }]);
 
   app.controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore ) {
 	  
+    $scope.test = "Character Controller";    
+    $scope.saved_characters_date_array = [];
+
     $scope.loadCharacter = function() {
       var saved_character_cookie_array = $cookieStore.get('characters');
+      $scope.saved_characters_array = [];
       for ( var i = 0; i < saved_character_cookie_array.length; i++) {
         console.log("Getting Character " +i+ " : " + saved_character_cookie_array[i]);        
         var character = $cookieStore.get(saved_character_cookie_array[i]);         
         if ( character ) {
-          console.log("Found : " + character.name);        
+          console.log("Pushing Character Into Array : " + character.name);        
           $scope.saved_characters_array.push(character);         
         }
       }
+      console.log("Saved Characters Array : " + $scope.saved_characters_array);
+      console.log("Saved Characters Array : " + $scope.saved_characters_array.length );
       $scope.open();
     }
 
@@ -237,12 +256,22 @@
 
       var stored_chars = $cookieStore.get('characters');
       if ( stored_chars != null ) {
-        $scope.saved_characters_date_array.push(stored_chars);
+        for( var i=0; i < stored_chars.length; i++ ) {
+          $scope.saved_characters_date_array.push(stored_chars[i]);
+        }
       }
       $scope.saved_characters_date_array.push('character_' + date_string);
       console.log("Saved Character Dates: " + $scope.saved_characters_date_array);
       $cookieStore.put('characters', $scope.saved_characters_date_array  ); 
       $cookieStore.put('character_' + date_string, $scope.character); 
+    };
+
+    $scope.deleteSavedCharacter = function(character_date_string) {
+      $cookieStore.remove(character_date_string);
+      var stored_char_strings = $cookieStore.get('characters');
+      var idx = stored_char_strings(character_date_string);
+      stored_char_strings.splice(idx,1);
+      $cookieStore.put('characters', stored_char_strings);
     };
 
     $scope.updateExp = function(attr, value) {
@@ -328,6 +357,8 @@
   }]);
 
   app.controller('SkillsController', function($scope) {
+
+    $scope.test = "Skills Controller";
 
     $scope.clickedSkillRank = null;
     $scope.showSkillList = false;
@@ -447,6 +478,7 @@
     };
    
     $scope.removeSkill = function(id) {
+       // METHOD OF GIVING BACK ALL EXP PTS WHEN SKILL IS Removed!
        replaceCharacterSkillById(id, null);
     };
 
@@ -474,8 +506,7 @@
         }
       }
       //console.log("Skill " + skill_id + " Not Found (getcharacterskillbyid)");
-      return null;
-    };
+      return null; };
 
     var replaceCharacterSkillById = function(skill_id, skill) {
       for(var i = 0; i < $scope.character.skills.length; i++) {
@@ -524,6 +555,7 @@
 
   app.controller('SpellsController', function($scope) {
 
+    $scope.test = "Spells Controller";
     $scope.spellSearchFilter;
     $scope.spellSearchText = "";
   
@@ -631,28 +663,29 @@
       { id:100, name:'', ring:'water', type:'', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 180 Core Book' },
     ];
 
-    $scope.showSpellsList = false;
-
-    $scope.toggleShowSpellsList = function() {
-      //console.log("Bang");
+    $scope.showSpellsList = false; 
+    
+    $scope.toggleShowSpellsList = function() { 
+      //console.log("Bang"); 
       $scope.showSpellsList = !$scope.showSpellsList;
     };
-
-    $scope.getSpell = function (spell_id,attr) {
+      
+      
+    $scope.getSpell = function (spell_id,attr) { 
         return $scope.getSpellFromMasterList(spell_id, attr);
-    };
+    }; 
     
-    $scope.getSpellFromMasterList = function(spell_id, attr) {
-        for(var i=0; i < $scope.spellsMasterList.length; i++) {
-            if ( $scope.spellsMasterList[i].id === spell_id ) {
-                if (attr === null || attr === undefined ) {
-                    return $scope.spellsMasterList[i];
-                } else {
-                    return $scope.spellsMasterList[i][attr];
-                }
-            }
+    $scope.getSpellFromMasterList = function(spell_id, attr) { 
+      for(var i=0; i < $scope.spellsMasterList.length; i++) { 
+        if ( $scope.spellsMasterList[i].id === spell_id ) { 
+          if (attr === null || attr === undefined ) { 
+            return $scope.spellsMasterList[i]; 
+          } else {
+            return $scope.spellsMasterList[i][attr];
+          }
         }
-        return "(error)";
+      }
+      return "(error)";
     };
 
     $scope.addSpell = function(spell_id) {      
@@ -672,6 +705,14 @@
 	  }
     };
 
+    $scope.removeSpell = function(spell_id) {
+      for( var i=0; i < $scope.character.spells.length; i++) {
+        if ( $scope.character.spells[i].id == spell_id ) {
+          $scope.character.spells.splice(i,1);
+        }
+      }
+    };
+ 
     var getCharacterSpellById = function(spell_id) {        
       for(var i = 0; i < $scope.character.spells.length; i++) {
         if ( $scope.character.spells[i] != undefined ) {

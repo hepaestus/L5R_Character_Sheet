@@ -1,13 +1,15 @@
-<div class="modal-dialog">
+<div class="modal-dialog" n g-controller="CharacterController">
     <div class="modal-header">
       <button type="button" class="close" ng-click="cancel()">&times;</button>
       <h4 class="modal-title">Load Character</h4>
     </div>
     <div class="modal-body">
-      <h6>Choose your character from the saved list</h6>
+      <h4>Choose Your Character</h4>
+      <h5>Test Controller:{{ test }}</h5>
+      <h5>Saved Chars:{{saved_characters_array}}</h5>
       <ul>
         <li ng-repeat="character in saved_characters_array">
-          <a ng-click="loadCharacter($index)">{{$index}} {{character}} {{character.name}} {{character.clan}} {{character.school}}</a>
+          <a ng-click="loadCharacter($index)">{{$index}} {{character.name}} {{character.clan}} {{character.school}}</a>
         </li>
       </ul>
     </div>

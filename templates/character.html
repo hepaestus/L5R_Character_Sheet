@@ -98,7 +98,7 @@
               <td class="skill_rank"><input name="skill_rank" ng-model="character.skills[$index].rank" type="number" min="0" ng-click="updateSkillRank(each.id)"/></td>
               <td>{{getSkill(each.id,'trait')}}</td>
               <td class="skill_roll">{{each.roll}}</td>
-              <td><a href="" class="small" ng-hide="each.emphasis" ng-show="getSkill(each.id,'emphases')" ng-click="toggleShowEmphasesList(each.id)">Add</a><span ng-show="each.emphasis">{{each.emphasis}}</span></td>
+              <td><a href="" class="small" ng-hide="each.emphasis || getSkill(each.id,'emphases') == null" ng-show="getSkill(each.id,'emphases')" ng-click="toggleShowEmphasesList(each.id)">Add</a><span ng-show="each.emphasis">{{each.emphasis}}</span></td>
               <td class="skill_mastery" style="line-height: 60%"><span class="small" ng-bind-html="each.mastery"></span></td>
 	          <td class="skill_desc" style="line-height: 60%"><span class="small">{{getSkill(each.id,'description')}}</span></td>
 	          <td class="skill_button"><button ng-click="removeSkill(each.id)"><span class="glyphhicon glyphicons-remove">X</span></button></td>
