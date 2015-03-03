@@ -393,16 +393,6 @@
         $scope.showEmphasesList = !$scope.showEmphasesList;
     };
 
-    $scope.addEmphasis = function(emphasis_index) {
-      var skill = getCharacterSkillById($scope.currentSkillId);
-      if ( skill ) {
-        skill.empasis = empasis_index;
-        replaceCharacterSkillById($scope.currentSkillId, skill);
-	$scope.character.experience_points -= 2;
-        $scope.toggleShowEmphasisList();
-      }
-    };
-
     var getSkillRoll = function(skill_id, skill_rank) {
       var skill = $scope.getSkillFromMasterList(skill_id);
       //console.log("get Roll of skill : " + skill_id + " with rank of " + skill_rank);
@@ -482,14 +472,25 @@
        replaceCharacterSkillById(id, null);
     };
 
+    //$scope.addEmphasis = function(emphasis_index) {
+     // console.log("ADD EMPHASIS ONE");
+      //var skill = getCharacterSkillById($scope.currentSkillId);
+      //if ( skill ) {
+        //skill.empasis = empasis_index;
+        //replaceCharacterSkillById($scope.currentSkillId, skill);
+        //$scope.toggleShowEmphasisList();
+      //}
+    //};
+
     $scope.addEmphasis = function(emp_index) {
+      console.log("ADD EMPHASIS TWO");
       var master_skill = $scope.getSkillFromMasterList($scope.currentSkillId);
       var emp = master_skill.emphases[emp_index];      
       var skill = getCharacterSkillById($scope.currentSkillId);
       skill.emphasis = emp;
-      console.log("Add Emphasis Index : " + emp_index + " to Character Skill Id : " + $scope.currentSkillId + "Emp: " + emp + " Emphasis: " + skill.emphasis );
-      //console.log(skill.emphasis);
+      //console.log("Add Emphasis Index : " + emp_index + " to Character Skill Id : " + $scope.currentSkillId + " Emp: " + emp + " Emphasis: " + skill.emphasis );
       replaceCharacterSkillById($scope.currentSkillId, skill);
+      $scope.character.experience_points -= 2;
       $scope.toggleShowEmphasesList();
     }
     

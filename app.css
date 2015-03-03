@@ -7,7 +7,7 @@ main {
 }
 
 input.clan, input.school, input.name {
-    width: 10em;
+    width: 8em;
 }
 input.experience_points, input.experience_points_earned, input.school_rank, input.insight_rank, input.insight {
     width: 4em;
@@ -53,7 +53,7 @@ table.rings-table {
 }
 .center {
     text-align:center;
-}}
+}
 
 input.void_box {
     margin:0;
@@ -72,7 +72,7 @@ input.void_box {
 }
 
 table.stats-table, table.weapons-table {
-    margin: 3em;
+    margin: 0em;
     width: 100%;
     border: 1px solid black;
 }
@@ -105,10 +105,6 @@ table.stats-table td input, table.weapons-table td input{
     text-align: center;
 }
 
-td.border-wide-left, th.border-wide-left {
-    border-left: 3px solid black;
-}
-
 label.line {
     width: 15%;
     text-align: right;
@@ -121,12 +117,14 @@ input.line {
 
 section.bushido-stats {
     text-align:center;
-    margin: 0 3em 2em 0;
+    margin: 0;
+    padding: 0;
 }
 section.bushido-stats input.stats-rank{
     text-align:center;
-    width: 3em;
+    width: 2em;
 }
+
 table.skill-table {
   width:100%;
 }
@@ -134,7 +132,6 @@ table.skill-table, table.skills-table td, table.skills.table th {
     border: 1px solid #DDD;
     padding: 3px;
 }
-
 table.skills-table input, table.skill-table td, table.skills-table td.list {
     border: 0px;
     border-bottom: 1px solid black;

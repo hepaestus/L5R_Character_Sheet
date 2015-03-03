@@ -1,16 +1,18 @@
 <div class="column">  
-    <div class="col-md-8">
+    <div class="col-md-7 col-xs-12">
 
       <button ng-click="saveCharacter()">Save Changes Locally</button>
       <button ng-click="loadCharacter()">Load Character</button><br/>
 
-      <label class="line">Name</label><input class="line name" class="name" name="name" type="text" ng-model="character.name"/>
-      <label class="line">Insight Rank</label><input class="line insight_rank" name="school" type="number" ng-model="character.insight_rank"/><br/>
-      <label class="line">Clan</label><input class="line clan" class="clan" name="clan" type="text" ng-model="character.clan"/>
-      <label class="line">Experience Points</label><input class="line experience_points" name="experience_points" type="number" ng-model="character.experience_points"/>
-      <label class="line">Total Earned</label><input class="line experience_points_earned" name="experience_points_earned" type="number" ng-model="character.experience_points_earned"><br/>
-      <label class="line">School</label><input class="line school" name="school" type="text" ng-model="character.school"/>
-      <label class="line">Insight</label><input class="line insight" name="insight" type="number" ng-model="character.insight"/><span>(Rings x 10 + skills)</span><br/>
+      <div class="info">
+        <label class="line">Name</label><input class="line name" class="name" name="name" type="text" ng-model="character.name"/>
+        <label class="line">Insight Rank</label><input class="line insight_rank" name="school" type="number" ng-model="character.insight_rank"/><br/>
+        <label class="line">Clan</label><input class="line clan" class="clan" name="clan" type="text" ng-model="character.clan"/>
+        <label class="line">Experience Points</label><input class="line experience_points" name="experience_points" type="number" ng-model="character.experience_points"/>
+        <label class="line">Total Earned</label><input class="line experience_points_earned" name="experience_points_earned" type="number" ng-model="character.experience_points_earned"><br/>
+        <label class="line">School</label><input class="line school" name="school" type="text" ng-model="character.school"/>
+        <label class="line">Insight</label><input class="line insight" name="insight" type="number" ng-model="character.insight"/><span>(Rings x 10 + skills)</span><br/>
+      </div>
 
       <table class="rings-table">
         <tr>
@@ -87,7 +89,7 @@
         </tr>
 
       </table>
-      <div class="col-md-8" ng-controller="SkillsController">
+      <div class="col-m d-6" ng-controller="SkillsController">
         <table class="skills-table">
           <tr>
 		  <th class="skill_name">Skill Name</th><th class="skill_rank">Rank</th><th class="skill_trait">Trait</th><th class="skill_roll">Roll</th><th class="skill_emphasis">Emphasis</th><th class="skill_mastery">Mastery Abilities</th><th class="skill_desc">Desc.</th><th class="skill_button"></th>
@@ -134,7 +136,7 @@
           </tr>
         </table>
       </div>
-      <div class="col-md-8">
+      <div class="col-m d-6">
         <table class="weapons-table">
           <tr>
             <th colspan="2">Weapon One</th><th colspan="2">Weapon Two</th>
@@ -176,7 +178,7 @@
 </div>
 
 <div="column">
-   <aside class="col-md-4">
+   <aside class="col-md-3 col-xs-12" style="border: 2px solid red;">
      <section class="bushido-stats">
        <h4>HONOR</h4>
        <input type="number" name="honor-rank" min="0" class="stats-rank" ng-model="character.honor"/>
