@@ -1,8 +1,22 @@
+
   <header>
       <h1>Spells</h1>
   </header>
+ 
+  <section>
+      <h3>Spell Affinity</h3>
+      <label for="spell_affinity">Air:</label>
+      <input type="checkbox" name="spell_affinity" ng-model="character.spell_affinity.air" value="air"/>
+      <label for="spell_affinity">Earth:</label>
+      <input type="checkbox" name="spell_affinity" ng-model="character.spell_affinity.earth" value="earth"/>
+      <label for="spell_affinity">Fire:</label>
+      <input type="checkbox" name="spell_affinity" ng-model="character.spell_affinity.fire" value="fire"/>
+      <label for="spell_affinity">Water:</label>
+      <input type="checkbox" name="spell_affinity" ng-model="character.spell_affinity.water" value="water"/>
+      <label for="spell_affinity">Void:</label>
+      <input type="checkbox" name="spell_affinity" ng-model="character.spell_affinity.void" value="void"/>
+  </section>
 
-  <p>Updated Spells Page</p>
   <a href="" ng-click="toggleShowSpellsList()">Add Spell</a>
   <div ng-show="showSpellsList">
     <label>Search</label><input name="spellSearchFilter.text" ng-model="spellSearchFilter.$" type="search"/>
@@ -20,44 +34,37 @@
   </div>
 
   <h1>Known Spells</h1>
-  <div ng-repeat="each in character.spells">
-      <div class="spell_tables">
-          <table class="spell">
-            <tr>
-                 <th>Name</th>
-		 <td class="spell_name">{{getSpell(each.id,'name')}} ({{getSpell(each.id,'type')}})</td>
-                 <th>M.Lvl.</th>
-                 <td class="center">{{getSpell(each.id,'level')}}</td>
-                 <th>Roll</th>
-                 <td class="center">{{getSpell(each.id,'roll')}}</td>
-                 <td class="remove"><button ng-click="removeSpell(each.id)"><span class="glyphicon glyphicon-remove"></span></button>
-            </tr>
-            <tr>
-                 <th>Element</th>
-                 <td>{{getSpell(each.id,'ring')}}</td>
-                 <th>Duration</th>
-                 <td class="center" colspan="4">{{getSpell(each.id,'duration')}}</td>
-            </tr>
-            <tr>
-                 <th>Area</th>
-                 <td>{{getSpell(each.id,'area_of_affect')}}</td>
-                 <th>Range</th>
-                 <td class="center" colspan="4">{{getSpell(each.id,'range')}}</td>
-            </tr>
-            <tr>
-                 <th>Raises</th>
-                 <td colspan="6" class="small"> 
-                     <span ng-bind-html="getSpell(each.id,'raises')"></span>')
-                 </td>
-            </tr>
-            <tr>
-                 <th rowspan="3">Effect</th>
-            </tr>
-            <tr>
-                 <td rowspan="3" colspan="6" class="small"> 
-                     <span ng-bind-html="getSpell(each.id,'description')"></span>')
-                 </td>
-            </tr>
-          </table>
+  <div class="container-fluid"> 
+    <div class="spell-section" ng-class="" ng-repeat="each in character.spells">
+      <div class="row">
+          <div class="col-xs-2 header right">Name</div>
+          <div class="col-xs-10 value"><strong>{{getSpell(each.id,'name')}}</strong> <span ng-if="getSpell(each.id,'type')">({{getSpell(each.id,'type')}})</span></div>
       </div>
+      <div class="row">
+          <div class="col-xs-2 header right">Lvl</div>
+          <div class="col-xs-4 value center"><strong>{{getSpell(each.id,'level')}}</strong></div>
+          <div class="col-xs-2 header right">Roll</div>
+          <div class="col-xs-4 value center">{{getSpell(each.id,'roll')}}</div>
+      </div>
+      <div class="row">
+          <div class="col-xs-2 header right">Ring</div>
+          <div class="col-xs-4 value center">{{getSpell(each.id,'ring')}}</div>
+          <div class="col-xs-2 header right">Duration</div>
+          <div class="col-xs-4 value center">{{getSpell(each.id,'duration')}}</div>
+      </div>
+      <div class="row">
+          <div class="col-xs-2 header right">Area</div>
+          <div class="col-xs-4 value center">{{getSpell(each.id,'area_of_affect')}}</div>
+          <div class="col-xs-2 header right">Range</div>
+          <div class="col-xs-4 value center">{{getSpell(each.id,'range')}}</div>
+      </div>
+      <div class="row">
+          <div class="col-xs-2 header right">Raises</div>
+          <div class="col-xs-10 value"><span ng-bind-html="getSpell(each.id,'raises')"></span></div>
+      </div>
+      <div class="row">
+          <div class="col-xs-2 header right">Effect</div>
+          <div class="col-xs-10 value"><span ng-bind-html="getSpell(each.id,'description')"></span></div>
+      </div>
+    </div>
   </div>

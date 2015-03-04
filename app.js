@@ -25,13 +25,13 @@
     $scope.test = "Main Controller";
 
     $scope.saved_characters_array = [];
-    
+
     $scope.open = function(size) {
       var modalInstance = $modal.open({
         templateUrl: 'templates/character_load.html',
         controller: 'ModalInstanceController',
         size: size,
-        resolve: { 
+        resolve: {
           saved_characters_array: function() {
             return $scope.saved_characters_array;
           }
@@ -40,22 +40,22 @@
       console.log('Modal Opened at: ' + new Date());
 
       modalInstance.result.then(function (selectedItem) {
-        $scope.selected = selectedItem;        
+        $scope.selected = selectedItem;
       }, function () {
         console.log('Modal dismissed at: ' + new Date());
       });
     };
-  
-    $scope.character = { 
-      name: "",      
+
+    $scope.character = {
+      name: "",
       clan: "",
       school: "",
       experience_points: 0,
       experience_points_earned: 0,
       get initiative() { return ((this.insight_rank + this.reflexes) + "K" + this.reflexes); },
       get current_tn() { return ((this.reflexes * 5 ) + 5); },
-      insight       : 100, 
-      insight_rank  : 1, 
+      insight       : 100,
+      insight_rank  : 1,
       earth         : 2,
       air           : 2,
       water         : 2,
@@ -76,8 +76,8 @@
       perception_s  : 2,
       agility       : 2,
       agility_s     : 2,
-      intelligence  : 2,      
-      intelligence_s: 2,      
+      intelligence  : 2,
+      intelligence_s: 2,
       armor         : { rating:0, bonus:0, notes:""},
       get armor_tn() { return ( 5 * this.reflexes + 5 + this.armor.rating + this.armor.bonus ); },
       honor         : 0,
@@ -86,12 +86,12 @@
       taint         : 0,
       skills        : [],
       spells        : [],
-      spell_affinity: ['air','water'],
+      spell_affinity: {air:false, earth:false, fire:false, water:false, void:false },
       get wounds() { return ( ((this.earth * 2) * this.insight_rank) + " : " + (this.earth * 5)); },
       get healing() { return ( this.stamina * 2 + this.insight_rank ); },
       healing_modifiers:0,
       get current_heal_rate() { return ( (this.stamina * 2) + this.insight_rank + this.healing_modifiers + " per day" ); },
-    };        
+    };
 
     var mastery = function(obj) {
       var text = '';
@@ -99,11 +99,11 @@
         if ( obj.rank >= x ) {
           text += "Level " + x + " : " + obj.masteries[x] + "<br />\n";
         }
-      } 
+      }
       // console.log("Text: " + text);
       return text;
     };
-    
+
     $scope.skillsMasterList = [
       // id:, level, type, subtype, trait, ring, rank, roll, emphasis, emphases{}, get mastery(), masteries{}, description
       { id:1000, level:'Debug', type:'Debug', sub_type:'debug', trait:'void', ring:'void', emphases:{0:'E Zero', 1:'E One', 2:'E Two'}, get mastery() { return mastery(this); }, masteries:{ 3:'M Three', 5:'M Five', 7:'M Seven'}, description:'debug description'},
@@ -203,7 +203,7 @@
 
 
   }]);
- 
+
   app.controller('HomeController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
 
     $scope.test = "Home Controller";
@@ -212,7 +212,7 @@
   }]);
 
   app.controller('ModalInstanceController', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
-     
+
     $scope.test = "ModalInstance Controller";
 
     $scope.ok = function () {
@@ -223,24 +223,24 @@
     $scope.cancel = function () {
       console.log("Cancel Window");
       $modalInstance.dismiss('cancel');
-    };    
+    };
 
   }]);
 
   app.controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore ) {
-	  
-    $scope.test = "Character Controller";    
+
+    $scope.test = "Character Controller";
     $scope.saved_characters_date_array = [];
 
     $scope.loadCharacter = function() {
       var saved_character_cookie_array = $cookieStore.get('characters');
       $scope.saved_characters_array = [];
       for ( var i = 0; i < saved_character_cookie_array.length; i++) {
-        console.log("Getting Character " +i+ " : " + saved_character_cookie_array[i]);        
-        var character = $cookieStore.get(saved_character_cookie_array[i]);         
+        console.log("Getting Character " +i+ " : " + saved_character_cookie_array[i]);
+        var character = $cookieStore.get(saved_character_cookie_array[i]);
         if ( character ) {
-          console.log("Pushing Character Into Array : " + character.name);        
-          $scope.saved_characters_array.push(character);         
+          console.log("Pushing Character Into Array : " + character.name);
+          $scope.saved_characters_array.push(character);
         }
       }
       console.log("Saved Characters Array : " + $scope.saved_characters_array);
@@ -262,8 +262,8 @@
       }
       $scope.saved_characters_date_array.push('character_' + date_string);
       console.log("Saved Character Dates: " + $scope.saved_characters_date_array);
-      $cookieStore.put('characters', $scope.saved_characters_date_array  ); 
-      $cookieStore.put('character_' + date_string, $scope.character); 
+      $cookieStore.put('characters', $scope.saved_characters_date_array  );
+      $cookieStore.put('character_' + date_string, $scope.character);
     };
 
     $scope.deleteSavedCharacter = function(character_date_string) {
@@ -288,8 +288,8 @@
           $scope.character[attr + "_s"] = $scope.character[attr];
       } else {
           //console.log("No Change to " + attr);
-      } }; 
-    $scope.updateEarth = function(attr, value) {      
+      } };
+    $scope.updateEarth = function(attr, value) {
       $scope.updateExp(attr,value);
       if ( $scope.character.stamina === $scope.character.willpower) {
         $scope.character.earth = $scope.character.stamina;
@@ -308,7 +308,7 @@
       } else if ( $scope.character.reflexes <  $scope.character.awareness ) {
         $scope.character.air = $scope.character.reflexes;
       } else if ( $scope.character.awareness < $scope.character.reflexes ) {
-        $scope.character.air = $scope.character.awareness;        
+        $scope.character.air = $scope.character.awareness;
       }
       $scope.updateInsightRank();
       //$scope.updateSkills(attr,'air');
@@ -320,7 +320,7 @@
       } else if ( $scope.character.strength <  $scope.character.perception ) {
         $scope.character.water = $scope.character.strength;
       } else if ( $scope.character.perception < $scope.character.strength ) {
-        $scope.character.water = $scope.character.perception;        
+        $scope.character.water = $scope.character.perception;
       }
       $scope.updateInsightRank();
       //$scope.updateSkills(attr,'water');
@@ -332,7 +332,7 @@
       } else if ( $scope.character.agility <  $scope.character.intelligence ) {
         $scope.character.fire = $scope.character.agility;
       } else if ( $scope.character.intelligence < $scope.character.agility ) {
-        $scope.character.fire = $scope.character.intelligence;        
+        $scope.character.fire = $scope.character.intelligence;
       }
       $scope.updateInsightRank();
       //$scope.updateSkills(attr,'fire');
@@ -342,8 +342,8 @@
       $scope.updateInsightRank();
       //$scope.updateSkills(attr,'void');
     };
-     
-    $scope.updateInsightRank = function() { 
+
+    $scope.updateInsightRank = function() {
       var skillRanks = 0;
       for(var i = 0; i < $scope.character.skills.length; i++) {
         if ( $scope.character.skills[i] != undefined ) {
@@ -384,12 +384,12 @@
         //console.log("Current Skill Id : " + $scope.currentSkillId);
         $scope.emphasesList = [];
         var skill = $scope.getSkillFromMasterList(skill_id);
-	if ( skill ) {
+    if ( skill ) {
         //console.log("FOUND skill : " + skill_id);
           for ( var i in skill.emphases ) {
             $scope.emphasesList.push( skill.emphases[i] ) ;
           }
-	}
+    }
         $scope.showEmphasesList = !$scope.showEmphasesList;
     };
 
@@ -418,12 +418,12 @@
           if ( obj.rank >= x ) {
             text += "Level " + x + " : " + master_skill.masteries[x] + "<br />\n";
           }
-	}
+    }
         //console.log("Text: " + text);
         return text;
       } else {
         return 'none';
-      } 
+      }
     };
 
     $scope.addSkill = function(skill_id) {
@@ -434,22 +434,22 @@
       if ( getCharacterSkillById(skill_id) === null) {
         //console.log("Add Skill " + skill_id );
         //console.log("Before Skills2 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
-        $scope.character.skills.push(new_skill);       
+        $scope.character.skills.push(new_skill);
         //console.log("After Skills1 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
         $scope.toggleShowSkillsList();
       } else {
         //console.log("skill " + skill_id + " already exists");
       }
         //console.log("After Skills2 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
-    };    
+    };
 
-    $scope.getSkill = function(skill_id, attr) { 
+    $scope.getSkill = function(skill_id, attr) {
         //console.log("Get : " + attr);
         return $scope.getSkillFromMasterList(skill_id, attr);
     };
 
     $scope.getSkillFromMasterList = function(skill_id, attr) {
-	//console.log("getSkillFromMasterList(" + skill_id + "," + attr + ")");
+    //console.log("getSkillFromMasterList(" + skill_id + "," + attr + ")");
         for(var i=0; i < $scope.skillsMasterList.length; i++) {
             if ( $scope.skillsMasterList[i].id === skill_id ) {
                 if (attr === null || attr === undefined) {
@@ -466,7 +466,7 @@
         }
         return "(error)";
     };
-   
+
     $scope.removeSkill = function(id) {
        // METHOD OF GIVING BACK ALL EXP PTS WHEN SKILL IS Removed!
        replaceCharacterSkillById(id, null);
@@ -485,7 +485,7 @@
     $scope.addEmphasis = function(emp_index) {
       console.log("ADD EMPHASIS TWO");
       var master_skill = $scope.getSkillFromMasterList($scope.currentSkillId);
-      var emp = master_skill.emphases[emp_index];      
+      var emp = master_skill.emphases[emp_index];
       var skill = getCharacterSkillById($scope.currentSkillId);
       skill.emphasis = emp;
       //console.log("Add Emphasis Index : " + emp_index + " to Character Skill Id : " + $scope.currentSkillId + " Emp: " + emp + " Emphasis: " + skill.emphasis );
@@ -493,8 +493,8 @@
       $scope.character.experience_points -= 2;
       $scope.toggleShowEmphasesList();
     }
-    
-    var getCharacterSkillById = function(skill_id) {        
+
+    var getCharacterSkillById = function(skill_id) {
       //console.log("Before Skills : " + JSON.stringify($scope.character.skills) + " (getCharacterSkillById)");
       for(var i = 0; i < $scope.character.skills.length; i++) {
         //console.log("Each Skill " + JSON.stringify($scope.character.skills[i]));
@@ -534,14 +534,14 @@
     $scope.updateSkillRank = function(id) {
       //console.log("Before Skills : " + JSON.stringify($scope.character.skills) + " (updateSkillRank)");
       var skill = getCharacterSkillById(id);
-      if ( skill != null && skill.id >= 0 ) { 
+      if ( skill != null && skill.id >= 0 ) {
         if ( skill.rank < skill.rank_s ) {
           var diff = skill.rank_s - skill.rank;
           $scope.character.experience_points += skill.rank_s;
           $scope.character.insight -= diff;
         } else if ( skill.rank > skill.rank_s ) {
           var diff = skill.rank - skill.rank_s;
-	  $scope.character.experience_points -= skill.rank;
+      $scope.character.experience_points -= skill.rank;
           $scope.character.insight += diff;
         }
         skill.rank_s = skill.rank;
@@ -559,18 +559,18 @@
     $scope.test = "Spells Controller";
     $scope.spellSearchFilter;
     $scope.spellSearchText = "";
-  
+
     var spellRoll = function(obj) {
       var roll = '';
       var spell_ring = obj.ring;
       var insight_rank = $scope.character.insight_rank;
       var ring_val = "R"
-      var affinity = "+Aff+"; 
+      var affinity = "+Aff+";
       if ( spell_ring != 'all' ) {
         ring_val = $scope.character[spell_ring];
-        affinity = '';
+        affinity = 0;
       }
-      if ( $scope.character.spell_affinity.indexOf( spell_ring ) >= 0 ) {
+      if ( $scope.character.spell_affinity[spell_ring] == true ) {
           affinity = 1;
       }
       roll = ring_val + ( affinity + insight_rank ) + 'K' + ring_val;
@@ -579,9 +579,9 @@
     };
 
     $scope.spellsMasterList = [
-      { id:0, name:'Sense', type:'', ring:'all', level: '1', range:'Personal', area_of_affect:'50\' radius from the caster', duration:'Instantaneous', raises: 'Range(+10\')', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the four standard elements. It allows for the caster to sense the presense, quantity, and rough location of the elemental spirits (not evil spirits known as <i>kansen</i> of that element within the range of the spell. This is most frequently applied when looking for spirits with which to Commune (See Commune), but can also can be useful as a crude basic location device. For example, a caster lost in the wilderness could cast Snese(Water) in hopes of locating the sourceof drinking water.' },
-      { id:1, name:'Summon', type:'', ring:'all', level: '1', range:'30\'', area_of_affect:'1 cubic foot of summoned matterial', duration:'Permanent', raises: 'Range(+10\'), Quantity(+1 cubic foot), Composition of Material(1-4 raises as outlined below)', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the tour standard elements. It allows the caster to summon a modest quantity (one cubic foot) of the chosen element. The summoned matter appears (usually in a rough ball shape] in any open space within the spell\'s range. This cannot place the summoned material inside another physical object or living creature. The summoned element will behave in a normal and mundane matter; earth falls to the ground, water soaks anything it lands on, air blows away, and fire winks out unless there is something present for it to burn. In general it is impossible to use this spell effectively in combat, although clever shugenja may find a few modest combat uses. such as using Summon [Fire] to ignite a foe soaked in cooking oil. More commonly, the Spell\'s value is in simpler functions. such as summoning Water while in a desert, or summoning Fire to light a campfire without flint and tinder. Raises may be used with this spell to summon a more specfic type of the appropriate element, such as wood or iron with Earth, or tea with Water. The GM should choose how many Raises (generally anywhere from 1 to 4) this requires. However, these Raises <strong>cannot</strong> be used to create rare or precious materials (such as gold) or spiritually powerful substances (such as jade or crystal).' },
-      { id:2, name:'Commune', type:'', ring:'all', level: '1', range:'20\'', area_of_affect:'self', duration:'Concentration', raises: 'See Desc.', get roll() { return spellRoll(this); }, description:'This spell can be cast in any element save Void. It allows the caster to speak with one of the local elemental kami, asking it a few questions, which is will answer honestly to the best of it\'s ability. ...' },
+      { id:0, name:'Sense', type:'', ring:'all', level: '1', range:'Personal', area_of_affect:'50\' radius from the caster', duration:'Instantaneous', raises: 'Range(+10\')', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the four standard elements. It allows for the caster to sense the presense, quantity, and rough location of the elemental spirits (not evil spirits known as <i>kansen</i> of that element within the range of the spell. This is most frequently applied when looking for spirits with which to Commune (See Commune), but can also can be useful as a crude basic location device. For example, a caster lost in the wilderness could cast Snese(Water) in hopes of locating the sourceof drinking water. Pg 166 Core Book' },
+      { id:1, name:'Summon', type:'', ring:'all', level: '1', range:'30\'', area_of_affect:'1 cubic foot of summoned matterial', duration:'Permanent', raises: 'Range(+10\'), Quantity(+1 cubic foot), Composition of Material(1-4 raises as outlined below)', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the tour standard elements. It allows the caster to summon a modest quantity (one cubic foot) of the chosen element. The summoned matter appears (usually in a rough ball shape] in any open space within the spell\'s range. This cannot place the summoned material inside another physical object or living creature. The summoned element will behave in a normal and mundane matter; earth falls to the ground, water soaks anything it lands on, air blows away, and fire winks out unless there is something present for it to burn. In general it is impossible to use this spell effectively in combat, although clever shugenja may find a few modest combat uses. such as using Summon [Fire] to ignite a foe soaked in cooking oil. More commonly, the Spell\'s value is in simpler functions. such as summoning Water while in a desert, or summoning Fire to light a campfire without flint and tinder. Raises may be used with this spell to summon a more specfic type of the appropriate element, such as wood or iron with Earth, or tea with Water. The GM should choose how many Raises (generally anywhere from 1 to 4) this requires. However, these Raises <strong>cannot</strong> be used to create rare or precious materials (such as gold) or spiritually powerful substances (such as jade or crystal). Pg 166 Core Book' },
+      { id:2, name:'Commune', type:'', ring:'all', level: '1', range:'20\'', area_of_affect:'self', duration:'Concentration', raises: 'See Desc.', get roll() { return spellRoll(this); }, description:'This spell can be cast in any element save Void. It allows the caster to speak with one of the local elemental kami, asking it a few questions, which is will answer honestly to the best of it\'s ability. Typically this spell will invoke the most active and energetic spirit of the chosen element in the area of effect, if all of the local spirits are quiescent, the GM may require the caster to call 1 or 2 Raises to "wake up" a local spirit enough to answer questions. A Spirit reached with Commune will answer two questions. The caster may Raise to get more questions (one per Raise). The caster may also Raise for clarity, to get a more accurate and informative answer to the questions. (Kami are notorious for their inabiiity to fully comprehend human behavior, and asking questions without Raises for clarity can often result in confusing, enigmatic, or incomplete answers.) Spirits do not forget anything, so theoretically a shugenja can ask a spirit about something that happened decades ago, however, they also do not experience time in the same way as mortals, so trying to ask about something from long ago will usually require Raises in order to make the caster\'s wishes clear to the spirit. The nature of the information which spirits can impart varies by element. Air spirits tend to be playful and easily distracted, conveying information as emotions or as riddles and jokes. Since they are more interested in feelings than in facts, and enjoy playing games with those who speak with them, commuting with an Air spirit can sometimes be very frustrating. Earth spirits are straightforward and matter of fact, often blunt, but are also often rather uninterested in the behavior of mortals, have a poor understanding of human emotion, and tend to be overly focused on obscure details such as the color of a piece of clothing or the weight of a horse. Fire spirits are irritable and tempermental, and are often angry at being summoned unless they are propitiated with an offering of something to burn. 0n the other hand, if a shugenja can please them they tend to offer the clearest and most accurate information. Water spirits communicate their knowledge through soundless visual images. This can be very helpful to a shugenja trying to investigate a past incident, but since the spirits cannot convey scent, sound, or emotion, the information they provide can often be incomplete or misleading. Pg 166 Core Book' },
       { id:3, name:'Blessed Wind', type:'Defense', ring:'air', level:'1', range:'Personal', area_of_affect:'10\' radius around the caster', duration:'Concentration', raises:'Special(you may target another spell with this spell with 3 raises)', get roll() { return spellRoll(this); }, description:'You summon a swirling aura of winds to protect you from ranged attacks. The buffeting winds deflect arrows and other projectiles. While you maintain your concentration, this spell adds +15 to your Armor TN versus all non-magical ranged attacks. Pg 167 Core Book' },
       { id:4, name:'By the Light of the Moon', type:'', ring:'air', level:'1', range:'Touch', area_of_affect:'One Object', duration:'1 hour', raises:'Area (+5 radius), Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'You call upon the kami to reveal that which has been hide den. All concealed objects within the area of effect appear as slightly luminous outlines to you. Any non-magical conceale ment is revealed, including secret compartments, trap doors. concealed weapons, etc. Only you can see the presence of these objects. Pg 167 Core Book' },
       { id:5, name:'Cloak of Night', type:'Illusion', ring:'air', level:'1', range:'Touch', area_of_affect:'One Object', duration:'1 hour', raises:'Duration (+1 hour)', get roll() { return spellRoll(this); }, description:'You can call upon the kami to wrap an object in their embrace, hiding it from the sight of mortal beings. You may target any one noneliving object smaller than you. This object becomes invisible to the naked eye. Attempts to perceive it magically will automatically succeed if the Mastery Level of the spell used is higher than that of this spell. Spells of equal Mastery Level require a Contested Air Roll to detect the hidden object. The object is still physically present and can be touched, smelled, or sensed with any normal sense other than vision. Pg 167 Core Book' },
@@ -592,10 +592,10 @@
       { id:10, name:'To Seek the Truth', type:'', ring:'air', level:'1', range:'Personal / Touch', area_of_affect:'One individual touched [may be the caster]', duration:'5 minutes', raises:'Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'You call upon the wind to purge the mind of your target, granting him clarity. This spell may negate temporary mental or social penalties suffered as a result of a mechanical effect, including Techniques, Wound Ranks, or other spells. The TN of the Spell Casting Roll made to cast this spell is increased by an amount equal to the Technique Rank, Wound Rank or spell Mastery Level used to create the penalty in the first place. Disadvantages permanently possessed by an individual may not be countered using this spell. Pg 168 Core Book' },
       { id:11, name:'Way of Deception', type:'Illusion', ring:'air', level:'1', range:'20\'', area_of_affect:'One illusory duplicate of the caster', duration:'Concentration +5 minutes', raises:'Area [+1 duplicate per 2 Raises]. Range [+5 feet], Special [see below]', get roll() { return spellRoll(this); }, description:'You can entreat the capricious spirits of the wind to create a perfect duplicate image of you a short distance away. The illusion exactly refects your appearance at the time the spell is cast, including your clothing and any equipment. The illusion may appear anywhere within the spell\'s range, and will perform whatever actions you perform while it is in effect. (If you sit down, for instance, your duplicate will sit down as well, even if there is nothing to sit on.) Once you leave the normal range of the spell, the duplicate disappears. if you make two Raises on the Spell Casting Roll, you may leave the area of effect and the illusion will remain in whatever position it was in when you left for as long as you continue concentrating on maintaining the spell. Pg 168 Core Book' },
       { id:12, name:'Yari or Air', type:'Craft, Thunder', ring:'air', level:'1', range:'Personal or 20\'', area_of_affect:'One created weapon', duration:'5 minutes', raises:'Damage (+lk0). Duration (+5 minutes). Range (+5 feet)', get roll() { return spellRoll(this); }, description:'You summon a swirling weapon of pure air. only visible as a foggy outline. The weapon\'s default form is a yari. but one Raise can change its form to any other spear of your choosing. The weapon has DR lkl. if you do not possess the Spears Skill, you may instead use your School Rank in its place. If you do possess the Spears Skill, using this weapon grants you one Free Raise that can only he used on the Feint or Increased Damage Maneuvers. This weapon disappears if is lost from your hand. instead of summoning the yari for yourself, you may cause it to appear in the hands of an ally within 20 feet. He is treated as the caster for all purposes of the spell, but he does not gain the Free Raise bonus. Pg 168 Core Book' },
-      { id:13, name:'Benten\s Touch', type:'', ring:'air', level:'2', range:'Personal / Touch', area_of_affect:'Target individual [may be the caster]', duration:'1 hour', raises:'Range (may increase range to 5\' with a single Raise)', get roll() { return spellRoll(this); }, description:'By calling upon the air kami [0 whisper suggestions to others, you may cause them to perceive the target of this spell more positively than they otherwise might. The target of this spell gains a bonus of +lkl. plus your Air Ring, to the total of all Social Skill rolls made for the duration of the spell. Pg 168 Core Book' },
+      { id:13, name:'Benten\'s Touch', type:'', ring:'air', level:'2', range:'Personal / Touch', area_of_affect:'Target individual [may be the caster]', duration:'1 hour', raises:'Range (may increase range to 5\' with a single Raise)', get roll() { return spellRoll(this); }, description:'By calling upon the air kami [0 whisper suggestions to others, you may cause them to perceive the target of this spell more positively than they otherwise might. The target of this spell gains a bonus of +lkl. plus your Air Ring, to the total of all Social Skill rolls made for the duration of the spell. Pg 168 Core Book' },
       { id:14, name:'Call Upon the Wind', type:'Travel', ring:'air', level:'2', range:'Personal or 20\'', area_of_affect:'Target individual [may he the caster]', duration:'1 minute', raises:'Duration (+1 minute), Range (+5)', get roll() { return spellRoll(this); }, description:'The winds can lift and buoy, carrying even the heaviest burden into the skies for short periods. The target of this spell gains a limited form of ?ight. allowing him to move through the air unimpeded. The target of the spell may make Free Move Actions. but not Simple Move Actions, and may never move more than lO\' per round. Heavy winds can interfere with this movement or prevent it altogether. At the end of the spell\'s duration. the target drifts harmlessly to the ground. no matter how high he might be. Pg 168 Core Book' },
       { id:15, name:'Hidden Visage', type:'Illusion', ring:'air', level:'2', range:'Personal', area_of_affect:'Self', duration:'5 minutes', raises:'Area of Effect (another person in line of sight can be targeted by this spell by making three Raises), Duration (+5 minutes)', get roll() { return spellRoll(this); }, description:'Air kami are mischievous and capricious, and enjoy anything they perceive as a joke. You may call upon them to create a subtle illusion, altering your facial featuresjust enough that you appear to he a different person. This spell does not allow you to impersonate specific individuals, or even people radically different from you. You appear as a person of the same age. build, race. and gender. The differences are subtle, enough so that you could be mistaken for your own brother or cousin. Pg 168 Core Book' },
-      { id:16, name:'The Kami\s Whisper', type:'Illusion', ring:'air', level:'2', range:'50\'', area_of_affect:'10\' radius', duration:'1 round', raises:'Area (+5\' radius), Duration (+1 round), Range (+5\')', get roll() { return spellRoll(this); }, description:'The kami of the wind can carry whispers for great distances. and can even create them if properly entreated. You can petition the kami to create a false sound, either a voice or a natural sound such as an animal\'s growl or runing water. for example. The sound can he no louder than a normal speaking voice, and cannot impersonate a specific person\'s voice. if used to create the sound of a voice. the spell is limited to twenty words. Pg 169 Core Book' },
+      { id:16, name:'The Kami\'s Whisper', type:'Illusion', ring:'air', level:'2', range:'50\'', area_of_affect:'10\' radius', duration:'1 round', raises:'Area (+5\' radius), Duration (+1 round), Range (+5\')', get roll() { return spellRoll(this); }, description:'The kami of the wind can carry whispers for great distances. and can even create them if properly entreated. You can petition the kami to create a false sound, either a voice or a natural sound such as an animal\'s growl or runing water. for example. The sound can he no louder than a normal speaking voice, and cannot impersonate a specific person\'s voice. if used to create the sound of a voice. the spell is limited to twenty words. Pg 169 Core Book' },
       { id:17, name:'Mists of Illusion', type:'Craft, Illusion', ring:'air', level:'2', range:'20\'', area_of_affect:'10\' radius', duration:'1 minute', raises:'Area (+5\'). Duration (+1 minute). Range (+5\')', get roll() { return spellRoll(this); }, description:'With greater ?uency with the kami comes the ability to craft increasingly convincing images from the stuff of the wind itself. You may create illusions of any object, individual. or image that you can imagine. These images are stationary. and they must fit within the spell\'s area of effect, but they can he as simple or complex as desired. These illusions are visual only. with no auditory component. no odors. etc. Pg 169 Core Book' },
       { id:18, name:'Secrets on the Wind', type:'', ring:'air', level:'2', range:'10 miles', area_of_affect:'20\' radius', duration:'Concentration', raises:'Area (+5\' radius). Range (+5 miles)', get roll() { return spellRoll(this); }, description:'The kami can carry whispers across an Empire. if properly enrtreated to do so. This spell requires you to perform a preparation ritual in order to cast it effectively. The ritual requires ten minutes of uninterrupted meditation in the area designated as the spell\'s area of effect. Any time within the 48 hours immediatly following this ritual, you may cast this spell. and overhear anything being said in the prepared area. If your concentration is disrupted, the effect ends and may not be renewed without an additional preparation ritual. Only one area may be prepared via this ritual at one time. Pg 169 Core Book' },
       { id:19, name:'Whispering Wind', type:'Divination', ring:'air', level:'2', range:'20\'', area_of_affect:'Target Individual', duration:'Instantaneous', raises:'Range (+5\')', get roll() { return spellRoll(this); }, description:'The air kami see very little difference between speech and thought. and can perceive both with relative ease. By compare ing the two, the kami can determine if what has been spoken is true or a lie. Unfortunately, they have notoriously short attention spans, and thus can only assess extremely recent conversations. By invoking this spell, you may determine if the last thing said by the target was true or false. The kami have no concept of personal opinion, however, and if the target truly believes what he said was true. the kami will believe it as well. Pg 169 Core Book' },
@@ -613,7 +613,7 @@
       { id:31, name:'Know the Mind', type:'', ring:'air', level:'4', range:'10\'', area_of_affect:'Target Individual', duration:'3 rounds', raises:'Duration (+1 round), Range (+5\')', get roll() { return spellRoll(this); }, description:'Although the ultimate secrets of the human mind are hidden even to the winds, air kami can pluck the most immediate thoughts from the minds of others and whisper them to those who carry their favor. For the duration of this spell, you essentially hear the surface thoughts of the spell\'s target. You only learn things they are actively thinking about. For example, if you asked the name of the target\'s daughter, that name would appear in their mind instantly even if they had no intention of speaking it aloud. A Contested Roll using your Perception against the target\'s Awareness will also allow you to assess their true emotional state, regardless of how they appear physically. Pg 171 Core Book' },
       { id:32, name:'Netsuke of Wind', type:'Craft, Illusion', ring:'air', level:'4', range:'Touch', area_of_affect:'One hand-held object', duration:'1 hour', raises:'Duration (+10 minutes)', get roll() { return spellRoll(this); }, description:'Although it requires great favor, the air kami are willing to coalesce into a solid form for a short period of time if they are fond enough of the priest asking them. You may create a small object out ofthe air itself, something that can be held in one or both hands and that does not weigh more than twenty pounds at the most. This creation is an illusion, but it can be used functionally, including inficting damage if it is a weapon. The object disappears completely at the end of the spell\'s duration. Pg 171 Core Book' },
       { id:33, name:'Symbol of Air', type:'Ward', ring:'air', level:'4', range:'Touch', area_of_affect:'Special', duration:'Permanent', raises:'none', get roll() { return spellRoll(this); }, description:'Priests of the kami are capable of inscribing powerful wards that invoke the power of the elements against all who attempt to pass them. A Symbol of Air must be inscribed on a solid object, most often a door, window, gate, or other passageway. Anyone attempting to pass through this passageway or otherwise pass by the area protected by the Symbol is affected by the protective ward. Such persons must succeed at a Contested Roll using their Earth against the caster\'s Air. Those who fail are affected by a powerful drowsiness, and must succeed at a Willpower Roll against the total of the Spell Casting Roll used to create the ward or fall into a deep sleep for one hour. Those affected by the spell cannot be woken by normal means, but will awaken instantly if subjected to any attack or form of harm, as the kami will not be party to such humorless tactics. You may only have one Symbol of Air in existence at any time, and Symbol spells of different elements may never affect the same area. This spell may be dispelled by another casting of Symbol of Air from any shugcnja, or by destroying the surface where the Symbol was etched. Pg 172 Core Book' },
-      { id:34, name:'Cloud the Mind', type:'', ring:'air', level:'5', range:'Touch', area_of_affect:'One Target Individual', duration:'Permanent', raises:'Special (+1day of effect)', get roll() { return spellRoll(this); }, description:'This extremely invasive spell is considered blasphemous by most honorable shugenja, and many respectable shugenja orders would find its use reason for excomniunication if not outright execution. This spell calls upon the air kami to befuddle and dismay a target, invading their mind and infuencing their ability to recall exactly what happened to them over a certain length of time. When this spell is successfully cast against a target, you must succeed at a Contested Roll using your Air versus the target\'s Earth. If successful, the target\'s memories are disrupted, and they forget what has happened to them over the course of the past week (five days). This information is completely lost to the target. What\'s more, the spell renders them extremely susceptible to suggestion, and you can tell them what happened to them over the course of the missing time. This allows unscrupulous shugenja to exploit others and essentially give them false memories, although certain individuals are highly resistant to this manner of manipulation. It is possible to determine that an individual was the target of this spell through use of the Commune spell, but it requires that the kami be specifically asked if they can detect any such manipulation. Pg 172 Core Book' }, 
+      { id:34, name:'Cloud the Mind', type:'', ring:'air', level:'5', range:'Touch', area_of_affect:'One Target Individual', duration:'Permanent', raises:'Special (+1day of effect)', get roll() { return spellRoll(this); }, description:'This extremely invasive spell is considered blasphemous by most honorable shugenja, and many respectable shugenja orders would find its use reason for excomniunication if not outright execution. This spell calls upon the air kami to befuddle and dismay a target, invading their mind and infuencing their ability to recall exactly what happened to them over a certain length of time. When this spell is successfully cast against a target, you must succeed at a Contested Roll using your Air versus the target\'s Earth. If successful, the target\'s memories are disrupted, and they forget what has happened to them over the course of the past week (five days). This information is completely lost to the target. What\'s more, the spell renders them extremely susceptible to suggestion, and you can tell them what happened to them over the course of the missing time. This allows unscrupulous shugenja to exploit others and essentially give them false memories, although certain individuals are highly resistant to this manner of manipulation. It is possible to determine that an individual was the target of this spell through use of the Commune spell, but it requires that the kami be specifically asked if they can detect any such manipulation. Pg 172 Core Book' },
       { id:35, name:'Draw Back the Shadow', type:'', ring:'air', level:'5', range:'100\'', area_of_affect:'30\' radius', duration:'Instantaneous', raises:'Area (+5\' radius), Range (+10\')', get roll() { return spellRoll(this); }, description:'Just as the kami craft illusions, they can cast them aside. Within the area affected by this spell, any illusions created by spells of Mastery Level 4 or lower are automatically dispelled. Spells of Mastery Level 5 or 6 require a Contested Air Roll between you and the shugenja who created those spells; if you are successful, those illusions are dispelled as well. Ongoing magical effects that are not illusions may also be dispelled by this spell, but require a Contested Ring Roll between you and their creator, using your Air versus his appropriate Ring. Pg 172 Core Book' },
       { id:36, name:'Echoes On the Breeze', type:'', ring:'air', level:'5', range:'Personal', area_of_affect:'One Target Individual', duration:'Concentration', raises:'none', get roll() { return spellRoll(this); }, description:'No one destination is beyond the reach of the wind. With a simple prayer to the kami, you can send your words across the span ofthe Empire, whispering into the ear of anyone you need to send a message. The person must be someone you know, and the spell will establish a link between the two of you only as long as you concentrate. You may communicate with one another, although you only hear each other\'s voices as whispers. Both participants are instantly aware when the connection is forged, and either can end it at any point. Pg 172 Core Book' },
       { id:37, name:'Legion of the Moon', type:'Illusion', ring:'air', level:'5', range:'Personal', area_of_affect:'10\' Radius', duration:'5 minutes', raises:'Area (+5\'), Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'The Moon can reveal what is hidden. but also conceal those who receive its blessings. You may summon the greater blessing of the Moon and envelop a large group of people within it, completely obscuring them from sight. Every individual you choose within the area of effect of this spell is rendered invisible to all normal senses for the duration of the spell. Those within the area that you choose to exclude are not affected. Anyone affected by the spell who performs any action that physically interacts with an unaffected individual is immediately excluded from the spell effect. Pg 172 Core Book' },
@@ -621,14 +621,14 @@
       { id:39, name:'Rise, Air', type:'', ring:'air', level:'6', range:'30\'', area_of_affect:'One Summoned Spirit', duration:'Concentration', raises:'none', get roll() { return spellRoll(this); }, description:'The wind itself will take form to defend you. The ultimate actualization of the Summon spell, this spell summons a massive kami of pure air to serve you. It takes the form of a vaguely humanoid shape, roughly ten feet in height. with an indistinct outline visible only because of small debris caught up in its body. The kami may move up to 10\' x your Air per round. and generates powerful winds in a twenty foot radius around it that hinder movement. preventing anyone from making Simple Move Actions within its area of effect. The manifest kami is treated as if it has all Physical Traits equal to your Air Ring, and attacks with a Jiujitsu Skill Rank equal to half your Air Ring. Damage from these attacks has 3 DR equal to your Air Ring (for example, a spirit summoned by a shugenja with Air 6 would inflict 6k6 damage with its attacks). For purposes of taking damage, the spirit is considered to have Wounds as though it Were a human with Earth equal to your Air Ring, but suffers no Wound penalties. It is invulnerable (see the creature rules in the Book of Void for details of this ability). If it is successfully reduced to zero Wounds, it is dispelled. Pg 173 Core Book' },
       { id:40, name:'The False Legion', type:'Battle, Illusion', ring:'air', level:'6', range:'Personal', area_of_affect:'Within 100\' of caster', duration:'Concentration', raises:'Area (+10\'), Special (+5 illusory figures per Raise)', get roll() { return spellRoll(this); }, description:'The greatest illusory gift of the wind is legion. Within the area of effect of this spell, you can create a number of illusory figures up to your Air Ring x 10. These figures may he as detailed or as vague as you prefer (such as "Crane bushi“ versus "heavy infantry of the fourth Daidoji legion"), although you must be familiar with their appearance in order for this spell to take effect (you could not. for example, replicate a family mon you have never seen). The figures are fully mobile and will take whatever actions you desire as long as they do not leave the spell\'s area of effect. They can be seen, heard, or even smelled. but as with most illusions, they cannot physically interact with objects or individuals, in any way. Pg 173 Core Book' },
       { id:41, name:'Wrath of Kaze-No-Kami (Hurricane)', ring:'air', type:'Thunder', level:'6', range:'Personal', area_of_affect:'1 mile radius centered on the caster', duration:'Concentration', raises:'none', get roll() { return spellRoll(this); }, description:'The wrath of the air kami, and of the Fortune of the Wind, is truly dreadful to behold. ln casting this spell, you unleash the full force of a hurricane upon your enemies. When the spell takes effect. you are standing in the eye of the storm, 3 zone radiating twenty feet in every direction from you, and in which no ill effects of the spell are suffered. Outside the eye, however, the brutal effects of the storm tear at everything in its path. Objects weighing less than five hundred pounds are lifted by the wind and tossed into the storm. Individuals in this area must hold on to something immobile or be cast into the winds to their certain death. Everyone within the affected region who does not have sturdy shelter suffers lkt Wounds per minute from the winds and minor debris. There is a one in ten chance each minute that an exposed individual will instead suffer SkS Wounds due to being struck by a wind borne object. This spell lasts for a maximum of one hour, although it can last for shorter times if you are disrupted while maintaining the spell. This spell may not be cast in a given area more than once per month, as it completely exhausts the favors of the air kami to perform it. Pg 173 Core Book' },
-      { id:42, name:'Armor of Earth', ring:'earth', type:'Battle, Defense', level:'1', range:'Personal', area_of_affect:'Self', duration:'10 rounds', raises:'Duration (+2 rounds)', get roll() { return spellRoll(this); }, description:'This spell infuses the caster\'s body with the strength of Earth, weakening the force of any physical or magical attack which strikes him. For the duration of the spell. you gain Reduction in an amount equal to your Earth Ring + School Rank. However, this infusion of Earth slows your movements, your Water is considered 1 Rank lower for purposes of movement while you are under the effects of this spell. Pg 173 Core Book' }, 
+      { id:42, name:'Armor of Earth', ring:'earth', type:'Battle, Defense', level:'1', range:'Personal', area_of_affect:'Self', duration:'10 rounds', raises:'Duration (+2 rounds)', get roll() { return spellRoll(this); }, description:'This spell infuses the caster\'s body with the strength of Earth, weakening the force of any physical or magical attack which strikes him. For the duration of the spell. you gain Reduction in an amount equal to your Earth Ring + School Rank. However, this infusion of Earth slows your movements, your Water is considered 1 Rank lower for purposes of movement while you are under the effects of this spell. Pg 173 Core Book' },
       { id:43, name:'Courage of the Seven Thunders', ring:'earth', type:'Battle', level:'1', range:'30\'', area_of_affect:'Targets up to caster\'s Shugenja School Rank', duration:'10 minutes', raises:'Duration (+1 minute), Targets (+1)', get roll() { return spellRoll(this); }, description:'This spell infuses the targets (who may include the caster) with firm and unyielding courage, bolstered by the eternal power of the Earth. For the duration of the spell, all the targets gain +5K0 to resist any kind of Fear effect, whether magical or natural. However, this spell is associated with the memory of the legendary Seven Thunders, and those whose connection to the Thunders is tenuous do not receive the same degree of blessing from the Earth kami. Samurai who are not of the original Seven Great Clans receive only +3k0 to their rolls to resist Fear. Anyone who has at least a full Rank of Shadowlands Taint cannot benefit from this spell, although this will not actually reveal that they are Tainted. This spell may be cast as a combined ritual by two or more shugenja who know the spell, in which case they may add their highest single Earth Rank to their combined total School Ranks to determine how many targets the spell can affect. Pg 173 Core Book' },
       { id:44, name:'Earth\'s Stagnation', ring:'earth', type:'', level:'1', range:'50\'', area_of_affect:'One Target', duration:'6 rounds', raises:'Duration (+2 rounds), Range (+10\'), Targets (+1, to a maximum of 4 total targets)', get roll() { return spellRoll(this); }, description:'This spell calls on the Earth in the target\'s body to weigh him down, impeding his movements. The target suffers a -2K0 penalty to all rolls using the Agility trait, and his Water Ring is considered 1 Rank lower for the purpose of how far he can move. Pg 174 Core Book' },
       { id:45, name:'Earth\'s Touch', ring:'earth', type:'Defense', level:'1', range:'Touch', area_of_affect:'One Target', duration:'1 hour', raises:'Duration (+1/2 hour), Targets (+1 per 2 raises, maximum of 3 total targets)', get roll() { return spellRoll(this); }, description:'With this spell, the shugenja calls forth the Earth of the target (which may he himself), invoking the kami to strengthen his health and mental fortitude. For the duration of the spell, one of the target\'s Earth Traits (chosen by the caster) is increased by 1. This does not increase the Ring itself, but it can enhance the target\'s ability to withstand temptation, resist poisons. or dominate others. Pg 174 Core Book' },
       { id:46, name:'Elemental Ward', ring:'earth', type:'Ward', level:'1', range:'Touch', area_of_affect:'One Target', duration:'1 hour', raises:'Duration (+1/2 hour), Targets (+1 per two Raises)', get roll() { return spellRoll(this); }, description:'This spell uses the power of Earth to enhance resistance to hostile magic. The spirits of Earth armor the target\'s body and soul, rejecting other kami when they try to affect the target. When the shugenja casts this spell, he chooses one Element (which cannot be Void or Maho). Spells of that element suffer a TN penalty equal to the caster\'s School Rank X 5 when they are cast on anyone under the protection of this spell. (Unfortunately, this includes friendly magic such as healing.) Pg 174 Core Book' },
       { id:47, name:'Jade Strike', ring:'earth', type:'Jade, Thunder', level:'1', range:'100\'', area_of_affect:'One Target', duration:'Instantaneous', raises:'Damage (+1K0) Range (+10\'), Targets (+1 target, maximum of 5 total targets)', get roll() { return spellRoll(this); }, description:'This spell summons forth the purest of Earth kami. those of jade, in the form of a blast of iridescent green energy. The jade power flies out and unerringly strikes the chosen target it cannot be intercepted or deflected, although Magic Resistance or other forms of magical defense can thwart it. if the target has at least one Rank of "taint, the Jade Strike will inflict damage with a DR of 3K3, burning and blackening the Tainted flesh. However, a target who does not have at least a full Rank of Taint will not suffer any damage from the spell. Casting Jade Strike on a non-Tainted target is generally regarded as a grave insult - except perhaps among the more paranoid ranks of the Kuni family, where it is seen as merely a sensible precaution. Pg 174 Core Book' },
       { id:48, name:'Jurojin\'s Balm', ring:'earth', type:'', level:'1', range:'Touch', area_of_affect:'One Target', duration:'1 hour', raises:'Duration (+1/2 hour), Targets (+1 per 2 Raises, maximum of 5 total targets)', get roll() { return spellRoll(this); }, description:'This spell fills the target\'s body with the purity and vigor of Earth, driving out poisons and impurities. If the target suffers the effects of any poison or toxin within the duration of the spell, or is already under the effects of a poison when the spell targets him, he may reroll any failed Stamina roll to resist the poison, with a bonus of +2kO to the second roll. (However, if the second roll is also failed. the poison has full effect.) An interesting side-effect of this spell is that it also cures drunkenness and other such effects, and it is impossible for the target to become intoxicated during the spell\'s duration. Pg 174 Core Book' },
-      { id:49, name:'Minor Binding', ring:'earth', type:'Craft', level:'1', range:'60\'', area_of_affect:'One Target', duration:'2 hours', raises:'Duration (+1 hour), Range (+20\')', get roll() { return spellRoll(this); }, description:'This spell was pioneered by the Kuni family but has come into use among other shugenja who battle the forces of the Shadowlands, such as the Scorpion and the Phoenix, it is used to safely imprison minor Shadowlands creatures, typically For purposes of interrogation. Any Shadowlands creature with an Earth of 3 or less can be targeted with this spell. It cannot affect the Lost, Oni Lords or their spawn, or creatures with an Earth of 4 or higher, nor can it affect creatures who are not Tainted. If the spell is cast successfully, it calls forth manacles of iron, formed from pure Earth spirits. which trap and bind the target creature, rendering it physically helpless for the duration of the spell. When the spell expires, the manacles instantly crumble away into dust. Pg 174 Core Book' },      
+      { id:49, name:'Minor Binding', ring:'earth', type:'Craft', level:'1', range:'60\'', area_of_affect:'One Target', duration:'2 hours', raises:'Duration (+1 hour), Range (+20\')', get roll() { return spellRoll(this); }, description:'This spell was pioneered by the Kuni family but has come into use among other shugenja who battle the forces of the Shadowlands, such as the Scorpion and the Phoenix, it is used to safely imprison minor Shadowlands creatures, typically For purposes of interrogation. Any Shadowlands creature with an Earth of 3 or less can be targeted with this spell. It cannot affect the Lost, Oni Lords or their spawn, or creatures with an Earth of 4 or higher, nor can it affect creatures who are not Tainted. If the spell is cast successfully, it calls forth manacles of iron, formed from pure Earth spirits. which trap and bind the target creature, rendering it physically helpless for the duration of the spell. When the spell expires, the manacles instantly crumble away into dust. Pg 174 Core Book' },
       { id:50, name:'Soul of Stone', ring:'earth', type:'Defense', level:'1', range:'Touch', area_of_affect:'One Target', duration:'1 hour', raises:'Duration (+1/2 hour)', get roll() { return spellRoll(this); }, description:'This spell fills the target\'s soul with the firm and unyielding strength of stone. For the duration of the spell, the target\'s feelings are immovable, and any attempt to divert or distract him will be resisted with supernatural determination. He gains a +3K0 bonus to any rolls made to resist Emotional manipulation or the distractions of desire. including Courtier (Manipulation) rolls, Temptation rolls, Compulsions, and any similar effects which the GM judges to be appropriate. However, this stony self control also makes it diffcult for the target to read and affect the emotions of others, and for the duration of the spell he suffers a 1k0 penalty to all Awareness Trait rolls and Awareness-related Skill Rolls made for the purpose of influencing others. Pg 174 Core Book' },
       { id:51, name:'Tetsubo of Earth', ring:'earth', type:'Craft, Jade', level:'1', range:'Self, or 20\'', area_of_affect:'One Created Weapon', duration:'5 minutes', raises:'Damage (+1k0), Duration (+5 minutes). Range (+5\')', get roll() { return spellRoll(this); }, description:'You summon a tetsubo of pure earth, studded with all manner of stones. The weapon\'s default form is a tetsubo, but one Raise can change its form to any other heavy weapon of your choosing. The tetsubo has a DR of 2K2. When wielding this weapon, you may use your School Rank in place of your Heavy Weapons Skill if you wish. If you do have the Heavy Weapon skill, the tetsubo grants you a Free Raise for the Knockdown maneuver (this bonus does not apply if you grant the Tetsubo to another person instead of wielding it yourself). The tetsubo disappears if it is lost from your hand. Instead of summoning the tetsubo for yourself, you may cause it to appear in the hands of an ally within 20 feet. He is treated as the caster for all purposes of the spell, but does not gain the Free Raise bonus. Pg 175 Core Book' },
       { id:52, name:'Be the Moountain', ring:'earth', type:'Defense', level:'2', range:'30\'', area_of_affect:'One target creature', duration:'4 rounds', raises:'Duration (+1 round)', get roll() { return spellRoll(this); }, description:'A variant of the spell Armor of Earth, designed to protect allies, this prayer causes the Earth kami to envelop the target with their embrace, covering his skin with a stony barrier that repels physical blows. The target gains Reduction of a value equal to 5X the caster\'s School Rank, to a maximum of 20, but cannot take Simple Move Actions for the duration of the spell (Free Move Actions are still allowed). Only a willing ally can be targeted with this spell. Pg 175 Core Book' },
@@ -654,8 +654,8 @@
       { id:72, name:'Earthquake', ring:'earth', type:'', level:'5', range:'Personal', area_of_affect:'1 mile radius', duration:'1 minute', raises:'Area (+500 yards), Duration (+1 minute per 2 Raises)', get roll() { return spellRoll(this); }, description:'This spell unleashes a terrible, ground wracking earthquake, centered on the caster, who alone is unaffected. The earthquake utterly destroys all wooden buildings within the radius of effect, and inflicts severe damage on stone structures. All persons within the area of the earthquake are thrown to the ground, and remain Prone and Stunned for the duration of the spell, as well as suffering 2K1 Wounds. Individuals who are inside buildings (including the caster) will suffer 6K6 damage from falling debris, collapsing roofs, etc. Casting this spell within range of a major inhabited area is generally considered an act of war. Pg 179 Core Book' },
       { id:73, name:'Major Binding', ring:'earth', type:'Jade, Wards', level:'5', range:'100\'', area_of_affect:'One target Shadow Creature', duration:'12 hours', raises:'Duration (+1 hour), Range (+50\')', get roll() { return spellRoll(this); }, description:'The more powerful counterpart to the Kuni family\'s Minor Binding spell, this spell has also been employed by other clan Shugenja, especially those of the Phoenix Clan. It is used to imprison more powerful Shadowlands creatures and members of the Lost, typically for purposes of interrogation. Any Lost and any Shadowlands creature can be targeted with this spell. It can also target other spirit creatures who are Tainted. It cannot affect any other creatures. The spell is a ritual, and requires ten minutes to east (making it quite hazardous when dealing with a rampaging oni), but if additional shugenja join in casting the spell the casting time is reduced by 1 minute per shugenja, to a minimum of 1 minute. If it is cast successfully, the casters make a Contested Roll of their combined Earth Rings against the Earth of the target. If the casters win. the spell calls forth manacles of pure elemental jade, which imprison the creature and render it helpless with the pain of its searing bonds for the duration of the spell. When the spell expires, however, the manacles instantly crumble into dust, and the creature is liable to seek immediate and bloody vengeance on its captors. Pg 179 Core Book' },
       { id:74, name:'Strike at the Roots', ring:'earth', type:'', level:'5', range:'50\'', area_of_affect:'One target creature', duration:'3 rounds', raises:'Duration (+1 Round), Range (+10\'), Targets (+1 target per 2 Raises), Special (Contested Roll, +lKl to the caster for each Raise)', get roll() { return spellRoll(this); }, description:'A more powerful and devastating form of The Wolf\'s Mercy, this spell brings the true wrath of the Earth onto the target, draining all favor of the Earth from his body and leaving him a weak, trembling, helpless victim. After casting this spell, the caster must succeed in a Contested Earth roll against the targets of the spell (rolling separately if he is targeting mule tiple people). If the target loses the roll, his Earth Ring is immediately reduced to 1 for the duration of the spell. This also reduces his Wound Ranks and may result in his immediate death if he has already suffered injuries. Pg 179 Core Book' },
-      { id:75, name:'The Kami\s Strength', ring:'earth', type:'Battle', level:'5', range:'30\'', area_of_affect:'One target creature', duration:'5 rounds', raises:'Duration (+1 round). Range (+10\')', get roll() { return spellRoll(this); }, description:'This spell allows the caster to fortify one person with the power of Earth, greatly enhancing their physical capabilities and their resistance to damage. The target of this spell gains Reduction of 20 and increases his Strength and one other physical Trait by an amount equal to the caster\'s Earth Ring. In return, however, the target is weighed down by the burden of Earth and cannot take Simple Move Actions (she can still take a Free Move Action).  Pg 179 Core Book' },
-      { id:76, name:'The Kami\s Will', ring:'earth', type:'Defense', level:'5', range:'30\'', area_of_affect:'One Target Creature', duration:'10 rounds', raises:'Duration (+1 round), Range (+10\')', get roll() { return spellRoll(this); }, description:'The counterpoint to The Kami\'s Strength, this spell infuses one person with the stubbornness and determination of Earth. greatly enhancing their willpower and making them all but immune to the effects of elemental magic. The target of this spell increases his Willpower by an amount equal to the caster\'s Earth Ring, and any spells (friendly or hostile, but not including Maho spells) which target him suffer a penalty of xKx to their Spell Casting roll, where x is the caster\'s Earth Ring. In return, however, the target is made so stubborn and willful that he cannot function properly in a social environment, and suffers a penalty to all Social Skill rolls of xK0, where X is the Earth Ring of the caster. Pg 179 Core Book' },
+      { id:75, name:'The Kami\'s Strength', ring:'earth', type:'Battle', level:'5', range:'30\'', area_of_affect:'One target creature', duration:'5 rounds', raises:'Duration (+1 round). Range (+10\')', get roll() { return spellRoll(this); }, description:'This spell allows the caster to fortify one person with the power of Earth, greatly enhancing their physical capabilities and their resistance to damage. The target of this spell gains Reduction of 20 and increases his Strength and one other physical Trait by an amount equal to the caster\'s Earth Ring. In return, however, the target is weighed down by the burden of Earth and cannot take Simple Move Actions (she can still take a Free Move Action).  Pg 179 Core Book' },
+      { id:76, name:'The Kami\'s Will', ring:'earth', type:'Defense', level:'5', range:'30\'', area_of_affect:'One Target Creature', duration:'10 rounds', raises:'Duration (+1 round), Range (+10\')', get roll() { return spellRoll(this); }, description:'The counterpoint to The Kami\'s Strength, this spell infuses one person with the stubbornness and determination of Earth. greatly enhancing their willpower and making them all but immune to the effects of elemental magic. The target of this spell increases his Willpower by an amount equal to the caster\'s Earth Ring, and any spells (friendly or hostile, but not including Maho spells) which target him suffer a penalty of xKx to their Spell Casting roll, where x is the caster\'s Earth Ring. In return, however, the target is made so stubborn and willful that he cannot function properly in a social environment, and suffers a penalty to all Social Skill rolls of xK0, where X is the Earth Ring of the caster. Pg 179 Core Book' },
       { id:77, name:'Essence of Jade', ring:'earth', type:'Defense, Jade', level:'6', range:'30\'', area_of_affect:'One Target Creature', duration:'10 rounds', raises:' Duration (+1 round), Range (+5\'), Targets (+1 target for 2 Raises, maximum of 3 total targets)', get roll() { return spellRoll(this); }, description:'This spell calls on the purity of jade to protect its targets against the power of Jigoku, whether manifested as Taint or as the dreaded magic known as maho. The target radiates the sacred green light of jade, and while the spell lasts, he cannot gain the Shadowlands Taint and is completely immune to the effects of all maho spells. This spell cannot be cast on anyone who possesses at least one full Rank of Taint, for the pure jade spirits will recoil from such a corrupt individual, immediately alerting the caster to this individuals Tainted nature. Pg 180 Core Book' },
       { id:78, name:'Power of the Earth Dragon', ring:'earth', type:'Defense', level:'6', range:'50\'', area_of_affect:'One Target Creature', duration:'10 minutes', raises:'Duration (+1 minute), Range (+10\'), Targets (+1), Special (Damage absorption +10 Wounds per Raise)', get roll() { return spellRoll(this); }, description:'This spell is the most powerful of the physically protective Earth spells, calling on the favor ofthe Dragon of Earth to enshroud the targets with protection against all forms of harm. The Earth spirits absorb all damage which the targets suffer while the spell lasts. However, there are limits to even Earth\'s endurance, Nemuranai can bypass the protection. Further, if the Earth spirits protecting a specific target absorb a total of 100 Wounds of damage, they will be exhausted and the spell\'s effects on that target come to an end. Pg 180 Core Book' },
       { id:79, name:'Prison of Earth', ring:'earth', type:'Wards', level:'6', range:'30\'', area_of_affect:'One Target Creature', duration:'Permanent', raises:'Range (+5\'), Special (Contested Roll, +1Kl to the caster for each Raise)', get roll() { return spellRoll(this); }, description:'The most powerful of the binding spells which Earth shugenja use to deal with dangerous creatures, this spell can literally imprison the essence of such a creature for as long as the caster desires. Casting this spell requires that the caster posesess a gem or pearl in which to imprison the creature (the GM may, discretionally, allow other rare or precious items to be used, such as a beautifully inlaid puzzlerhox or a crystal pendant). The spell can target any creature native to the realms of Jigoku, Gold-Do, or Toshigoku, and any other non-human creature with at least 1 full Rank of Taint. After casting the spell, the caster must make a Contested Willpower roll against the target. if the caster wins, the createture\'s physical body vanishes and its essence is imprisoned within the item. It will remain there indefinitely unless the item is physically destroyed. If that happens, the released creature immediately resumes its physical form, and will most likely seelc vengeance against the caster or his descendants. Pg 180 Core Book' },
@@ -664,23 +664,24 @@
       { id:100, name:'', ring:'water', type:'', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 180 Core Book' },
     ];
 
-    $scope.showSpellsList = false; 
-    
-    $scope.toggleShowSpellsList = function() { 
-      //console.log("Bang"); 
+    $scope.showSpellsList = false;
+
+    $scope.toggleShowSpellsList = function() {
+      //console.log("Bang");
       $scope.showSpellsList = !$scope.showSpellsList;
+      $scope.spellSearchFilter = null;      
     };
-      
-      
-    $scope.getSpell = function (spell_id,attr) { 
+
+
+    $scope.getSpell = function (spell_id,attr) {
         return $scope.getSpellFromMasterList(spell_id, attr);
-    }; 
-    
-    $scope.getSpellFromMasterList = function(spell_id, attr) { 
-      for(var i=0; i < $scope.spellsMasterList.length; i++) { 
-        if ( $scope.spellsMasterList[i].id === spell_id ) { 
-          if (attr === null || attr === undefined ) { 
-            return $scope.spellsMasterList[i]; 
+    };
+
+    $scope.getSpellFromMasterList = function(spell_id, attr) {
+      for(var i=0; i < $scope.spellsMasterList.length; i++) {
+        if ( $scope.spellsMasterList[i].id === spell_id ) {
+          if (attr === null || attr === undefined ) {
+            return $scope.spellsMasterList[i];
           } else {
             return $scope.spellsMasterList[i][attr];
           }
@@ -689,11 +690,11 @@
       return "(error)";
     };
 
-    $scope.addSpell = function(spell_id) {      
+    $scope.addSpell = function(spell_id) {
       var master_spell = $scope.getSpellFromMasterList(spell_id);
       if( master_spell ) {
-	    var new_id = master_spell.id;
-        //var new_roll = master_spell.roll;      
+        var new_id = master_spell.id;
+        //var new_roll = master_spell.roll;
         //var new_spell = {id:new_id, roll:new_roll};
         var new_spell = {id:new_id}; // roll:new_roll};
         //$scope.character.spells.push( $scope.spellsMasterList[index]) ;
@@ -701,9 +702,9 @@
           $scope.character.spells.push( new_spell ) ;
           $scope.toggleShowSpellsList();
         }
-	  } else {
-		console.log("Spell " + spell_id + " Not Found");
-	  }
+      } else {
+        console.log("Spell " + spell_id + " Not Found");
+      }
     };
 
     $scope.removeSpell = function(spell_id) {
@@ -713,8 +714,8 @@
         }
       }
     };
- 
-    var getCharacterSpellById = function(spell_id) {        
+
+    var getCharacterSpellById = function(spell_id) {
       for(var i = 0; i < $scope.character.spells.length; i++) {
         if ( $scope.character.spells[i] != undefined ) {
           if ( $scope.character.spells[i].id === spell_id ) {
@@ -724,7 +725,6 @@
       }
       return null;
     };
-
 
   });
 

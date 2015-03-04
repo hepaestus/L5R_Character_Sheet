@@ -187,3 +187,24 @@ td.spell_name {
 td.spell_roll {
     width: 40%;
 }
+
+strong { font-weight: bold; }
+
+div.spell-section {
+    margin-bottom: 5px;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+}
+div.spell-section div {
+    border-top: 0px solid black;
+    border-left: 1px solid black;
+    font-size: 85%;
+}
+div.spell-section div.header{
+    font-size: 85%;
+    font-weight: bold;
+    background-color: #BFA994;
+}
+
+
+
