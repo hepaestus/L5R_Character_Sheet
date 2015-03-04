@@ -108,13 +108,13 @@
           </tr>
           <tr ng-hide="showEmphasesList">
               <td colspan="8"><a href="" ng-click="toggleShowSkillsList()">Add a Skill</a>              
-              <span ng-show="showSkillsList">
+                <div ng-show="showSkillsList">
                   <label for="search">Search:</label><input name="search" type="search" ng-model="skillSearchText"/>
-                  <!-- label for="search">High:</label><input name="type_high" type="checkbox" ng-model="skillSearch.filterHigh"/>
-                  <label for="search">Bugei:</label><input name="type_bugei" type="checkbox" ng-model="skillSearch.filterBugei"/>
-                  <label for="search">Merchant:</label><input name="type_merchant" type="checkbox" ng-model="skillSearch.filterMerchant"/>
-                  <label for="search">Low:</label><input name="type_low" type="checkbox" ng-model="skillSearch.filterLow"/ -->
-              </span>
+                  <!-- label for="type_high">High:</label><input name="type_high" type="radio" value="high" ng-model="skillSearch.type"/>
+                  <label for="type_bugei">Bugei:</label><input name="type_bugei" type="radio" value="bugei" ng-model="skillSearch.type"/>
+                  <label for="type_merchant">Merchant:</label><input name="type_merchant" value="bugei" type="radio" ng-model="skillSearch.type"/>
+                  <label for="type_low">Low:</label><input name="type_low" type="radio" value="low" ng-model="skillSearch.type"/ -->
+                </div>
               </td>
           </tr>
           <tr ng-show="showEmphasesList"> 
@@ -129,7 +129,7 @@
           <tr ng-show="showSkillsList"> 
             <td colspan="7">
               <ul class="add_skill_list">                  
-                  <li ng-repeat="each in skillsMasterList | filter:skillSearchText "> <!-- | filter:skillSearchFilterHigh | filter:skillSearchFilterBugei"> -->
+                  <li ng-repeat="each in skillsMasterList | filter:skillSearchText">
                       <a href="" ng-click="addSkill(each.id)">{{each.type}} {{each.sub_type}}</a>
                   <li>
               </ul>

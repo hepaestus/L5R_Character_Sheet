@@ -4,7 +4,7 @@
   // Declare app level module which depends on views, and components
   var app = angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap']);
 
-  app.config(['$routeProvider', function($routeProvider) {
+  angular.module('myApp').config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {
       templateUrl: "templates/home.html",
       controller: 'HomeController'
@@ -20,7 +20,7 @@
     .otherwise({redirectTo: '/'});
   }]);
 
-  app.controller('MainController', ['$scope', '$cookieStore', '$modal', function($scope, $cookieStore, $modal) {
+  angular.module('myApp').controller('MainController', ['$scope', '$cookieStore', '$modal', function($scope, $cookieStore, $modal) {
 
     $scope.test = "Main Controller";
 
@@ -91,6 +91,8 @@
       get healing() { return ( this.stamina * 2 + this.insight_rank ); },
       healing_modifiers:0,
       get current_heal_rate() { return ( (this.stamina * 2) + this.insight_rank + this.healing_modifiers + " per day" ); },
+      weapon_one    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
+      weapon_two    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
     };
 
     var mastery = function(obj) {
@@ -204,14 +206,14 @@
 
   }]);
 
-  app.controller('HomeController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
+  angular.module('myApp').controller('HomeController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
 
     $scope.test = "Home Controller";
 
 
   }]);
 
-  app.controller('ModalInstanceController', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+  angular.module('myApp').controller('ModalInstanceController', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
 
     $scope.test = "ModalInstance Controller";
 
@@ -227,7 +229,7 @@
 
   }]);
 
-  app.controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore ) {
+  angular.module('myApp').controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore ) {
 
     $scope.test = "Character Controller";
     $scope.saved_characters_date_array = [];
@@ -356,7 +358,7 @@
 
   }]);
 
-  app.controller('SkillsController', function($scope) {
+  angular.module('myApp').controller('SkillsController', function($scope) {
 
     $scope.test = "Skills Controller";
 
@@ -554,7 +556,7 @@
 
   });
 
-  app.controller('SpellsController', function($scope) {
+  angular.module('myApp').controller('SpellsController', function($scope) {
 
     $scope.test = "Spells Controller";
     $scope.spellSearchFilter;
