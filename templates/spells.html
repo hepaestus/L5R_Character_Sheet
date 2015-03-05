@@ -19,15 +19,14 @@
 
   <a href="" ng-click="toggleShowSpellsList()">Add Spell</a>
   <div ng-show="showSpellsList">
-    <label>Search</label><input name="spellSearchFilter.text" ng-model="spellSearchFilter.$" type="search"/>
-    <label>Level</label><input name="spellSearchFilter.level" ng-model="spellSearchFilter.level" type="number" min='1' max='6'/>
+    <label>Search</label><input name="spellSearchFilter.text" ng-model="spellSearchFilter.$" type="search"/><br/>
+    <label>Level</label><input name="spellSearchFilter.level" ng-model="spellSearchFilter.level" type="number" min='1' max='6'/><br/>
     <label>Ring</label><input name="spellSearchFilter.ring" ng-model="spellSearchFilter.ring" type="text"/>
     <ul>
       <li ng-repeat="spell in spellsMasterList | filter:spellSearchFilter">
-        <a href="" ng-click="addSpell(spell.id)">{{spell.name}} - Level:{{spell.level}}</a>
+      <a href="" ng-click="addSpell(spell.id)"><strong>{{spell.name}}</strong>, Level:{{spell.level}}, Ring:{{spell.ring}}<span ng-if="spell.type">, Type: {{spell.type}}</span></a>
         <ul>
-          <li>Ring {{spell.ring}}</li>
-          <li><span ng-bind-html="spell.description"></span></li>
+          <li class="medium"><span ng-bind-html="spell.description"></span></li>
          </ul>
       </li>
     </ul>

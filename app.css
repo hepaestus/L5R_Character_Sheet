@@ -16,43 +16,33 @@ input.experience_points, input.experience_points_earned, input.school_rank, inpu
 table.rings-table {
    border: 0px solid black;
    width: 40%;   
-   margin: 3em auto;
-   height: 310px; 
-   width: 310px; 
+   margin: 2em auto;
+   height: 300px; 
+   width: 300px; 
 }
 table.rings-table td, table.rings-table th {
    font-size: .75em;
-   border: 0px solid #aaa;
+   border: 1px solid rgba(200,200,200,0);
    width: 12.5%
 }
 table.rings-table th {
 }
 table.rings-table input {
     width: 3em;
-    text-align:center;
-    background: rbg(0,0,0,123);
+    text-align: center;
+    background: rbga(0,0,0,128);
 }
 input.ring_input {
-    border: 0;
-    background: rbg(0,0,0,123);
+    border: 1px solid rbga(200,200,200,0);;
+    background: rbga(200,200,200,0);
 }
 
 table.rings-table {
-    background: url("images/mountain.png") no-repeat scroll 60px 30px, 
-                url("images/air.png") no-repeat scroll 175px 25px, 
-                url("images/water.png") no-repeat scroll 12px 137px,
-                url("images/fire.png") no-repeat scroll 203px 134px,
-                url("images/void.png") no-repeat scroll 115px 175px rgba(0, 0, 0, 0);
-}
-
-.right {
-    text-align:right;
-}
-.left {
-    text-align:left;
-}
-.center {
-    text-align:center;
+    background: url("images/mountain.png") no-repeat scroll 64px 30px, 
+                url("images/air.png") no-repeat scroll 178px 25px, 
+                url("images/water.png") no-repeat scroll 16px 137px,
+                url("images/fire.png") no-repeat scroll 208px 135px,
+                url("images/void.png") no-repeat scroll 119px 176px rgba(0, 0, 0, 0);
 }
 
 input.void_box {
@@ -60,6 +50,11 @@ input.void_box {
     padding:0;
 }
 
+.medium {
+    font-size: 0.85em;
+    line-height: 1.10em;
+    padding: 3px;
+}
 .small {
     font-size: 0.75em;
     line-height: 0.95em;
@@ -206,5 +201,20 @@ div.spell-section div.header{
     background-color: #BFA994;
 }
 
+
+/*****
+div.ring {
+    background-color: #aaaaff;
+    border: 1px solid blue;
+}
+div.ring input {
+    width: 2em;
+}
+#earth_ring { width: 100px; }
+#air_ring { width: 100px; }
+#fire_ring { width: 100px; }
+#water_ring { width: 100px; }
+#void_ring { width: 100px; }
+*****/
 
 
