@@ -6,7 +6,7 @@ body {
 main {
 }
 
-input.clan, input.school, input.name {
+input.clan, input.school, input.name, input.family {
     width: 8em;
 }
 input.experience_points, input.experience_points_earned, input.school_rank, input.insight_rank, input.insight {
