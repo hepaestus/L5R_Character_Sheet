@@ -12,6 +12,12 @@
           <a ng-click="loadCharacter($index)">{{$index}} {{character.name}} {{character.clan}} {{character.school}}</a>
         </li>
       </ul>
+      Items
+      <ul>
+        <li ng-repeat="item in items">
+          <a ng-click="selected.item = item">{{$index}} {{item}}</a>
+        </li>
+      </ul>
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" ng-click="ok()">OK</button>

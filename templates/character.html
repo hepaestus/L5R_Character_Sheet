@@ -6,12 +6,25 @@
       <button ng-click="loadCharacter()">Load Character</button><br/>
 
       <div class="info">
-        <label class="line">Name</label><input class="line name" class="name" name="name" type="text" ng-model="character.name"/>
-        <label class="line">Insight Rank</label><input class="line insight_rank" name="school" type="number" ng-model="character.insight_rank"/><br/>
-        <label class="line">Clan</label><input class="line clan" class="clan" name="clan" type="text" ng-model="character.clan"/>
+        <label class="line">Clan</label><input class="line clan" class="clan" name="clan" type="text" ng-click="toggleShowClansList()" ng-model="character.clan"/>
+        <ul ng-show="showClansList">
+		<li ng-repeat="clan in clansMasterList"><a href="" ng-click='selectClan(clan.id)'>{{clan.name}}</a></li>
+	</ul>	
+        <label class="line">Insight Rank</label><input class="line insight_rank" name="school" type="number" ng-model="character.insight_rank"/>
         <label class="line">Experience Points</label><input class="line experience_points" name="experience_points" type="number" ng-model="character.experience_points"/>
+	<br/>
+	<label class="line">Name</label>
+	<input class="line family" class="family" name="family" type="text" ng-click="toggleShowFamiliesList()" ng-model="character.family"/>
+        <ul ng-show="showFamiliesList">
+		<li ng-repeat="family in familiesMasterList | filter:character.clan"><a href="" ng-click='selectFamily(family.id)'>{{family.name}}</a></li>
+	</ul>	
+	<input class="line name" class="name" name="name" type="text" ng-model="character.name"/>
+	
         <label class="line">Total Earned</label><input class="line experience_points_earned" name="experience_points_earned" type="number" ng-model="character.experience_points_earned"><br/>
-        <label class="line">School</label><input class="line school" name="school" type="text" ng-model="character.school"/>
+        <label class="line">School</label><input class="line school" name="school" type="text" ng-click="toggleShowSchoolsList()" ng-model="character.school"/>
+        <ul ng-show="showSchoolsList">
+		<li ng-repeat="school in schoolsMasterList | filter:character.clan"><a href="" ng-click='selectSchool(school.id)'>{{school.name}}</a></li>
+	</ul>	
         <label class="line">Insight</label><input class="line insight" name="insight" type="number" ng-model="character.insight"/><span>(Rings x 10 + skills)</span><br/>
       </div>
 
