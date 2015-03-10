@@ -16,6 +16,20 @@
       <label for="spell_affinity">Void:</label>
       <input type="checkbox" name="spell_affinity" ng-model="character.spell_affinity.void" value="void"/>
   </section>
+ 
+  <section>
+      <h3>Spell Deficiency</h3>
+      <label for="spell_deficiency">Air:</label>
+      <input type="checkbox" name="spell_deficiency" ng-model="character.spell_deficiency.air" value="air"/>
+      <label for="spell_deficiency">Earth:</label>
+      <input type="checkbox" name="spell_deficiency" ng-model="character.spell_deficiency.earth" value="earth"/>
+      <label for="spell_deficiency">Fire:</label>
+      <input type="checkbox" name="spell_deficiency" ng-model="character.spell_deficiency.fire" value="fire"/>
+      <label for="spell_deficiency">Water:</label>
+      <input type="checkbox" name="spell_deficiency" ng-model="character.spell_deficiency.water" value="water"/>
+      <label for="spell_deficiency">Void:</label>
+      <input type="checkbox" name="spell_deficiency" ng-model="character.spell_deficiency.void" value="void"/>
+  </section>
 
   <a href="" ng-click="toggleShowSpellsList()">Add Spell</a>
   <div ng-show="showSpellsList">
