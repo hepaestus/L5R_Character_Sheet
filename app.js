@@ -20,14 +20,26 @@
     .otherwise({redirectTo: '/'});
   }]);
 
-  angular.module('myApp').controller('ModalInstanceController', ['$scope', '$modalInstance', function ($scope, $modalInstance, items ) {
+  angular.module('myApp').controller('ModalInstanceController', ['$scope', '$modalInstance', 'items', 'saved_characters_array', function ($scope, $modalInstance, items, saved_characters_array ) {
 
-    $scope.test = "ModalInstance Controller";
+    $scope.test = "ModalInstanceController";
+
     $scope.items = items;
+    console.log("MIC Items" + $scope.items);
+
+    $scope.saved_characters_array = saved_characters_array;
+    console.log("MIC Characters" + $scope.saved_characters_array);
+
+    $scope.loadSavedCharacter = function(index) {
+      $scope.character = $scope.saved_characters_array[index];
+      console.log("MIC: Load Saved Character Index : " + index);
+      console.log("MIC: Load Saved Character : " + $scope.character);
+    };
+
     $scope.selected = {
       item: $scope.items,
     };
-
+    
     $scope.ok = function () {
       console.log("OK - Close Window");
       $modalInstance.close($scope.selected.item);
@@ -40,35 +52,9 @@
 
   }])
 
-  angular.module('myApp').controller('MainController', ['$scope', '$cookieStore', '$modal', function($scope, $cookieStore, $modal) {
+  angular.module('myApp').controller('MainController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
 
     $scope.test = "Main Controller";
-
-    $scope.saved_characters_array = ['A','B','C'];
-    $scope.items = ['one', 'two', 'three'];
-
-    $scope.open = function(size) {
-      var modalInstance = $modal.open({
-        templateUrl: 'templates/character_load.html',
-        controller: 'ModalInstanceController',
-        size: size,
-        resolve: {
-          items: function() {
-            return $scope.items;
-	  },
-          saved_characters_array: function() {
-            return $scope.saved_characters_array;
-          },
-        },
-      });
-      console.log('Modal Opened at: ' + new Date());
-
-      modalInstance.result.then(function (selectedItem) {
-        $scope.selected = selectedItem;
-      }, function () {
-        console.log('Modal dismissed at: ' + new Date());
-      });
-    };
 
     $scope.character = {
       name: "",
@@ -272,15 +258,51 @@
 
     $scope.test = "Home Controller";
 
+    $scope.loadSavedCharacter = function(index) {
+      $scope.character = $scope.saved_character_array[index];
+      console.log("HC: Load Saved Character :" + $scope.character);
+    };
 
   }]);
 
 ;
 
-  angular.module('myApp').controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore ) {
+  angular.module('myApp').controller('CharacterController', ['$scope', '$cookieStore', '$modal', function($scope, $cookieStore, $modal ) {
 
     $scope.test = "Character Controller";
-    $scope.saved_characters_date_array = [];
+
+    $scope.loadSavedCharacter = function(index) {
+      $scope.character = $scope.saved_character_array[index];
+      console.log("CC: Load Saved Character :" + $scope.character);
+    };
+
+    $scope.items = ['one', 'two', 'three'];
+    $scope.saved_characters_array = [];
+
+    $scope.open = function(size) {
+      var modalInstance = $modal.open({
+        templateUrl: 'templates/character_load.html',
+        controller: 'ModalInstanceController',
+        size: size,
+        resolve: {
+          items: function() {
+            console.log("Items" + $scope.items);
+            return $scope.items;
+	  },
+          saved_characters_array: function() {
+            console.log("Characters" + $scope.saved_characters_array);
+            return $scope.saved_characters_array;
+          },
+	},
+      });
+      console.log('Modal Opened at: ' + new Date());
+
+      modalInstance.result.then(function (selectedItem) {
+        $scope.selected = selectedItem;
+      }, function () {
+        console.log('Modal dismissed at: ' + new Date());
+      });
+    };
 
     $scope.loadCharacter = function() {
       var saved_character_cookie_array = $cookieStore.get('characters');
@@ -326,6 +348,7 @@
       $cookieStore.put('characters', stored_char_strings);
     };
 
+
     $scope.updateExp = function(attr, value) {
       var cost = 4;
       if ( attr == 'void') {
@@ -334,8 +357,7 @@
       //console.log(attr + " : val: " + value + " Old Val: " + $scope.character[attr + "_s"]);
       if ( $scope.character[attr] > $scope.character[attr + "_s"] ) {
           $scope.character.experience_points -= ( value * cost );
-          $scope.character[attr + "_s"] = $scope.character[attr];
-      } else if ( $scope.character[attr] < $scope.character[attr + "_s"] ) {
+           } else if ( $scope.character[attr] < $scope.character[attr + "_s"] ) {
           $scope.character.experience_points += ($scope.character[attr + "_s"] * cost );
           $scope.character[attr + "_s"] = $scope.character[attr];
       } else {
