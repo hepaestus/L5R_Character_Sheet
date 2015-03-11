@@ -555,37 +555,27 @@
 
     $scope.getSkillFromMasterList = function(skill_id, attr) {
     //console.log("getSkillFromMasterList(" + skill_id + "," + attr + ")");
-        for(var i=0; i < $scope.skillsMasterList.length; i++) {
-            if ( $scope.skillsMasterList[i].id === skill_id ) {
-                if (attr === null || attr === undefined) {
-                    //console.log("Return skill: " + JSON.stringify($scope.skillsMasterList[i]) );
-                    return $scope.skillsMasterList[i];
-                } else if ( attr === 'mastery') {
-                    //console.log("Get Mastery FOO: ");
-                    return $scope.skillsMasterList[i].mastery;
-                } else {
-                    //console.log("Return attr: " + $scope.skillsMasterList[i][attr] );
-                    return $scope.skillsMasterList[i][attr];
-                }
-            }
+      for(var i=0; i < $scope.skillsMasterList.length; i++) {
+        if ( $scope.skillsMasterList[i].id === skill_id ) {
+          if (attr === null || attr === undefined) {
+            //console.log("Return skill: " + JSON.stringify($scope.skillsMasterList[i]) );
+            return $scope.skillsMasterList[i];
+          } else if ( attr === 'mastery') {
+            //console.log("Get Mastery FOO: ");
+            return $scope.skillsMasterList[i].mastery;
+          } else {
+            //console.log("Return attr: " + $scope.skillsMasterList[i][attr] );
+            return $scope.skillsMasterList[i][attr];
+          }
         }
-        return "(error)";
+      }
+      return "(error)";
     };
 
     $scope.removeSkill = function(id) {
        // METHOD OF GIVING BACK ALL EXP PTS WHEN SKILL IS Removed!
        replaceCharacterSkillById(id, null);
     };
-
-    //$scope.addEmphasis = function(emphasis_index) {
-     // console.log("ADD EMPHASIS ONE");
-      //var skill = getCharacterSkillById($scope.currentSkillId);
-      //if ( skill ) {
-        //skill.empasis = empasis_index;
-        //replaceCharacterSkillById($scope.currentSkillId, skill);
-        //$scope.toggleShowEmphasisList();
-      //}
-    //};
 
     $scope.addEmphasis = function(emp_index) {
       console.log("ADD EMPHASIS TWO");
@@ -744,6 +734,7 @@
       { id:39, name:'Rise, Air', type:'', ring:'air', level:'6', range:'30\'', area_of_affect:'One Summoned Spirit', duration:'Concentration', raises:'none', get roll() { return spellRoll(this); }, description:'The wind itself will take form to defend you. The ultimate actualization of the Summon spell, this spell summons a massive kami of pure air to serve you. It takes the form of a vaguely humanoid shape, roughly ten feet in height. with an indistinct outline visible only because of small debris caught up in its body. The kami may move up to 10\' x your Air per round. and generates powerful winds in a twenty foot radius around it that hinder movement. preventing anyone from making Simple Move Actions within its area of effect. The manifest kami is treated as if it has all Physical Traits equal to your Air Ring, and attacks with a Jiujitsu Skill Rank equal to half your Air Ring. Damage from these attacks has 3 DR equal to your Air Ring (for example, a spirit summoned by a shugenja with Air 6 would inflict 6k6 damage with its attacks). For purposes of taking damage, the spirit is considered to have Wounds as though it Were a human with Earth equal to your Air Ring, but suffers no Wound penalties. It is invulnerable (see the creature rules in the Book of Void for details of this ability). If it is successfully reduced to zero Wounds, it is dispelled. Pg 173 Core Book' },
       { id:40, name:'The False Legion', type:'Battle, Illusion', ring:'air', level:'6', range:'Personal', area_of_affect:'Within 100\' of caster', duration:'Concentration', raises:'Area (+10\'), Special (+5 illusory figures per Raise)', get roll() { return spellRoll(this); }, description:'The greatest illusory gift of the wind is legion. Within the area of effect of this spell, you can create a number of illusory figures up to your Air Ring x 10. These figures may he as detailed or as vague as you prefer (such as "Crane bushi versus "heavy infantry of the fourth Daidoji legion"), although you must be familiar with their appearance in order for this spell to take effect (you could not. for example, replicate a family mon you have never seen). The figures are fully mobile and will take whatever actions you desire as long as they do not leave the spell\'s area of effect. They can be seen, heard, or even smelled. but as with most illusions, they cannot physically interact with objects or individuals, in any way. Pg 173 Core Book' },
       { id:41, name:'Wrath of Kaze-No-Kami (Hurricane)', ring:'air', type:'Thunder', level:'6', range:'Personal', area_of_affect:'1 mile radius centered on the caster', duration:'Concentration', raises:'none', get roll() { return spellRoll(this); }, description:'The wrath of the air kami, and of the Fortune of the Wind, is truly dreadful to behold. ln casting this spell, you unleash the full force of a hurricane upon your enemies. When the spell takes effect. you are standing in the eye of the storm, 3 zone radiating twenty feet in every direction from you, and in which no ill effects of the spell are suffered. Outside the eye, however, the brutal effects of the storm tear at everything in its path. Objects weighing less than five hundred pounds are lifted by the wind and tossed into the storm. Individuals in this area must hold on to something immobile or be cast into the winds to their certain death. Everyone within the affected region who does not have sturdy shelter suffers lkt Wounds per minute from the winds and minor debris. There is a one in ten chance each minute that an exposed individual will instead suffer SkS Wounds due to being struck by a wind borne object. This spell lasts for a maximum of one hour, although it can last for shorter times if you are disrupted while maintaining the spell. This spell may not be cast in a given area more than once per month, as it completely exhausts the favors of the air kami to perform it. Pg 173 Core Book' },
+
       { id:42, name:'Armor of Earth', ring:'earth', type:'Battle, Defense', level:'1', range:'Personal', area_of_affect:'Self', duration:'10 rounds', raises:'Duration (+2 rounds)', get roll() { return spellRoll(this); }, description:'This spell infuses the caster\'s body with the strength of Earth, weakening the force of any physical or magical attack which strikes him. For the duration of the spell. you gain Reduction in an amount equal to your Earth Ring + School Rank. However, this infusion of Earth slows your movements, your Water is considered 1 Rank lower for purposes of movement while you are under the effects of this spell. Pg 173 Core Book' },
       { id:43, name:'Courage of the Seven Thunders', ring:'earth', type:'Battle', level:'1', range:'30\'', area_of_affect:'Targets up to caster\'s Shugenja School Rank', duration:'10 minutes', raises:'Duration (+1 minute), Targets (+1)', get roll() { return spellRoll(this); }, description:'This spell infuses the targets (who may include the caster) with firm and unyielding courage, bolstered by the eternal power of the Earth. For the duration of the spell, all the targets gain +5K0 to resist any kind of Fear effect, whether magical or natural. However, this spell is associated with the memory of the legendary Seven Thunders, and those whose connection to the Thunders is tenuous do not receive the same degree of blessing from the Earth kami. Samurai who are not of the original Seven Great Clans receive only +3k0 to their rolls to resist Fear. Anyone who has at least a full Rank of Shadowlands Taint cannot benefit from this spell, although this will not actually reveal that they are Tainted. This spell may be cast as a combined ritual by two or more shugenja who know the spell, in which case they may add their highest single Earth Rank to their combined total School Ranks to determine how many targets the spell can affect. Pg 173 Core Book' },
       { id:44, name:'Earth\'s Stagnation', ring:'earth', type:'', level:'1', range:'50\'', area_of_affect:'One Target', duration:'6 rounds', raises:'Duration (+2 rounds), Range (+10\'), Targets (+1, to a maximum of 4 total targets)', get roll() { return spellRoll(this); }, description:'This spell calls on the Earth in the target\'s body to weigh him down, impeding his movements. The target suffers a -2K0 penalty to all rolls using the Agility trait, and his Water Ring is considered 1 Rank lower for the purpose of how far he can move. Pg 174 Core Book' },
@@ -783,6 +774,7 @@
       { id:78, name:'Power of the Earth Dragon', ring:'earth', type:'Defense', level:'6', range:'50\'', area_of_affect:'One Target Creature', duration:'10 minutes', raises:'Duration (+1 minute), Range (+10\'), Targets (+1), Special (Damage absorption +10 Wounds per Raise)', get roll() { return spellRoll(this); }, description:'This spell is the most powerful of the physically protective Earth spells, calling on the favor ofthe Dragon of Earth to enshroud the targets with protection against all forms of harm. The Earth spirits absorb all damage which the targets suffer while the spell lasts. However, there are limits to even Earth\'s endurance, Nemuranai can bypass the protection. Further, if the Earth spirits protecting a specific target absorb a total of 100 Wounds of damage, they will be exhausted and the spell\'s effects on that target come to an end. Pg 180 Core Book' },
       { id:79, name:'Prison of Earth', ring:'earth', type:'Wards', level:'6', range:'30\'', area_of_affect:'One Target Creature', duration:'Permanent', raises:'Range (+5\'), Special (Contested Roll, +1Kl to the caster for each Raise)', get roll() { return spellRoll(this); }, description:'The most powerful of the binding spells which Earth shugenja use to deal with dangerous creatures, this spell can literally imprison the essence of such a creature for as long as the caster desires. Casting this spell requires that the caster posesess a gem or pearl in which to imprison the creature (the GM may, discretionally, allow other rare or precious items to be used, such as a beautifully inlaid puzzlerhox or a crystal pendant). The spell can target any creature native to the realms of Jigoku, Gold-Do, or Toshigoku, and any other non-human creature with at least 1 full Rank of Taint. After casting the spell, the caster must make a Contested Willpower roll against the target. if the caster wins, the createture\'s physical body vanishes and its essence is imprisoned within the item. It will remain there indefinitely unless the item is physically destroyed. If that happens, the released creature immediately resumes its physical form, and will most likely seelc vengeance against the caster or his descendants. Pg 180 Core Book' },
       { id:80, name:'Rise Earth', ring:'earth', type:'', level:'6', range:'30\'', area_of_affect:'One Summoned Spirit', duration:'Concentration', raises:'none', get roll() { return spellRoll(this); }, description:'The Earth itself arises and takes form to defend you. The ultimate realization of the Summon spell, this prayer summons a massive kami of pure Earth to serve you. It takes the form of a vaguely humanoid shape, roughly ten feet in height, with a broad body and thick limbs all formed from earth and stone. This mighty Earth kami may move up to 5x your Earth per round, and its footsteps shake the earth in a twenty foot radius around it, preventing anyone from making Simple Move Actions within its area of effect. This Earth spirit is treated as if it has all Physical Traits equal to your Earth Ring, and attacks with a Jiujitsu Skill Rank equal to half your Earth Rank. The DR from these attacks is equal to your Earth Ring. The kami can carry up to 1,000 pounds of weight if so commanded, and its blows are strong enough to destroy any wooden structure and to shatter stone walls of one foot thickness. For purposes of taking damage. the spirit is considered to have Wounds as though it were a human with Earth equal to your Earth Ring, but suffers no Wound penalties, it is invulnerable (see the creature rules in the Book of Void for details of this ability). If it is successfully reduced to zero Wounds. it is dispelled. Pg 180 Core Book' },
+
       { id:81, name:'Biting Steel', ring:'fire', type:'Craft', level:'1', range:'touch', area_of_affect:'1 bladed weapon', duration:'1 minute', raises:'Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'ire spirits can infuse metal with their own fury, turning a sharp edge into a supremely perfect one. This spell entrances the damage of steel bladed weapons. such as swords, knives, nagiuata, etc. Biting Steel cannot affect weapons which are not metal blades, which are nemuranai, or which have all ready been enhanced by magical effects. The weapon\'s DR is increased by 1K1 for the duration of the spell. Pg 180 Core Book' },
       { id:82, name:'Burning Kiss of Steel', ring:'fire', type:'Battle', level:'1', range:'touch', area_of_affect:'One melee weapon in caster\'s hand', duration:'5 minutes', raises:'Duration (+2 minutes)', get roll() { return spellRoll(this); }, description:'This spell embraces a weapon with fire, causing it to be larger and more effective. When the spell is cast, a tendril of fire extends from your hands to engulf your weapon. (if you drop or lose the weapon, the spell effect ends.) This weapon gains a +1k1 bonus to melee attack rolls. The bonus is +2K2 when making attacks against mounted opponents or opponents of larger than human size Pg 180 Core Book' },
       { id:83, name:'Flames', ring:'fire', type:'', level:'1', range:'30\'', area_of_affect:'One target', duration:'Intantaneous', raises:'', get roll() { return spellRoll(this); }, description:'Fire\'s most basic power is destruction, and summoned Fire spirits can easily be unleashed on one\'s enemies. This spell invokes a single fire kami, which lances toward the target, hitting uneringly so long as the target is within range. The spell deals 2k2 Wounds. The burns this spell inﬂicts are quite painful, and if the spell targets a shugenja who is casting a spell, his Willpower roll has a TN of 20 plus the damage dealt, instead ofthe normal 10 plus damage dealt. Pg 181 Core Book' },
@@ -822,8 +814,10 @@
       { id:117, name:'Beam of the Inferno', ring:'fire', type:'', level:'6', range:'200\'', area_of_affect:'One target', duration:'Instantaneous', raises:'', get roll() { return spellRoll(this); }, description:'This is perhaps the deadliest single spell available to a shugenja, and one of the most fearsome spells ever developed in the Empire. The prayer invokes a tremendous blast of fire against the chosen target. who takes 10K10 Wounds. The spell puts all the Fire kami in the area into a state of agitation, and normal fires within range will burn hotter and more violently for many minutes after this spell is cast. Pg 186 Core Book' },
       { id:118, name:'Globe of the Everlasting Sun', ring:'fire', type:'Defense', level:'6', range:'500\'', area_of_affect:'1 mile', duration:'1 day', raises:'', get roll() { return spellRoll(this); }, description:'This mighty prayer calls on all the Fire kami in the area to remain quiet and calm, soothing the agitation which so often afflicts them. It is often invoked during major festivals, such as the crowning of a new Emperor. For the duration of the spell, all buildings within the area of effect are immune to the effects of magical fire, and all Fire spells cast within that area have the TN of thier Spell Casting Rolls increased by 15. Normal fires still ignite and burn but do so sluggishly and so not spread easily. Pg 186 Core Book' },
       { id:119, name:'The Soul\'s Blade', ring:'fire', type:'Craft', level:'6', range:'Touch', area_of_affect:'One target weapon', duration:'5 rounds', raises:'Duration(+1 round per 3 Raises)', get roll() { return spellRoll(this); }, description:'This spell imbues powerful Fire kami into a weapon, grantin the fill fury of a raging firestorm. A bushi armed with this weapon is a terrible opponent, for the fire spirits shock and daze his enemies with every blow. For the duration of the spell, the weapon will overcome Invulnerability, and every target his is automatically stunned.  Pg 186 Core Book' },
+
       { id:120, name:'', ring:'water', type:'', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 182 Core Book' },
-      { id:120, name:'', ring:'water', type:'', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 182 Core Book' },
+      { id:121, name:'', ring:'water', type:'', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 182 Core Book' },
+
       { id:160, name:'', ring:'void', type:'', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 185 Core Book' },
       { id:189, name:'', ring:'void', type:'', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 185 Core Book' },
     ];
@@ -831,11 +825,9 @@
     $scope.showSpellsList = false;
 
     $scope.toggleShowSpellsList = function() {
-      //console.log("Bang");
       $scope.showSpellsList = !$scope.showSpellsList;
       $scope.spellSearchFilter = null;      
     };
-
 
     $scope.getSpell = function (spell_id,attr) {
         return $scope.getSpellFromMasterList(spell_id, attr);
