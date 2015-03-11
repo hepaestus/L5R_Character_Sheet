@@ -58,9 +58,9 @@
 
     $scope.character = {
       name: "",
-      clan: "",
-      family: "",
-      school: "",
+      clan: {},
+      family: {},
+      school: {},
       experience_points: 0,
       experience_points_earned: 0,
       get initiative() { return ((this.insight_rank + this.reflexes) + "K" + this.reflexes); },
@@ -132,18 +132,139 @@
     ];
 
     $scope.schoolsMasterList = [
-      {id:0, name:'Hida Bushi', clan:'Crab', bonus:{ stamina:1, honor:3.5, skills:['athletics', 'defense', 'heavy weapons', 'intimidation', 'kenjutsu', 'lore:shadowlands', '1 bugei skill'], techniques:{1:'The Way of the Crab Pg. 106', 2:'The Mountain Does Not Move. Pg. 106', 3:'Two Pincers, One Mind. Pg. 106', 4:'Devastating Blow. Pg. 106', 5:'The Mountain Does Not Fall. Pg. 107' } } },
+      {id:0, name:'Hida Bushi', clan:'Crab', bonus:{ stamina:1, honor:3.5, skills:[56, 58, 65, 90, 66, 36, '1 bugei'], techniques:{1:'The Way of the Crab Pg. 106', 2:'The Mountain Does Not Move. Pg. 106', 3:'Two Pincers, One Mind. Pg. 106', 4:'Devastating Blow. Pg. 106', 5:'The Mountain Does Not Fall. Pg. 107' } } },
       {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['calligraphy:cipher','lore:shadowlands:2','lore:theology','spellcraft','1 weapon skill'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
-      {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['commerce:appraisal','courtier','defense','ettiquette','intimidation','sincerity:deceit','1 merchant skill'], techiniques:{1:'The Way of the Carp. pg. 107', 2:'Do As We Say. pg. 108', 3:'Treasures of the Carp. pg 108', 4:'Wiles of the Carp. pg 108', 5:'What is Yours is Mine. pg 108'} } },
+      {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['commerce:appraisal','courtier','defense','ettiquette','intimidation','sincerity:deceit','1 merchant skill'], techniques:{1:'The Way of the Carp. pg. 107', 2:'Do As We Say. pg. 108', 3:'Treasures of the Carp. pg 108', 4:'Wiles of the Carp. pg 108', 5:'What is Yours is Mine. pg 108'} } },
       {id:3, name:'Hirumi Bushi', clan:'Crab', bonus:{ willpower:1, honor:4.5, skills:['athletics','hunting','kenjutsu:katana','kyujutsu','lore:shadowlands','stealth','1 skill'], techniques:{1:'Torch Flame Flickers. pg 108', 2:'Wolf\'s Little Lesson. pg 108', 3:'Hummingbird Wings. pg 108', 4:'Shark Smells Blood. pg 108', 5:'Daylight Wastes No Movement. pg 108'} } },
-      //{id:4, name:'', clan:'', bonus:{ :1, honor:, affinity:'', deficiency:'', skills:[], techniques:{}} },
-      {id:5, name:'', clan:'', bonus:{} },
-      {id:6, name:'', clan:'', bonus:{} },
-      {id:7, name:'', clan:'', bonus:{} },
-      {id:8, name:'', clan:'', bonus:{} },
-      {id:9, name:'', clan:'', bonus:{} },
+      {id:5, name:'', clan:'Crane', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
+      {id:6, name:'', clan:'Dragon', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
+      {id:7, name:'', clan:'Lion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
+      {id:8, name:'', clan:'Mantis', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
+      {id:9, name:'', clan:'Phoenix', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
+      {id:10, name:'', clan:'Scorpion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
+      {id:11, name:'', clan:'Unicorn', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:20, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:['battle','calligraphy:cipher','ettiquette','lore:history','lore:theology','spellcraft','1 high or bugie skill'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}} },
     ];
+
+    $scope.calculateBonus = function(obj) {
+      var key;
+      for( key in obj ) {
+        console.log("KEY : " + key + "  VALUE: " + obj[key]);
+        switch(key) {
+          case 'stamina':
+            $scope.character.stamina +=  obj[key];
+            break;
+          case 'willpower':
+            $scope.character.willpower +=  obj[key];
+            break;
+          case 'reflexes':
+            $scope.character.reflexes +=  obj[key];
+            break;
+          case 'awareness':
+            $scope.character.awareness +=  obj[key];
+            break;
+          case 'agility':
+            $scope.character.agility +=  obj[key];
+            break;
+          case 'intelligence':
+            $scope.character.intelligence +=  obj[key];
+            break;
+          case 'strength':
+            $scope.character.strength +=  obj[key];
+            break;
+          case 'perception':
+            $scope.character.perception +=  obj[key];
+            break;
+          case 'honor':
+            $scope.character.honor +=  obj[key];
+            break;
+          case 'affinity':
+            var ring = obj[key];
+            $scope.character.affinity.ring = true;
+            break;
+          case 'deficiency':
+            var ring = obj[key];
+            $scope.character.deficiency.ring = true;
+            break;
+          case 'skills':
+            //if( obj[key].isArray() ) {
+              for(var i=0; i < obj[key].length; i++ ) {
+                console.log("Add this skill: " + obj[key][i] );
+                var skill =  obj[key][i];
+                if ( isFinite(skill) ) {
+                  $scope.addSkill(skill, 1);
+                } else {
+                  alert("You Also Get " + skill + " skill");
+                }
+              }
+            //}
+            break;
+          case 'techniques':
+            break;
+        }
+      }
+    };
+
+    $scope.addSkill = function(skill_id, rank) {
+      var skill = $scope.getSkillFromMasterList(skill_id);
+      var new_skill = { id:skill_id, rank:rank, rank_s:rank, emphasis:null, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
+      if ( $scope.getCharacterSkillById(skill_id) === null) {
+        $scope.character.skills.push(new_skill);
+      }
+    };
+
+    $scope.getSkillFromMasterList = function(skill_id, attr) {
+      for(var i=0; i < $scope.skillsMasterList.length; i++) {
+        if ( $scope.skillsMasterList[i].id === skill_id ) {
+          if (attr === null || attr === undefined) {
+            return $scope.skillsMasterList[i];
+          } else if ( attr === 'mastery') {
+            return $scope.skillsMasterList[i].mastery;
+          } else {
+            return $scope.skillsMasterList[i][attr];
+          }
+        }
+      }
+      return "(error)";
+    };
+
+    $scope.getCharacterSkillById = function(skill_id) {
+      for(var i = 0; i < $scope.character.skills.length; i++) {
+        if ( $scope.character.skills[i] != undefined ) {
+          if ( $scope.character.skills[i].id === skill_id ) {
+            return $scope.character.skills[i];
+          }
+        }
+      }
+      return null;
+    };
+
+    var getSkillRoll = function(skill_id, skill_rank) {
+      var skill = $scope.getSkillFromMasterList(skill_id);
+      if ( skill ) {
+        var trait = skill.trait;
+        var ring  = skill.ring;
+        var roll =  ( skill_rank + $scope.character[trait] ) + "K" + $scope.character[ring];
+        return roll;
+      } else {
+        return '0K0';
+      }
+    };
+
+    var skillMastery = function(obj) {
+      var master_skill = $scope.getSkillFromMasterList(obj.id);
+      if ( master_skill ) {
+        var text = '';
+        for(var x in master_skill.masteries ) {
+          if ( obj.rank >= x ) {
+            text += "Level " + x + " : " + master_skill.masteries[x] + "<br />\n";
+          }
+        }
+        return text;
+      } else {
+        return 'none';
+      }
+    };
 
     var mastery = function(obj) {
       var text = '';
@@ -194,7 +315,7 @@
       { id:33, level:'High', type:'Lore', sub_type:'Nature', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
       { id:34, level:'High', type:'Lore', sub_type:'Non-Human Culture', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
       { id:35, level:'High', type:'Lore', sub_type:'Omens', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
-      { id:36, level:'High', type:'Lore', sub_type:'Shadowslands*', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
+      { id:36, level:'High', type:'Lore', sub_type:'Shadowlands*', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
       { id:37, level:'High', type:'Lore', sub_type:'Shugenja', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
       { id:38, level:'High', type:'Lore', sub_type:'Spirit Realms', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
       { id:39, level:'High', type:'Lore', sub_type:'Theology', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
@@ -224,7 +345,7 @@
       { id:63, level:'Bugei', type:'Weapons', sub_type:'', trait:'', ring:'', emphases:{1:'Special'}, get mastery() { return mastery(this); }, masteries:{}, description:'Pg. 140 Core Book'},
       { id:64, level:'Bugei', type:'Chain Weapons', sub_type:'Weapon Skill', trait:'agility', ring:'fire', emphases:{0:'Kusarigama', 1:'Kyoketsu-shogi', 2:'Manrikusari'}, get mastery() { return mastery(this); }, masteries:{3:'Chain weapons made be used to initiate grapple (See Book of Earth)', 5:'Wielding a chain weapon gains a 1k0 on Contested Rolls against opponents who are tangled or Grappled via their weapon', 7:'Use of chain weapon confers one Free Raise toward use of Disarm or Knockdown Maneuvers'}, description:'Pg. 141 Core Book'},
       { id:65, level:'Bugei', type:'Heavy Weapons', sub_type:'Weapon Skill', trait:'agility', ring:'fire', emphases:{0:'Dai Tsuchi', 1:'Masakari', 2:'Ono', 3:'Tetsubo'}, get mastery() { return mastery(this); }, masteries:{3:'Opponents with a Reduction Rating have their rating reduced by 2 when attacked with heavy weapon', 5:'Use of Heavy Weapon confers on Free Raise toward use of Knockdown Maneuver', 7:'Damage dice explode on a result of 9 and 10 when using heavy weapons'}, description:'Pg. 141 Core Book'},
-      { id:66, level:'Bugei', type:'Kenjustu', sub_type:'Weapon Skill', trait:'agility', ring:'fire', emphases:{0:'Katana', 1:'Ninja-to', 2:'No-dachi', 3:'Parangu', 4:'Scimitar', 5:'Wakizashi'}, get mastery() { return mastery(this); }, masteries:{3:'Total damage rolls is increased by 1k0', 5:'Sword can be readied as a Free Action', 7:'Damage dice explode on a 9 and 10'}, description:'Pg. 141 Core Book'},
+      { id:66, level:'Bugei', type:'Kenjutsu', sub_type:'Weapon Skill', trait:'agility', ring:'fire', emphases:{0:'Katana', 1:'Ninja-to', 2:'No-dachi', 3:'Parangu', 4:'Scimitar', 5:'Wakizashi'}, get mastery() { return mastery(this); }, masteries:{3:'Total damage rolls is increased by 1k0', 5:'Sword can be readied as a Free Action', 7:'Damage dice explode on a 9 and 10'}, description:'Pg. 141 Core Book'},
       { id:67, level:'Bugei', type:'Knives', sub_type:'Weapon Skill', trait:'agility', ring:'fire', emphases:{0:'Aiguchi', 1:'Jitte', 2:'Kama', 3:'Sai', 4:'Tanto'}, get mastery() { return mastery(this); }, masteries:{3:'No Off-hand penalties', 5:'Use or a sai or jitte confers one Free Raise towards the Disarm Maneuver', 7:'Use of any knife confers a Free Raise towards use of the Extra Attack Maneuver'}, description:'(Tanojutsu) Pg. 141 Core Book'},
       { id:68, level:'Bugei', type:'Kyujutsu', sub_type:'Weapon Skill', trait:'reflexes', ring:'air', emphases:{0:'Dai-kyu', 1:'Han-kyu', 2:'Yumi'}, get mastery() { return mastery(this); }, masteries:{3:'Striging bow is a Simple Action', 5:'Max range of any bow increased by 50%', 7:'Strength of bow increased by 1'}, description:'Pg. 142 Core Book'},
       { id:69, level:'Bugei', type:'Ninjutsu* (agility)', sub_type:'Weapon Skill', trait:'agility', ring:'fire', emphases:{0:'Blowgun*', 1:'Shuriken*', 2:'Tsubute*'}, get mastery() { return mastery(this); }, masteries:{3:'Damage increase by 1k1', 5:'Dice on Damage Rolls Exlode on 10 despite being Nijutsu Weapons', 7:'Damage on ninjutsu weapons increased by +0k1 (+1k1 total)'}, description:'Low Skill. Pg. 142 Core Book'},
@@ -435,28 +556,30 @@
     };
 
     $scope.selectClan = function(id) {
-      $scope.character.clan = $scope.clansMasterList[id].name;
+      $scope.character.clan = $scope.clansMasterList[id];
       $scope.toggleShowClansList();
     };
 
     $scope.showFamiliesList = false;
     $scope.toggleShowFamiliesList = function() {
-        $scope.showFamiliesList = !$scope.showFamiliesList;
+        $scope.showFamiliesList = !$scope.showFamiliesList;        
     };
 
     $scope.selectFamily = function(id) {
-      $scope.character.family = $scope.familiesMasterList[id].name;
+      $scope.character.family = $scope.familiesMasterList[id];
       $scope.toggleShowFamiliesList();
+      $scope.calculateBonus( $scope.familiesMasterList[id].bonus );
     };
 
     $scope.showSchoolsList = false;
     $scope.toggleShowSchoolsList = function() {
-        $scope.showSchoolsList = !$scope.showSchoolsList;
+      $scope.showSchoolsList = !$scope.showSchoolsList;
     };
 
     $scope.selectSchool = function(id) {
-      $scope.character.school = $scope.schoolsMasterList[id].name;
+      $scope.character.school = $scope.schoolsMasterList[id];
       $scope.toggleShowSchoolsList();
+      $scope.calculateBonus( $scope.schoolsMasterList[id].bonus );
     };
 
   }]);
@@ -602,7 +725,8 @@
         }
       }
       //console.log("Skill " + skill_id + " Not Found (getcharacterskillbyid)");
-      return null; };
+      return null;
+    };
 
     var replaceCharacterSkillById = function(skill_id, skill) {
       for(var i = 0; i < $scope.character.skills.length; i++) {
