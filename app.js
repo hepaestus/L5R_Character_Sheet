@@ -670,7 +670,13 @@
       var spell_ring = obj.ring;
       var insight_rank = $scope.character.insight_rank;
       var ring_val = "R"
-      var affinity = "+Aff+";
+      var affinity = "+AD+";
+      var bonus = '';
+      if ( doesCharacterHaveSpellcraftBonus() && spell_ring != 'all' ) {
+          bonus = 1;
+      } else if ( doesCharacterHaveSpellcraftBonus() && spell_ring == 'all' ) {
+          bonus = "+1";
+      } 
       if ( spell_ring != 'all' ) {
         ring_val = $scope.character[spell_ring];
         affinity = 0;
@@ -678,9 +684,21 @@
       if ( $scope.character.spell_affinity[spell_ring] == true ) {
           affinity = 1;
       }
-      roll = ring_val + ( affinity + insight_rank ) + 'K' + ring_val;
-      //console.log("Spell Roll: " + roll);
+      if ( $scope.character.spell_deficiency[spell_ring] == true ) {
+          affinity = -1;
+      }
+      roll = ring_val + ( bonus ) + ( affinity + insight_rank ) + 'K' + ring_val;
       return roll;
+    };
+
+    var doesCharacterHaveSpellcraftBonus = function() {
+      for(var i=0; i < $scope.character.skills.length; i++) {
+        if( $scope.character.skills[i].id == 54 ) { // 54 is the spellcraft skill id in the skillsMasterList
+          if(  $scope.character.skills[i].rank >= 5 ) {
+            return true;
+          }
+        }
+      }
     };
 
     $scope.spellsMasterList = [
