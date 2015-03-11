@@ -6,7 +6,15 @@ body {
 main {
 }
 
-input.clan, input.school, input.name, input.family {
+div.info .list-group {
+  width: 33%;
+  margin-left: 10em;
+}
+
+input.clan, input.name, input.family {
+    width: 6em;
+}
+input.school {
     width: 8em;
 }
 input.experience_points, input.experience_points_earned, input.school_rank, input.insight_rank, input.insight {
