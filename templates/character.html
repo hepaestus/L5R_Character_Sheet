@@ -137,16 +137,16 @@
             <th colspan="1" class="center">FIRE</th>
         </tr>
         <tr>
-            <td class="center" colspan="11">
-                <input type="checkbox" name="void_box" class="void_box"/>
-                <input type="checkbox" name="void_box" class="void_box"/>
-                <input type="checkbox" name="void_box" class="void_box"/>
-                <input type="checkbox" name="void_box" class="void_box"/>
-                <input type="checkbox" name="void_box" class="void_box"/>
-                <input type="checkbox" name="void_box" class="void_box"/>
-                <input type="checkbox" name="void_box" class="void_box"/>
-                <input type="checkbox" name="void_box" class="void_box"/>
-                <input type="checkbox" name="void_box" class="void_box"/>
+            <td class="center" colspan="11" style="margin: 0 auto; text-align:center;">
+                <input type="checkbox" name="void_box" class="void_box" ng-show="character.void >= 1"/>
+                <input type="checkbox" name="void_box" class="void_box" ng-show="character.void >= 2"/>
+                <input type="checkbox" name="void_box" class="void_box" ng-show="character.void >= 3"/>
+                <input type="checkbox" name="void_box" class="void_box" ng-show="character.void >= 4"/>
+                <input type="checkbox" name="void_box" class="void_box" ng-show="character.void >= 5"/>
+                <input type="checkbox" name="void_box" class="void_box" ng-show="character.void >= 6"/>
+                <input type="checkbox" name="void_box" class="void_box" ng-show="character.void >= 7"/>
+                <input type="checkbox" name="void_box" class="void_box" ng-show="character.void >= 8"/>
+                <input type="checkbox" name="void_box" class="void_box" ng-show="character.void >= 9"/>
             </td>
         </tr>
       </table>

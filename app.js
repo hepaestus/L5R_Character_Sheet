@@ -2,7 +2,7 @@
 (function(){
 
   // Declare app level module which depends on views, and components
-  var app = angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap']);
+  var app = angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap', 'ngDialog']);
 
   angular.module('myApp').config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {
@@ -117,6 +117,17 @@
       {id:5, name:'Phoenix', bonus:''},	    
       {id:6, name:'Scorpion', bonus:''},	    
       {id:7, name:'Unicorn', bonus:''},	    
+      //{id:8, name:'Badger', bonus:''},	    
+      //{id:9, name:'Bat', bonus:''},	    
+      //{id:10, name:'Bear', bonus:''},	    
+      //{id:11, name:'Dragonfly', bonus:''},	    
+      //{id:12, name:'Hare', bonus:''},	    
+      //{id:13, name:'Tortoise', bonus:''},	    
+      //{id:14, name:'Monkey', bonus:''},	    
+      //{id:15, name:'Oriole', bonus:''},	    
+      //{id:16, name:'Ox', bonus:''},	    
+      //{id:17, name:'Sparrow', bonus:''},	    
+      //{id:18, name:'Firefly', bonus:''},	    
     ];
     
     $scope.familiesMasterList = [
@@ -127,8 +138,11 @@
       {id:4, name:'Toritaki', clan:'Crab', bonus:{ perception:1 } },
       {id:5, name:'Yasuki', clan:'Crab', bonus:{ awareness:1 } },
       {id:6, name:'Asahina', clan:'Crane', bonus:{ intelligence:1} },
-      {id:7, name:'Daidoji', clan:'Crane', bonus:{ stamina:1 } },
-      {id:8, name:'Kitsu', clan:'Lion', bonus:{ stamina:1 } },
+      {id:7, name:'Doji', clan:'Crane', bonus:{ attr:1 } },
+      {id:8, name:'Daidoji', clan:'Crane', bonus:{ attr:1 } },
+      {id:9, name:'Kakita', clan:'Crane', bonus:{ attr:1 } },
+      {id:10, name:'Yasuki', clan:'Crane', bonus:{ attr:1 } },
+      {id:11, name:'Kitsu', clan:'Lion', bonus:{ stamina:1 } },
     ];
 
     $scope.schoolsMasterList = [
@@ -194,15 +208,16 @@
                   $scope.addASkill(skill, 1);
                 } else if ( skill.match(/:/) ) {
                   var arr = skill.split(":");
-		  var skill = arr[0];
-		  var emp = (arr[1]) ? arr[1] : null;
-		  var lvl = (arr[2]) ? arr[2] : 1;
+		          var skill = arr[0];
+		          var emp = (arr[1]) ? arr[1] : null;
+		          var lvl = (arr[2]) ? arr[2] : 1;
                   $scope.addASkill(skill, lvl, emp);
-		} else {
+		        } else {
                   alert("You Also Get " + skill + " skill");
+                  $scope.skillSearchText = "bugei";
+                  $scope.toggleShowSkillsList();
                 }
               }
-            //}
             break;
           case 'techniques':
             break;
