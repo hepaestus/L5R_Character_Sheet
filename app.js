@@ -2,7 +2,7 @@
 (function(){
 
   // Declare app level module which depends on views, and components
-  var app = angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap', 'ngDialog']);
+angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap']);
 
   angular.module('myApp').config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {
@@ -18,41 +18,9 @@
       controller: 'SpellsController'
     })
     .otherwise({redirectTo: '/'});
-  }]);
+  }]);//end routes
 
-  angular.module('myApp').controller('ModalInstanceController', ['$scope', '$modalInstance', 'items', 'saved_characters_array', function ($scope, $modalInstance, items, saved_characters_array ) {
-
-    $scope.test = "ModalInstanceController";
-
-    $scope.items = items;
-    console.log("MIC Items" + $scope.items);
-
-    $scope.saved_characters_array = saved_characters_array;
-    console.log("MIC Characters" + $scope.saved_characters_array);
-
-    $scope.loadSavedCharacter = function(index) {
-      $scope.character = $scope.saved_characters_array[index];
-      console.log("MIC: Load Saved Character Index : " + index);
-      console.log("MIC: Load Saved Character : " + $scope.character);
-    };
-
-    $scope.selected = {
-      item: $scope.items,
-    };
-    
-    $scope.ok = function () {
-      console.log("OK - Close Window");
-      $modalInstance.close($scope.selected.item);
-    };
-
-    $scope.cancel = function () {
-      console.log("Cancel Window");
-      $modalInstance.dismiss('cancel');
-    };
-
-  }])
-
-  angular.module('myApp').controller('MainController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
+  angular.module('myApp').controller('MainController', ['$scope', '$cookieStore', '$modal', function($scope, $cookieStore, $modal) {
 
     $scope.test = "Main Controller";
 
@@ -146,10 +114,10 @@
     ];
 
     $scope.schoolsMasterList = [
-      {id:0, name:'Hida Bushi', clan:'Crab', bonus:{ stamina:1, honor:3.5, skills:[56, 58, 65, 90, 66, 36, '1 bugei'], techniques:{1:'The Way of the Crab Pg. 106', 2:'The Mountain Does Not Move. Pg. 106', 3:'Two Pincers, One Mind. Pg. 106', 4:'Devastating Blow. Pg. 106', 5:'The Mountain Does Not Fall. Pg. 107' } } },
-      {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['10:1','36::2',39,54,'1 weapon skill'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
-      {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['commerce:appraisal','courtier','defense','ettiquette','intimidation','sincerity:deceit','1 merchant skill'], techniques:{1:'The Way of the Carp. pg. 107', 2:'Do As We Say. pg. 108', 3:'Treasures of the Carp. pg 108', 4:'Wiles of the Carp. pg 108', 5:'What is Yours is Mine. pg 108'} } },
-      {id:3, name:'Hirumi Bushi', clan:'Crab', bonus:{ willpower:1, honor:4.5, skills:['athletics','hunting','kenjutsu:katana','kyujutsu','lore:shadowlands','stealth','1 skill'], techniques:{1:'Torch Flame Flickers. pg 108', 2:'Wolf\'s Little Lesson. pg 108', 3:'Hummingbird Wings. pg 108', 4:'Shark Smells Blood. pg 108', 5:'Daylight Wastes No Movement. pg 108'} } },
+      {id:0, name:'Hida Bushi', clan:'Crab', bonus:{ stamina:1, honor:3.5, skills:[56, 58, 65, 90, 66, 36, '+1 bugei'], techniques:{1:'The Way of the Crab Pg. 106', 2:'The Mountain Does Not Move. Pg. 106', 3:'Two Pincers, One Mind. Pg. 106', 4:'Devastating Blow. Pg. 106', 5:'The Mountain Does Not Fall. Pg. 107' } } },
+      {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['10:1','36::2',39,54,'+1 weapon skill'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
+      {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['76:0',11,58,13,90,'53:1','+1 merchant skill'], techniques:{1:'The Way of the Carp. pg. 107', 2:'Do As We Say. pg. 108', 3:'Treasures of the Carp. pg 108', 4:'Wiles of the Carp. pg 108', 5:'What is Yours is Mine. pg 108'} } },
+      {id:3, name:'Hirumi Bushi', clan:'Crab', bonus:{ willpower:1, honor:4.5, skills:[56,60,'66:0',68,36,92,'+1 skill'], techniques:{1:'Torch Flame Flickers. pg 108', 2:'Wolf\'s Little Lesson. pg 108', 3:'Hummingbird Wings. pg 108', 4:'Shark Smells Blood. pg 108', 5:'Daylight Wastes No Movement. pg 108'} } },
       {id:5, name:'', clan:'Crane', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:6, name:'', clan:'Dragon', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:7, name:'', clan:'Lion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
@@ -400,7 +368,7 @@
     ];
 
 
-  }]);
+  }]);//end main controller
 
   angular.module('myApp').controller('HomeController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
 
@@ -411,45 +379,15 @@
       console.log("HC: Load Saved Character :" + $scope.character);
     };
 
-  }]);
+  }]);//end HomeController
 
-;
-
-  angular.module('myApp').controller('CharacterController', ['$scope', '$cookieStore', '$modal', function($scope, $cookieStore, $modal ) {
+  angular.module('myApp').controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore ) {
 
     $scope.test = "Character Controller";
 
     $scope.loadSavedCharacter = function(index) {
       $scope.character = $scope.saved_character_array[index];
       console.log("CC: Load Saved Character :" + $scope.character);
-    };
-
-    $scope.items = ['one', 'two', 'three'];
-    $scope.saved_characters_array = [];
-
-    $scope.open = function(size) {
-      var modalInstance = $modal.open({
-        templateUrl: 'templates/character_load.html',
-        controller: 'ModalInstanceController',
-        size: size,
-        resolve: {
-          items: function() {
-            console.log("Items" + $scope.items);
-            return $scope.items;
-	  },
-          saved_characters_array: function() {
-            console.log("Characters" + $scope.saved_characters_array);
-            return $scope.saved_characters_array;
-          },
-	},
-      });
-      console.log('Modal Opened at: ' + new Date());
-
-      modalInstance.result.then(function (selectedItem) {
-        $scope.selected = selectedItem;
-      }, function () {
-        console.log('Modal dismissed at: ' + new Date());
-      });
     };
 
     $scope.loadCharacter = function() {
@@ -580,10 +518,11 @@
         $scope.showClansList = !$scope.showClansList;
     };
 
-    $scope.selectClan = function(id) {
-      $scope.character.clan = $scope.clansMasterList[id];
-      $scope.toggleShowClansList();
-    };
+    //$scope.selectClan = function(id) {
+    //  console.log("Select Clan : " + id );
+    //  $scope.character.clan = $scope.clansMasterList[id];
+    //  $scope.toggleShowClansList();
+    //};
 
     $scope.showFamiliesList = false;
     $scope.toggleShowFamiliesList = function() {
@@ -607,7 +546,7 @@
       $scope.calculateBonus( $scope.schoolsMasterList[id].bonus );
     };
 
-  }]);
+  }]);//end CharacterController
 
   angular.module('myApp').controller('SkillsController', function($scope) {
 
@@ -796,7 +735,7 @@
       }
     };
 
-  });
+  });//end SkillsController
 
   angular.module('myApp').controller('SpellsController', function($scope) {
 
@@ -1031,6 +970,6 @@
       return null;
     };
 
-  });
+  });//end SpellsController
 
-})();
+})();//end myApp
