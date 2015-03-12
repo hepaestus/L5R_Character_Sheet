@@ -58,9 +58,9 @@
 
     $scope.character = {
       name: "",
-      clan: {},
-      family: {},
-      school: {},
+      clan: null,
+      family: null,
+      school: null,
       experience_points: 0,
       experience_points_earned: 0,
       get initiative() { return ((this.insight_rank + this.reflexes) + "K" + this.reflexes); },
@@ -107,7 +107,6 @@
       weapon_one    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
       weapon_two    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
     };
-
     
     $scope.clansMasterList = [
       {id:0, name:'Crab', bonus:''},	    
@@ -129,11 +128,12 @@
       {id:5, name:'Yasuki', clan:'Crab', bonus:{ awareness:1 } },
       {id:6, name:'Asahina', clan:'Crane', bonus:{ intelligence:1} },
       {id:7, name:'Daidoji', clan:'Crane', bonus:{ stamina:1 } },
+      {id:8, name:'Kitsu', clan:'Lion', bonus:{ stamina:1 } },
     ];
 
     $scope.schoolsMasterList = [
       {id:0, name:'Hida Bushi', clan:'Crab', bonus:{ stamina:1, honor:3.5, skills:[56, 58, 65, 90, 66, 36, '1 bugei'], techniques:{1:'The Way of the Crab Pg. 106', 2:'The Mountain Does Not Move. Pg. 106', 3:'Two Pincers, One Mind. Pg. 106', 4:'Devastating Blow. Pg. 106', 5:'The Mountain Does Not Fall. Pg. 107' } } },
-      {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['calligraphy:cipher','lore:shadowlands:2','lore:theology','spellcraft','1 weapon skill'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
+      {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['10:1','36::2',39,54,'1 weapon skill'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
       {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['commerce:appraisal','courtier','defense','ettiquette','intimidation','sincerity:deceit','1 merchant skill'], techniques:{1:'The Way of the Carp. pg. 107', 2:'Do As We Say. pg. 108', 3:'Treasures of the Carp. pg 108', 4:'Wiles of the Carp. pg 108', 5:'What is Yours is Mine. pg 108'} } },
       {id:3, name:'Hirumi Bushi', clan:'Crab', bonus:{ willpower:1, honor:4.5, skills:['athletics','hunting','kenjutsu:katana','kyujutsu','lore:shadowlands','stealth','1 skill'], techniques:{1:'Torch Flame Flickers. pg 108', 2:'Wolf\'s Little Lesson. pg 108', 3:'Hummingbird Wings. pg 108', 4:'Shark Smells Blood. pg 108', 5:'Daylight Wastes No Movement. pg 108'} } },
       {id:5, name:'', clan:'Crane', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
@@ -143,7 +143,7 @@
       {id:9, name:'', clan:'Phoenix', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:10, name:'', clan:'Scorpion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:11, name:'', clan:'Unicorn', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
-      {id:20, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:['battle','calligraphy:cipher','ettiquette','lore:history','lore:theology','spellcraft','1 high or bugie skill'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}} },
+      {id:20, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:1',13,31,39,54,'1 high or bugie skill'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}} },
     ];
 
     $scope.calculateBonus = function(obj) {
@@ -187,13 +187,18 @@
             $scope.character.deficiency.ring = true;
             break;
           case 'skills':
-            //if( obj[key].isArray() ) {
               for(var i=0; i < obj[key].length; i++ ) {
                 console.log("Add this skill: " + obj[key][i] );
                 var skill =  obj[key][i];
                 if ( isFinite(skill) ) {
-                  $scope.addSkill(skill, 1);
-                } else {
+                  $scope.addASkill(skill, 1);
+                } else if ( skill.match(/:/) ) {
+                  var arr = skill.split(":");
+		  var skill = arr[0];
+		  var emp = (arr[1]) ? arr[1] : null;
+		  var lvl = (arr[2]) ? arr[2] : 1;
+                  $scope.addASkill(skill, lvl, emp);
+		} else {
                   alert("You Also Get " + skill + " skill");
                 }
               }
@@ -205,11 +210,16 @@
       }
     };
 
-    $scope.addSkill = function(skill_id, rank) {
+    $scope.addASkill = function(skill_id, rank, emp) {
       var skill = $scope.getSkillFromMasterList(skill_id);
-      var new_skill = { id:skill_id, rank:rank, rank_s:rank, emphasis:null, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
+      var lvl = ( rank )? rank : 0;
+      var emph = ( emp ) ? emp : null;
+      var new_skill = { id:skill_id, rank:lvl, rank_s:lvl, emphasis:emph, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
       if ( $scope.getCharacterSkillById(skill_id) === null) {
         $scope.character.skills.push(new_skill);
+      }
+      if (emp) {
+      
       }
     };
 
