@@ -143,7 +143,7 @@
       {id:9, name:'', clan:'Phoenix', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:10, name:'', clan:'Scorpion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:11, name:'', clan:'Unicorn', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
-      {id:20, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:1',13,31,39,54,'1 high or bugie skill'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}} },
+      {id:12, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:1',13,31,39,54,'1 high or bugie skill'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}} },
     ];
 
     $scope.calculateBonus = function(obj) {
