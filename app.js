@@ -23,6 +23,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
   angular.module('myApp').controller('ModalController', ['$scope', 'close', function($scope, close) {
     // when you need to close the modal, call close
     $scope.close = function(result) {
+      console.log("ModalController Result: " + result);
       close(result, 550); 
     };
   }]);//end ModalController
@@ -35,13 +36,60 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       ModalService.showModal({
         templateUrl: "templates/modal.html",
         controller: "ModalController"
-        }).then(function(modal) {
-          //it's a bootstrap element, use 'modal' to show it
-          modal.element.modal();
-          modal.close.then(function(result) {
-          console.log(result);
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(result) {
+          console.log("Show Result: " + result);
         });
       }); 
+    };
+
+    $scope.loadCharacterModal = function() {
+      console.log("Load Characters");
+      $scope.loadCharacters()
+      ModalService.showModal({
+        templateUrl: "templates/character_load.html",
+        controller: "MainController"
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(result) {
+          console.log("loadCharacterModal Result: " + result);
+        });
+      }); 
+    };
+
+    $scope.loadSavedCharacter = function(index) {
+      $scope.character = $scope.saved_character_array[index];
+      console.log("CC: Load Saved Character :" + $scope.character);
+    };
+
+    $scope.saved_characters_array = [];
+
+    $scope.loadCharacters = function() {
+      var saved_character_cookie_array = $cookieStore.get('characters');
+      $scope.saved_characters_array = [];
+      if ( saved_character_cookie_array ) {
+        for ( var i = 0; i < saved_character_cookie_array.length; i++) {
+          console.log("Getting Character " +i+ " : " + saved_character_cookie_array[i]);
+          var character = $cookieStore.get(saved_character_cookie_array[i]);
+          if ( character ) {
+            console.log("Pushing Character Into Array : " + character.name);
+            $scope.saved_characters_array.push(character);
+          }
+        }
+      }
+      console.log("Saved Characters Array : " + JSON.stringify($scope.saved_characters_array));
+      console.log("Saved Characters Array : " + $scope.saved_characters_array.length );
+    }
+
+    $scope.deleteSavedCharacter = function(character_date_string) {
+      $cookieStore.remove(character_date_string);
+      var stored_char_strings = $cookieStore.get('characters');
+      var idx = stored_char_strings(character_date_string);
+      stored_char_strings.splice(idx,1);
+      $cookieStore.put('characters', stored_char_strings);
     };
 
     $scope.character = {
@@ -405,29 +453,6 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
 
     $scope.test = "Character Controller";
 
-    $scope.loadSavedCharacter = function(index) {
-      $scope.character = $scope.saved_character_array[index];
-      console.log("CC: Load Saved Character :" + $scope.character);
-    };
-
-    $scope.loadCharacter = function() {
-      var saved_character_cookie_array = $cookieStore.get('characters');
-      $scope.saved_characters_array = [];
-      if ( saved_character_cookie_array ) {
-        for ( var i = 0; i < saved_character_cookie_array.length; i++) {
-          console.log("Getting Character " +i+ " : " + saved_character_cookie_array[i]);
-          var character = $cookieStore.get(saved_character_cookie_array[i]);
-          if ( character ) {
-            console.log("Pushing Character Into Array : " + character.name);
-            $scope.saved_characters_array.push(character);
-          }
-        }
-      }
-      console.log("Saved Characters Array : " + $scope.saved_characters_array);
-      console.log("Saved Characters Array : " + $scope.saved_characters_array.length );
-      $scope.open();
-    }
-
     $scope.saveCharacter = function() {
       var d = new Date();
       var date_string = d.toString().replace(/ /g, "_");
@@ -446,13 +471,6 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       $cookieStore.put('character_' + date_string, $scope.character);
     };
 
-    $scope.deleteSavedCharacter = function(character_date_string) {
-      $cookieStore.remove(character_date_string);
-      var stored_char_strings = $cookieStore.get('characters');
-      var idx = stored_char_strings(character_date_string);
-      stored_char_strings.splice(idx,1);
-      $cookieStore.put('characters', stored_char_strings);
-    };
 
 
     $scope.updateExp = function(attr, value) {

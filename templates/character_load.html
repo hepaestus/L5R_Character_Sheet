@@ -1,25 +1,25 @@
-<div class="modal-dialog" n g-controller="CharacterController">
-    <div class="modal-header">
-      <button type="button" class="close" ng-click="cancel()">&times;</button>
-      <h4 class="modal-title">Load Character</h4>
+<div class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="close(false)" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Load Character</h4>
+        <div class="modal-body">
+          <h4>Choose Your Character</h4>
+          <h5>Controller: {{test}}</h5>
+          <h5>Test: {{saved_characters_array}}</h5>
+          <ul>
+            <li ng-repeat="character in saved_characters_array">
+              <a ng-click="loadSavedCharacter($index)">{{$index}} {{character.name}} {{character.clan}} {{character.school}}</a>
+            </li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" ng-click="close(false)" class="btn btn-default" data-dismiss="modal">No</button>
+          <button type="button" ng-click="close(true)" class="btn btn-primary" data-dismiss="modal">Yes</button>
+        </div>
+      </div>
     </div>
-    <div class="modal-body">
-      <h4>Choose Your Character</h4>
-      <h5>Controller: {{test}}</h5>
-      <ul>
-        <li ng-repeat="character in saved_characters_array">
-          <a ng-click="loadSavedCharacter($index)">{{$index}} {{character.name}} {{character.clan}} {{character.school}}</a>
-        </li>
-      </ul>
-      Items
-      <ul>
-        <li ng-repeat="item in items">
-          <a ng-click="selected.item = item">{{$index}} {{item}}</a>
-        </li>
-      </ul>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary" ng-click="ok()">OK</button>
-      <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-    </div>
+  </div>
 </div>
+
