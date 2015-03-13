@@ -2,7 +2,7 @@
 (function(){
 
   // Declare app level module which depends on views, and components
-angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap']);
+angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','angularModalService' ]);
 
   angular.module('myApp').config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {
@@ -20,9 +20,29 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap'])
     .otherwise({redirectTo: '/'});
   }]);//end routes
 
-  angular.module('myApp').controller('MainController', ['$scope', '$cookieStore', '$modal', function($scope, $cookieStore, $modal) {
+  angular.module('myApp').controller('ModalController', ['$scope', 'close', function($scope, close) {
+    // when you need to close the modal, call close
+    $scope.close = function(result) {
+      close(result, 550); 
+    };
+  }]);//end ModalController
+
+  angular.module('myApp').controller('MainController', ['$scope', '$cookieStore', 'ModalService', function($scope, $cookieStore, ModalService) {
 
     $scope.test = "Main Controller";
+    
+    $scope.show = function() {
+      ModalService.showModal({
+        templateUrl: "templates/modal.html",
+        controller: "ModalController"
+        }).then(function(modal) {
+          //it's a bootstrap element, use 'modal' to show it
+          modal.element.modal();
+          modal.close.then(function(result) {
+          console.log(result);
+        });
+      }); 
+    };
 
     $scope.character = {
       name: "",

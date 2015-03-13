@@ -226,12 +226,15 @@ div.ring input {
 *****/
 
 /* Fix for Bootstrap 3 with Angular UI Bootstrap */
+/**
 .modal { 
 	display: block;
     height: 50em;
 }
 .modal-content {
+    height: ;
 }
+**/
 /* Custom dialog/modal headers */
 .dialog-header-error { background-color: #d2322d; }
 .dialog-header-wait { background-color: #428bca; }

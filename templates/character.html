@@ -4,7 +4,8 @@
 
       <button ng-click="saveCharacter()">Save Changes Locally</button>
       <button ng-click="loadCharacter()">Load Character</button><br/>
-      <button ng-click="launch('error')">Error</button><br/>
+      <a class="btn btn-default" href ng-click="show()">Show a Modal</a>
+      <p>{{message}}</p>
 
       <div class="info">
         <label class="line">Clan</label><input class="line clan" class="clan" name="clan" type="text" ng-click="launch('clan')" n g-click="toggleShowClansList()" ng-model="character.clan.name"/>
