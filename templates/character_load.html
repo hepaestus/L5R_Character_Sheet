@@ -10,7 +10,7 @@
           <h5>Test: {{saved_characters_array}}</h5>
           <ul>
             <li ng-repeat="character in saved_characters_array">
-              <a ng-click="loadSavedCharacter($index)">{{$index}} {{character.name}} {{character.clan}} {{character.school}}</a>
+	    <a ng-click="loadSavedCharacter($index)">{{$index}} {{character}} {{character.name}} {{character.clan}} {{character.school}}</a>
             </li>
           </ul>
         </div>

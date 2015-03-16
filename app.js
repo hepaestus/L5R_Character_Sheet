@@ -28,123 +28,9 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
     };
   }]);//end ModalController
 
-  angular.module('myApp').controller('MainController', ['$scope', '$cookieStore', 'ModalService', function($scope, $cookieStore, ModalService) {
+  angular.module('myApp').service('DataService', function() {
 
-    $scope.test = "Main Controller";
-    
-    $scope.show = function() {
-      ModalService.showModal({
-        templateUrl: "templates/modal.html",
-        controller: "ModalController"
-      }).then(function(modal) {
-        //it's a bootstrap element, use 'modal' to show it
-        modal.element.modal();
-        modal.close.then(function(result) {
-          console.log("Show Result: " + result);
-        });
-      }); 
-    };
-
-    $scope.loadCharacterModal = function() {
-      console.log("Load Characters");
-      $scope.loadCharacters()
-      ModalService.showModal({
-        templateUrl: "templates/character_load.html",
-        controller: "MainController"
-      }).then(function(modal) {
-        //it's a bootstrap element, use 'modal' to show it
-        modal.element.modal();
-        modal.close.then(function(result) {
-          console.log("loadCharacterModal Result: " + result);
-        });
-      }); 
-    };
-
-    $scope.loadSavedCharacter = function(index) {
-      $scope.character = $scope.saved_character_array[index];
-      console.log("CC: Load Saved Character :" + $scope.character);
-    };
-
-    $scope.saved_characters_array = [];
-
-    $scope.loadCharacters = function() {
-      var saved_character_cookie_array = $cookieStore.get('characters');
-      $scope.saved_characters_array = [];
-      if ( saved_character_cookie_array ) {
-        for ( var i = 0; i < saved_character_cookie_array.length; i++) {
-          console.log("Getting Character " +i+ " : " + saved_character_cookie_array[i]);
-          var character = $cookieStore.get(saved_character_cookie_array[i]);
-          if ( character ) {
-            console.log("Pushing Character Into Array : " + character.name);
-            $scope.saved_characters_array.push(character);
-          }
-        }
-      }
-      console.log("Saved Characters Array : " + JSON.stringify($scope.saved_characters_array));
-      console.log("Saved Characters Array : " + $scope.saved_characters_array.length );
-    }
-
-    $scope.deleteSavedCharacter = function(character_date_string) {
-      $cookieStore.remove(character_date_string);
-      var stored_char_strings = $cookieStore.get('characters');
-      var idx = stored_char_strings(character_date_string);
-      stored_char_strings.splice(idx,1);
-      $cookieStore.put('characters', stored_char_strings);
-    };
-
-    $scope.character = {
-      name: "",
-      clan: null,
-      family: null,
-      school: null,
-      experience_points: 0,
-      experience_points_earned: 0,
-      get initiative() { return ((this.insight_rank + this.reflexes) + "K" + this.reflexes); },
-      get current_tn() { return ((this.reflexes * 5 ) + 5); },
-      insight       : 100,
-      insight_rank  : 1,
-      earth         : 2,
-      air           : 2,
-      water         : 2,
-      fire          : 2,
-      void          : 2,
-      void_s        : 2,
-      stamina       : 2,
-      stamina_s     : 2,
-      willpower     : 2,
-      willpower_s   : 2,
-      reflexes      : 2,
-      reflexes_s    : 2,
-      awareness     : 2,
-      awareness_s   : 2,
-      strength      : 2,
-      strength_s    : 2,
-      perception    : 2,
-      perception_s  : 2,
-      agility       : 2,
-      agility_s     : 2,
-      intelligence  : 2,
-      intelligence_s: 2,
-      armor         : { rating:0, bonus:0, notes:""},
-      get armor_tn() { return ( 5 * this.reflexes + 5 + this.armor.rating + this.armor.bonus ); },
-      honor         : 0,
-      glory         : 0,
-      'status'      : 0,
-      taint         : 0,
-      skills        : [],
-      spells        : [],
-      key_word_bonus: '',
-      spell_affinity: {air:false, earth:false, fire:false, water:false, void:false },
-      spell_deficiency: {air:false, earth:false, fire:false, water:false, void:false },
-      get wounds() { return ( ((this.earth * 2) * this.insight_rank) + " : " + (this.earth * 5)); },
-      get healing() { return ( this.stamina * 2 + this.insight_rank ); },
-      healing_modifiers:0,
-      get current_heal_rate() { return ( (this.stamina * 2) + this.insight_rank + this.healing_modifiers + " per day" ); },
-      weapon_one    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
-      weapon_two    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
-    };
-    
-    $scope.clansMasterList = [
+    var clansMasterList = [
       {id:0, name:'Crab', bonus:''},	    
       {id:1, name:'Crane', bonus:''},	    
       {id:2, name:'Dragon', bonus:''},	    
@@ -165,8 +51,8 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       //{id:17, name:'Sparrow', bonus:''},	    
       //{id:18, name:'Firefly', bonus:''},	    
     ];
-    
-    $scope.familiesMasterList = [
+   
+    var familiesMasterList = [
       {id:0, name:'Hida', clan:'Crab', bonus:{ strength:1 }, },
       {id:1, name:'Hiruma', clan:'Crab', bonus:{ agility:1 } },
       {id:2, name:'Kaiu', clan:'Crab', bonus:{ intelligence:1 } },
@@ -181,7 +67,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       {id:11, name:'Kitsu', clan:'Lion', bonus:{ stamina:1 } },
     ];
 
-    $scope.schoolsMasterList = [
+    var schoolsMasterList = [
       {id:0, name:'Hida Bushi', clan:'Crab', bonus:{ stamina:1, honor:3.5, skills:[56, 58, 65, 90, 66, 36, '+1 bugei'], techniques:{1:'The Way of the Crab Pg. 106', 2:'The Mountain Does Not Move. Pg. 106', 3:'Two Pincers, One Mind. Pg. 106', 4:'Devastating Blow. Pg. 106', 5:'The Mountain Does Not Fall. Pg. 107' } } },
       {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['10:1','36::2',39,54,'+1 weapon skill'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
       {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['76:0',11,58,13,90,'53:1','+1 merchant skill'], techniques:{1:'The Way of the Carp. pg. 107', 2:'Do As We Say. pg. 108', 3:'Treasures of the Carp. pg 108', 4:'Wiles of the Carp. pg 108', 5:'What is Yours is Mine. pg 108'} } },
@@ -196,149 +82,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       {id:12, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:1',13,31,39,54,'1 high or bugie skill'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}} },
     ];
 
-    $scope.calculateBonus = function(obj) {
-      var key;
-      for( key in obj ) {
-        console.log("KEY : " + key + "  VALUE: " + obj[key]);
-        switch(key) {
-          case 'stamina':
-            $scope.character.stamina +=  obj[key];
-            break;
-          case 'willpower':
-            $scope.character.willpower +=  obj[key];
-            break;
-          case 'reflexes':
-            $scope.character.reflexes +=  obj[key];
-            break;
-          case 'awareness':
-            $scope.character.awareness +=  obj[key];
-            break;
-          case 'agility':
-            $scope.character.agility +=  obj[key];
-            break;
-          case 'intelligence':
-            $scope.character.intelligence +=  obj[key];
-            break;
-          case 'strength':
-            $scope.character.strength +=  obj[key];
-            break;
-          case 'perception':
-            $scope.character.perception +=  obj[key];
-            break;
-          case 'honor':
-            $scope.character.honor +=  obj[key];
-            break;
-          case 'affinity':
-            var ring = obj[key];
-            $scope.character.affinity.ring = true;
-            break;
-          case 'deficiency':
-            var ring = obj[key];
-            $scope.character.deficiency.ring = true;
-            break;
-          case 'skills':
-              for(var i=0; i < obj[key].length; i++ ) {
-                console.log("Add this skill: " + obj[key][i] );
-                var skill =  obj[key][i];
-                if ( isFinite(skill) ) {
-                  $scope.addASkill(skill, 1);
-                } else if ( skill.match(/:/) ) {
-                  var arr = skill.split(":");
-		          var skill = arr[0];
-		          var emp = (arr[1]) ? arr[1] : null;
-		          var lvl = (arr[2]) ? arr[2] : 1;
-                  $scope.addASkill(skill, lvl, emp);
-		        } else {
-                  alert("You Also Get " + skill + " skill");
-                  $scope.skillSearchText = "bugei";
-                  $scope.toggleShowSkillsList();
-                }
-              }
-            break;
-          case 'techniques':
-            break;
-        }
-      }
-    };
-
-    $scope.addASkill = function(skill_id, rank, emp) {
-      var skill = $scope.getSkillFromMasterList(skill_id);
-      var lvl = ( rank )? rank : 0;
-      var emph = ( emp ) ? emp : null;
-      var new_skill = { id:skill_id, rank:lvl, rank_s:lvl, emphasis:emph, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
-      if ( $scope.getCharacterSkillById(skill_id) === null) {
-        $scope.character.skills.push(new_skill);
-      }
-      if (emp) {
-      
-      }
-    };
-
-    $scope.getSkillFromMasterList = function(skill_id, attr) {
-      for(var i=0; i < $scope.skillsMasterList.length; i++) {
-        if ( $scope.skillsMasterList[i].id === skill_id ) {
-          if (attr === null || attr === undefined) {
-            return $scope.skillsMasterList[i];
-          } else if ( attr === 'mastery') {
-            return $scope.skillsMasterList[i].mastery;
-          } else {
-            return $scope.skillsMasterList[i][attr];
-          }
-        }
-      }
-      return "(error)";
-    };
-
-    $scope.getCharacterSkillById = function(skill_id) {
-      for(var i = 0; i < $scope.character.skills.length; i++) {
-        if ( $scope.character.skills[i] != undefined ) {
-          if ( $scope.character.skills[i].id === skill_id ) {
-            return $scope.character.skills[i];
-          }
-        }
-      }
-      return null;
-    };
-
-    var getSkillRoll = function(skill_id, skill_rank) {
-      var skill = $scope.getSkillFromMasterList(skill_id);
-      if ( skill ) {
-        var trait = skill.trait;
-        var ring  = skill.ring;
-        var roll =  ( skill_rank + $scope.character[trait] ) + "K" + $scope.character[ring];
-        return roll;
-      } else {
-        return '0K0';
-      }
-    };
-
-    var skillMastery = function(obj) {
-      var master_skill = $scope.getSkillFromMasterList(obj.id);
-      if ( master_skill ) {
-        var text = '';
-        for(var x in master_skill.masteries ) {
-          if ( obj.rank >= x ) {
-            text += "Level " + x + " : " + master_skill.masteries[x] + "<br />\n";
-          }
-        }
-        return text;
-      } else {
-        return 'none';
-      }
-    };
-
-    var mastery = function(obj) {
-      var text = '';
-      for(var x in obj.masteries ) {
-        if ( obj.rank >= x ) {
-          text += "Level " + x + " : " + obj.masteries[x] + "<br />\n";
-        }
-      }
-      // console.log("Text: " + text);
-      return text;
-    };
-
-    $scope.skillsMasterList = [
+    var skillsMasterList = [
       // id:, level, type, subtype, trait, ring, rank, roll, emphasis, emphases{}, get mastery(), masteries{}, description
       { id:1000, level:'Debug', type:'Debug', sub_type:'debug', trait:'void', ring:'void', emphases:{0:'E Zero', 1:'E One', 2:'E Two'}, get mastery() { return mastery(this); }, masteries:{ 3:'M Three', 5:'M Five', 7:'M Seven'}, description:'debug description'},
       { id:0, level:'High', type:'Artisan', sub_type:'', trait:'awareness', ring:'air', emphases: {0:'Bonsai', 1:'Gardening', 2:'Ikebana', 3:'Origami', 4:'Painting', 5:'Poetry', 6:'Sculpture', 7:'Tattooing'}, description:'Pg. 135 Core Book'},
@@ -435,391 +179,9 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       { id:93, level:'Low', type:'Temptation*', sub_type:'Social Skill', trait:'awareness', ring:'air', emphases:{0:'Bribery', 1:'Seduction'}, get mastery() { return mastery(this); }, masteries:{5:'Character gains +5 Bonus to the total of any contested Roll using Temptation.'}, description:'Pg. 143 Core Book'},
     ];
 
-
-  }]);//end main controller
-
-  angular.module('myApp').controller('HomeController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
-
-    $scope.test = "Home Controller";
-
-    $scope.loadSavedCharacter = function(index) {
-      $scope.character = $scope.saved_character_array[index];
-      console.log("HC: Load Saved Character :" + $scope.character);
-    };
-
-  }]);//end HomeController
-
-  angular.module('myApp').controller('CharacterController', ['$scope', '$cookieStore', function($scope, $cookieStore ) {
-
-    $scope.test = "Character Controller";
-
-    $scope.saveCharacter = function() {
-      var d = new Date();
-      var date_string = d.toString().replace(/ /g, "_");
-      var date_string = d.toString().replace(/:/g, "-");
-      console.log("Date : " + date_string );
-
-      var stored_chars = $cookieStore.get('characters');
-      if ( stored_chars != null ) {
-        for( var i=0; i < stored_chars.length; i++ ) {
-          $scope.saved_characters_date_array.push(stored_chars[i]);
-        }
-      }
-      $scope.saved_characters_date_array.push('character_' + date_string);
-      console.log("Saved Character Dates: " + $scope.saved_characters_date_array);
-      $cookieStore.put('characters', $scope.saved_characters_date_array  );
-      $cookieStore.put('character_' + date_string, $scope.character);
-    };
-
-
-
-    $scope.updateExp = function(attr, value) {
-      var cost = 4;
-      if ( attr == 'void') {
-        cost = 6;
-      }
-      //console.log(attr + " : val: " + value + " Old Val: " + $scope.character[attr + "_s"]);
-      if ( $scope.character[attr] > $scope.character[attr + "_s"] ) {
-          $scope.character.experience_points -= ( value * cost );
-           } else if ( $scope.character[attr] < $scope.character[attr + "_s"] ) {
-          $scope.character.experience_points += ($scope.character[attr + "_s"] * cost );
-          $scope.character[attr + "_s"] = $scope.character[attr];
-      } else {
-          //console.log("No Change to " + attr);
-      } };
-    $scope.updateEarth = function(attr, value) {
-      $scope.updateExp(attr,value);
-      if ( $scope.character.stamina === $scope.character.willpower) {
-        $scope.character.earth = $scope.character.stamina;
-      } else if ( $scope.character.willpower <  $scope.character.stamina ) {
-        $scope.character.earth = $scope.character.willpower;
-      } else if ( $scope.character.stamina < $scope.character.willpower ) {
-        $scope.character.earth = $scope.character.stamina;
-      }
-      $scope.updateInsightRank();
-      //$scope.updateSkills(attr,'earth');
-    };
-    $scope.updateAir = function(attr, value) {
-      $scope.updateExp(attr,value);
-      if ( $scope.character.reflexes === $scope.character.awareness) {
-        $scope.character.air = $scope.character.reflexes;
-      } else if ( $scope.character.reflexes <  $scope.character.awareness ) {
-        $scope.character.air = $scope.character.reflexes;
-      } else if ( $scope.character.awareness < $scope.character.reflexes ) {
-        $scope.character.air = $scope.character.awareness;
-      }
-      $scope.updateInsightRank();
-      //$scope.updateSkills(attr,'air');
-    };
-    $scope.updateWater = function(attr, value) {
-      $scope.updateExp(attr,value);
-      if ( $scope.character.strength === $scope.character.perception) {
-        $scope.character.water = $scope.character.strength;
-      } else if ( $scope.character.strength <  $scope.character.perception ) {
-        $scope.character.water = $scope.character.strength;
-      } else if ( $scope.character.perception < $scope.character.strength ) {
-        $scope.character.water = $scope.character.perception;
-      }
-      $scope.updateInsightRank();
-      //$scope.updateSkills(attr,'water');
-    };
-    $scope.updateFire = function(attr, value) {
-      $scope.updateExp(attr,value);
-      if ( $scope.character.agility === $scope.character.intelligence) {
-        $scope.character.fire = $scope.character.agility;
-      } else if ( $scope.character.agility <  $scope.character.intelligence ) {
-        $scope.character.fire = $scope.character.agility;
-      } else if ( $scope.character.intelligence < $scope.character.agility ) {
-        $scope.character.fire = $scope.character.intelligence;
-      }
-      $scope.updateInsightRank();
-      //$scope.updateSkills(attr,'fire');
-    };
-    $scope.updateVoid = function(attr, value) {
-      $scope.updateExp(attr,value);
-      $scope.updateInsightRank();
-      //$scope.updateSkills(attr,'void');
-    };
-
-    $scope.updateInsightRank = function() {
-      var skillRanks = 0;
-      for(var i = 0; i < $scope.character.skills.length; i++) {
-        if ( $scope.character.skills[i] != undefined ) {
-          skillRanks += $scope.character.skills[i].rank;
-        }
-      }
-      $scope.character.insight = skillRanks + (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10);
-    };
-
-    $scope.showClansList = false;
-    $scope.toggleShowClansList = function() {
-        $scope.showClansList = !$scope.showClansList;
-    };
-
-    //$scope.selectClan = function(id) {
-    //  console.log("Select Clan : " + id );
-    //  $scope.character.clan = $scope.clansMasterList[id];
-    //  $scope.toggleShowClansList();
-    //};
-
-    $scope.showFamiliesList = false;
-    $scope.toggleShowFamiliesList = function() {
-        $scope.showFamiliesList = !$scope.showFamiliesList;        
-    };
-
-    $scope.selectFamily = function(id) {
-      $scope.character.family = $scope.familiesMasterList[id];
-      $scope.toggleShowFamiliesList();
-      $scope.calculateBonus( $scope.familiesMasterList[id].bonus );
-    };
-
-    $scope.showSchoolsList = false;
-    $scope.toggleShowSchoolsList = function() {
-      $scope.showSchoolsList = !$scope.showSchoolsList;
-    };
-
-    $scope.selectSchool = function(id) {
-      $scope.character.school = $scope.schoolsMasterList[id];
-      $scope.toggleShowSchoolsList();
-      $scope.calculateBonus( $scope.schoolsMasterList[id].bonus );
-    };
-
-  }]);//end CharacterController
-
-  angular.module('myApp').controller('SkillsController', function($scope) {
-
-    $scope.test = "Skills Controller";
-
-    $scope.clickedSkillRank = null;
-    $scope.showSkillList = false;
-    $scope.skillSearchText = "";
-    $scope.skillSearchFilterHigh = "type = 'high'";
-    $scope.skillSearchFilterLow = "type = 'low'";
-    $scope.skillSearchFilterBugei = "type = 'bugei'";
-    $scope.skillSearchFilterMerchant = "type = 'merchant'";
-    $scope.skillSearchFilterLow = "type = 'low'";
-
-    $scope.toggleShowSkillsList = function() {
-        $scope.showSkillsList = !$scope.showSkillsList;
-        $scope.skillSearchText = ""
-    };
-
-    $scope.emphasesList = ["One", "Two"];
-    $scope.currentSkillId = null;
-    $scope.showEmphasesList = false;
-
-    $scope.toggleShowEmphasesList = function(skill_id) {
-        //console.log("Skill Id : " + skill_id);
-        $scope.currentSkillId = skill_id;
-        //console.log("Current Skill Id : " + $scope.currentSkillId);
-        $scope.emphasesList = [];
-        var skill = $scope.getSkillFromMasterList(skill_id);
-    if ( skill ) {
-        //console.log("FOUND skill : " + skill_id);
-          for ( var i in skill.emphases ) {
-            $scope.emphasesList.push( skill.emphases[i] ) ;
-          }
-    }
-        $scope.showEmphasesList = !$scope.showEmphasesList;
-    };
-
-    var getSkillRoll = function(skill_id, skill_rank) {
-      var skill = $scope.getSkillFromMasterList(skill_id);
-      //console.log("get Roll of skill : " + skill_id + " with rank of " + skill_rank);
-      if ( skill ) {
-        //console.log("found skill : " + skill + " :: " + JSON.stringify(skill_rank));
-        var trait = skill.trait;
-        var ring  = skill.ring;
-        var roll =  ( skill_rank + $scope.character[trait] ) + "K" + $scope.character[ring];
-        return roll;
-      } else {
-        return '0K0';
-      }
-    };
-
-    var skillMastery = function(obj) {
-      //console.log("get Mastery of skill : " + obj.id + " with rank of " + obj.rank);
-      var master_skill = $scope.getSkillFromMasterList(obj.id);
-      if ( master_skill ) {
-        //console.log("Master Skill: " + JSON.stringify(master_skill));
-        //console.log("Master Skill Masteries: " + JSON.stringify(master_skill.masteries));
-        var text = '';
-        for(var x in master_skill.masteries ) {
-          if ( obj.rank >= x ) {
-            text += "Level " + x + " : " + master_skill.masteries[x] + "<br />\n";
-          }
-    }
-        //console.log("Text: " + text);
-        return text;
-      } else {
-        return 'none';
-      }
-    };
-
-    $scope.addSkill = function(skill_id) {
-      //console.log("Before Skills1 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
-      var skill = $scope.getSkillFromMasterList(skill_id);
-      var new_skill = { id:skill_id, rank:0, rank_s:0, emphasis:null, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
-      //console.log("Make Sure Skill " + skill_id + " does not exist");
-      if ( getCharacterSkillById(skill_id) === null) {
-        //console.log("Add Skill " + skill_id );
-        //console.log("Before Skills2 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
-        $scope.character.skills.push(new_skill);
-        //console.log("After Skills1 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
-        $scope.toggleShowSkillsList();
-      } else {
-        //console.log("skill " + skill_id + " already exists");
-      }
-        //console.log("After Skills2 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
-    };
-
-    $scope.getSkill = function(skill_id, attr) {
-        //console.log("Get : " + attr);
-        return $scope.getSkillFromMasterList(skill_id, attr);
-    };
-
-    $scope.getSkillFromMasterList = function(skill_id, attr) {
-    //console.log("getSkillFromMasterList(" + skill_id + "," + attr + ")");
-      for(var i=0; i < $scope.skillsMasterList.length; i++) {
-        if ( $scope.skillsMasterList[i].id === skill_id ) {
-          if (attr === null || attr === undefined) {
-            //console.log("Return skill: " + JSON.stringify($scope.skillsMasterList[i]) );
-            return $scope.skillsMasterList[i];
-          } else if ( attr === 'mastery') {
-            //console.log("Get Mastery FOO: ");
-            return $scope.skillsMasterList[i].mastery;
-          } else {
-            //console.log("Return attr: " + $scope.skillsMasterList[i][attr] );
-            return $scope.skillsMasterList[i][attr];
-          }
-        }
-      }
-      return "(error)";
-    };
-
-    $scope.removeSkill = function(id) {
-       // METHOD OF GIVING BACK ALL EXP PTS WHEN SKILL IS Removed!
-       replaceCharacterSkillById(id, null);
-    };
-
-    $scope.addEmphasis = function(emp_index) {
-      console.log("ADD EMPHASIS TWO");
-      var master_skill = $scope.getSkillFromMasterList($scope.currentSkillId);
-      var emp = master_skill.emphases[emp_index];
-      var skill = getCharacterSkillById($scope.currentSkillId);
-      skill.emphasis = emp;
-      //console.log("Add Emphasis Index : " + emp_index + " to Character Skill Id : " + $scope.currentSkillId + " Emp: " + emp + " Emphasis: " + skill.emphasis );
-      replaceCharacterSkillById($scope.currentSkillId, skill);
-      $scope.character.experience_points -= 2;
-      $scope.toggleShowEmphasesList();
-    }
-
-    var getCharacterSkillById = function(skill_id) {
-      //console.log("Before Skills : " + JSON.stringify($scope.character.skills) + " (getCharacterSkillById)");
-      for(var i = 0; i < $scope.character.skills.length; i++) {
-        //console.log("Each Skill " + JSON.stringify($scope.character.skills[i]));
-        if ( $scope.character.skills[i] != undefined ) {
-          if ( $scope.character.skills[i].id === skill_id ) {
-            //console.log("Afterr Skills : " + JSON.stringify($scope.character.skills) + " (getCharacterSkillById)");
-            //console.log("Skill " + skill_id + " FOUND (getcharacterskillbyid)");
-            return $scope.character.skills[i];
-          }
-        }
-      }
-      //console.log("Skill " + skill_id + " Not Found (getcharacterskillbyid)");
-      return null;
-    };
-
-    var replaceCharacterSkillById = function(skill_id, skill) {
-      for(var i = 0; i < $scope.character.skills.length; i++) {
-        if ( $scope.character.skills[i] != undefined ) {
-          //console.log("Skill : " + JSON.stringify($scope.character.skills[i]) + "  Skill Id : " + $scope.character.skills[i].id + "  i:" + i + "(replaceCharacterSkillById)");
-          if ( $scope.character.skills[i].id === skill_id ) {
-            if ( skill === null ) {
-              //console.log("Remove Skill");
-              $scope.character.skills.splice(i,1);
-              return;
-            } else {
-              //console.log("Replace Skill");
-              $scope.character.skills.splice(i,1,skill);
-              //console.log("Before Skills : " + JSON.stringify($scope.character.skills) + " (replaceCharacterSkillById)");
-              //$scope.character.skills.push(skill);
-              //console.log("After Skills : " + JSON.stringify($scope.character.skills) + " (replaceCharacterSkillById)");
-              return;
-            }
-          }
-        }
-      }
-    }
-
-    $scope.updateSkillRank = function(id) {
-      //console.log("Before Skills : " + JSON.stringify($scope.character.skills) + " (updateSkillRank)");
-      var skill = getCharacterSkillById(id);
-      if ( skill != null && skill.id >= 0 ) {
-        if ( skill.rank < skill.rank_s ) {
-          var diff = skill.rank_s - skill.rank;
-          $scope.character.experience_points += skill.rank_s;
-          $scope.character.insight -= diff;
-        } else if ( skill.rank > skill.rank_s ) {
-          var diff = skill.rank - skill.rank_s;
-      $scope.character.experience_points -= skill.rank;
-          $scope.character.insight += diff;
-        }
-        skill.rank_s = skill.rank;
-        replaceCharacterSkillById(id, skill);
-        $scope.updateInsightRank();
-      } else {
-        //console.log("Skill Not Found (updateskillrank)");
-      }
-    };
-
-  });//end SkillsController
-
-  angular.module('myApp').controller('SpellsController', function($scope) {
-
-    $scope.test = "Spells Controller";
-    $scope.spellSearchFilter;
-    $scope.spellSearchText = "";
-
-    var spellRoll = function(obj) {
-      var roll = '';
-      var spell_ring = obj.ring;
-      var insight_rank = $scope.character.insight_rank;
-      var ring_val = "R"
-      var affinity = "+AD+";
-      var bonus = '';
-      if ( doesCharacterHaveSpellcraftBonus() && spell_ring != 'all' ) {
-          bonus = 1;
-      } else if ( doesCharacterHaveSpellcraftBonus() && spell_ring == 'all' ) {
-          bonus = "+1";
-      } 
-      if ( spell_ring != 'all' ) {
-        ring_val = $scope.character[spell_ring];
-        affinity = 0;
-      }
-      if ( $scope.character.spell_affinity[spell_ring] == true ) {
-          affinity = 1;
-      }
-      if ( $scope.character.spell_deficiency[spell_ring] == true ) {
-          affinity = -1;
-      }
-      roll = ring_val + ( bonus ) + ( affinity + insight_rank ) + 'K' + ring_val;
-      return roll;
-    };
-
-    var doesCharacterHaveSpellcraftBonus = function() {
-      for(var i=0; i < $scope.character.skills.length; i++) {
-        if( $scope.character.skills[i].id == 54 ) { // 54 is the spellcraft skill id in the skillsMasterList
-          if(  $scope.character.skills[i].rank >= 5 ) {
-            return true;
-          }
-        }
-      }
-    };
-
-    $scope.spellsMasterList = [
+    var spellsMasterList = [
       { id:0, name:'Sense', type:'', ring:'all', level: '1', range:'Personal', area_of_affect:'50\' radius from the caster', duration:'Instantaneous', raises: 'Range(+10\')', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the four standard elements. It allows for the caster to sense the presense, quantity, and rough location of the elemental spirits (not evil spirits known as <i>kansen</i> of that element within the range of the spell. This is most frequently applied when looking for spirits with which to Commune (See Commune), but can also can be useful as a crude basic location device. For example, a caster lost in the wilderness could cast Snese(Water) in hopes of locating the sourceof drinking water. Pg 166 Core Book' },
-      { id:1, name:'Summon', type:'', ring:'all', level: '1', range:'30\'', area_of_affect:'1 cubic foot of summoned matterial', duration:'Permanent', raises: 'Range(+10\'), Quantity(+1 cubic foot), Composition of Material(1-4 raises as outlined below)', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the tour standard elements. It allows the caster to summon a modest quantity (one cubic foot) of the chosen element. The summoned matter appears (usually in a rough ball shape] in any open space within the spell\'s range. This cannot place the summoned material inside another physical object or living creature. The summoned element will behave in a normal and mundane matter; earth falls to the ground, water soaks anything it lands on, air blows away, and fire winks out unless there is something present for it to burn. In general it is impossible to use this spell effectively in combat, although clever shugenja may find a few modest combat uses. such as using Summon [Fire] to ignite a foe soaked in cooking oil. More commonly, the Spell\'s value is in simpler functions. such as summoning Water while in a desert, or summoning Fire to light a campfire without flint and tinder. Raises may be used with this spell to summon a more specfic type of the appropriate element, such as wood or iron with Earth, or tea with Water. The GM should choose how many Raises (generally anywhere from 1 to 4) this requires. However, these Raises <strong>cannot</strong> be used to create rare or precious materials (such as gold) or spiritually powerful substances (such as jade or crystal). Pg 166 Core Book' },
+      { id:1, name:'Summon', type:'', ring:'all', level: '1', range:'30\'', area_of_affect:'1 cubic foot of summoned matterial', duration:'Permanent', raises: 'Range(+10\'), Quantity(+1 cubic foot), Composition of Material(1-4 raises as outlined below)', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the tour standard elements. It allows the caster to summon a modest quantity (one cubic foot) of the chosen element. The summoned matter appears (usually in a rough ball shape) in any open space within the spell\'s range. This cannot place the summoned material inside another physical object or living creature. The summoned element will behave in a normal and mundane matter; earth falls to the ground, water soaks anything it lands on, air blows away, and fire winks out unless there is something present for it to burn. In general it is impossible to use this spell effectively in combat, although clever shugenja may find a few modest combat uses. such as using Summon [Fire] to ignite a foe soaked in cooking oil. More commonly, the Spell\'s value is in simpler functions. such as summoning Water while in a desert, or summoning Fire to light a campfire without flint and tinder. Raises may be used with this spell to summon a more specfic type of the appropriate element, such as wood or iron with Earth, or tea with Water. The GM should choose how many Raises (generally anywhere from 1 to 4) this requires. However, these Raises <strong>cannot</strong> be used to create rare or precious materials (such as gold) or spiritually powerful substances (such as jade or crystal). Pg 166 Core Book' },
       { id:2, name:'Commune', type:'', ring:'all', level: '1', range:'20\'', area_of_affect:'self', duration:'Concentration', raises: 'See Desc.', get roll() { return spellRoll(this); }, description:'This spell can be cast in any element save Void. It allows the caster to speak with one of the local elemental kami, asking it a few questions, which is will answer honestly to the best of it\'s ability. Typically this spell will invoke the most active and energetic spirit of the chosen element in the area of effect, if all of the local spirits are quiescent, the GM may require the caster to call 1 or 2 Raises to "wake up" a local spirit enough to answer questions. A Spirit reached with Commune will answer two questions. The caster may Raise to get more questions (one per Raise). The caster may also Raise for clarity, to get a more accurate and informative answer to the questions. (Kami are notorious for their inabiiity to fully comprehend human behavior, and asking questions without Raises for clarity can often result in confusing, enigmatic, or incomplete answers.) Spirits do not forget anything, so theoretically a shugenja can ask a spirit about something that happened decades ago, however, they also do not experience time in the same way as mortals, so trying to ask about something from long ago will usually require Raises in order to make the caster\'s wishes clear to the spirit. The nature of the information which spirits can impart varies by element. Air spirits tend to be playful and easily distracted, conveying information as emotions or as riddles and jokes. Since they are more interested in feelings than in facts, and enjoy playing games with those who speak with them, commuting with an Air spirit can sometimes be very frustrating. Earth spirits are straightforward and matter of fact, often blunt, but are also often rather uninterested in the behavior of mortals, have a poor understanding of human emotion, and tend to be overly focused on obscure details such as the color of a piece of clothing or the weight of a horse. Fire spirits are irritable and tempermental, and are often angry at being summoned unless they are propitiated with an offering of something to burn. 0n the other hand, if a shugenja can please them they tend to offer the clearest and most accurate information. Water spirits communicate their knowledge through soundless visual images. This can be very helpful to a shugenja trying to investigate a past incident, but since the spirits cannot convey scent, sound, or emotion, the information they provide can often be incomplete or misleading. Pg 166 Core Book' },
       { id:3, name:'Blessed Wind', type:'Defense', ring:'air', level:'1', range:'Personal', area_of_affect:'10\' radius around the caster', duration:'Concentration', raises:'Special(you may target another spell with this spell with 3 raises)', get roll() { return spellRoll(this); }, description:'You summon a swirling aura of winds to protect you from ranged attacks. The buffeting winds deflect arrows and other projectiles. While you maintain your concentration, this spell adds +15 to your Armor TN versus all non-magical ranged attacks. Pg 167 Core Book' },
       { id:4, name:'By the Light of the Moon', type:'', ring:'air', level:'1', range:'Touch', area_of_affect:'One Object', duration:'1 hour', raises:'Area (+5 radius), Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'You call upon the kami to reveal that which has been hide den. All concealed objects within the area of effect appear as slightly luminous outlines to you. Any non-magical conceale ment is revealed, including secret compartments, trap doors. concealed weapons, etc. Only you can see the presence of these objects. Pg 167 Core Book' },
@@ -831,7 +193,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       { id:10, name:'To Seek the Truth', type:'', ring:'air', level:'1', range:'Personal / Touch', area_of_affect:'One individual touched [may be the caster]', duration:'5 minutes', raises:'Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'You call upon the wind to purge the mind of your target, granting him clarity. This spell may negate temporary mental or social penalties suffered as a result of a mechanical effect, including Techniques, Wound Ranks, or other spells. The TN of the Spell Casting Roll made to cast this spell is increased by an amount equal to the Technique Rank, Wound Rank or spell Mastery Level used to create the penalty in the first place. Disadvantages permanently possessed by an individual may not be countered using this spell. Pg 168 Core Book' },
       { id:11, name:'Way of Deception', type:'Illusion', ring:'air', level:'1', range:'20\'', area_of_affect:'One illusory duplicate of the caster', duration:'Concentration +5 minutes', raises:'Area [+1 duplicate per 2 Raises]. Range [+5 feet], Special [see below]', get roll() { return spellRoll(this); }, description:'You can entreat the capricious spirits of the wind to create a perfect duplicate image of you a short distance away. The illusion exactly refects your appearance at the time the spell is cast, including your clothing and any equipment. The illusion may appear anywhere within the spell\'s range, and will perform whatever actions you perform while it is in effect. (If you sit down, for instance, your duplicate will sit down as well, even if there is nothing to sit on.) Once you leave the normal range of the spell, the duplicate disappears. if you make two Raises on the Spell Casting Roll, you may leave the area of effect and the illusion will remain in whatever position it was in when you left for as long as you continue concentrating on maintaining the spell. Pg 168 Core Book' },
       { id:12, name:'Yari or Air', type:'Craft, Thunder', ring:'air', level:'1', range:'Personal or 20\'', area_of_affect:'One created weapon', duration:'5 minutes', raises:'Damage (+lk0). Duration (+5 minutes). Range (+5 feet)', get roll() { return spellRoll(this); }, description:'You summon a swirling weapon of pure air. only visible as a foggy outline. The weapon\'s default form is a yari. but one Raise can change its form to any other spear of your choosing. The weapon has DR lkl. if you do not possess the Spears Skill, you may instead use your School Rank in its place. If you do possess the Spears Skill, using this weapon grants you one Free Raise that can only he used on the Feint or Increased Damage Maneuvers. This weapon disappears if is lost from your hand. instead of summoning the yari for yourself, you may cause it to appear in the hands of an ally within 20 feet. He is treated as the caster for all purposes of the spell, but he does not gain the Free Raise bonus. Pg 168 Core Book' },
-      { id:13, name:'Benten\'s Touch', type:'', ring:'air', level:'2', range:'Personal / Touch', area_of_affect:'Target individual [may be the caster]', duration:'1 hour', raises:'Range (may increase range to 5\' with a single Raise)', get roll() { return spellRoll(this); }, description:'By calling upon the air kami [0 whisper suggestions to others, you may cause them to perceive the target of this spell more positively than they otherwise might. The target of this spell gains a bonus of +lkl. plus your Air Ring, to the total of all Social Skill rolls made for the duration of the spell. Pg 168 Core Book' },
+      { id:13, name:'Benten\'s Touch', type:'', ring:'air', level:'2', range:'Personal / Touch', area_of_affect:'Target individual [may be the caster]', duration:'1 hour', raises:'Range (may increase range to 5\' with a single Raise)', get roll() { return spellRoll(this); }, description:'By calling upon the air kami to whisper suggestions to others, you may cause them to perceive the target of this spell more positively than they otherwise might. The target of this spell gains a bonus of +lkl. plus your Air Ring, to the total of all Social Skill rolls made for the duration of the spell. Pg 168 Core Book' },
       { id:14, name:'Call Upon the Wind', type:'Travel', ring:'air', level:'2', range:'Personal or 20\'', area_of_affect:'Target individual [may he the caster]', duration:'1 minute', raises:'Duration (+1 minute), Range (+5)', get roll() { return spellRoll(this); }, description:'The winds can lift and buoy, carrying even the heaviest burden into the skies for short periods. The target of this spell gains a limited form of ?ight. allowing him to move through the air unimpeded. The target of the spell may make Free Move Actions. but not Simple Move Actions, and may never move more than lO\' per round. Heavy winds can interfere with this movement or prevent it altogether. At the end of the spell\'s duration. the target drifts harmlessly to the ground. no matter how high he might be. Pg 168 Core Book' },
       { id:15, name:'Hidden Visage', type:'Illusion', ring:'air', level:'2', range:'Personal', area_of_affect:'Self', duration:'5 minutes', raises:'Area of Effect (another person in line of sight can be targeted by this spell by making three Raises), Duration (+5 minutes)', get roll() { return spellRoll(this); }, description:'Air kami are mischievous and capricious, and enjoy anything they perceive as a joke. You may call upon them to create a subtle illusion, altering your facial featuresjust enough that you appear to he a different person. This spell does not allow you to impersonate specific individuals, or even people radically different from you. You appear as a person of the same age. build, race. and gender. The differences are subtle, enough so that you could be mistaken for your own brother or cousin. Pg 168 Core Book' },
       { id:16, name:'The Kami\'s Whisper', type:'Illusion', ring:'air', level:'2', range:'50\'', area_of_affect:'10\' radius', duration:'1 round', raises:'Area (+5\' radius), Duration (+1 round), Range (+5\')', get roll() { return spellRoll(this); }, description:'The kami of the wind can carry whispers for great distances. and can even create them if properly entreated. You can petition the kami to create a false sound, either a voice or a natural sound such as an animal\'s growl or runing water. for example. The sound can he no louder than a normal speaking voice, and cannot impersonate a specific person\'s voice. if used to create the sound of a voice. the spell is limited to twenty words. Pg 169 Core Book' },
@@ -846,7 +208,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       { id:25, name:'Summoning the Gale', type:'Defense', ring:'air', level:'3', range:'50\'', area_of_affect:'Target individual (may be the caster)', duration:'Concentration', raises:'Range (+5\')', get roll() { return spellRoll(this); }, description:'Swirling winds can he commanded to circle a designated target, preventing ranged attacks being made in either direction. This spell affects an area thirty feet around the target in all directions. Everyone within the affected area gains at +15 bonus to their Armor TN against ranged attacks. However. everyone within the area also suffers a penalty of -3k3 to all ranged attack rolls. Pg 170 Core Book' },
       { id:26, name:'Summon Fog', type:'', ring:'air', level:'3', range:'100\'', area_of_affect:'50\' radius', duration:'1 minute', raises:'Area (+5\' radius), Duration (+1 minute), Range (+10)', get roll() { return spellRoll(this); }, description:'The kami can be petitioned to coalesce in an area as they do on the coast, creating a thick. obscuring fog. Within the area affected by your spell, the Visibility is decreased to a meager ?ve feet. Fabrics and other absorbent materials within the spell\'s area of effect will become damp or even wet if they remain within it long enough. Small sources of open flame, such as candles, might be extinguished as well, at the GM\'s discretion. The moistness of fog is extremely damaging to rice paper. Pg 170 Core Book' },
       { id:27, name:'Your Heart\'s Enemy', type:'Illusion', ring:'air', level:'3', range:'25\'', area_of_affect:'One Target Individual', duration:'5 rounds', raises:'Duration (+1 round). Range (+5\')', get roll() { return spellRoll(this); }, description:'The kami can see into the hearts of mortals, and can use that information at a shugenja\'s request. You manifest the kami as an illusion of the thing your target fears most in the world. it may be an individual (the man who killed his father), or an item (a cursed blade that brought ruin to his family), or even a vista of some sort (an image of an enemy slaying his family). This effectively generates Fear 4 that the target must overcome (see the Book of Earth for rules regarding Fear). Only the target can see the specifics of the illusion; others see only a hazy outline that appears to he a small fog cloud. Pg 171 Core Book' },
-      { id:28, name:'Call the Spirit', type:'', ring:'air', level:'4', range:'Special', area_of_affect:'Target Spirit', duration:'5 minutes', raises:'Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'Essentially an extremely powerful. specific form of the basic spell Summon. Call the Spirit allows a shugenja to summon any particular spirit, regardless ofits realm, to have a discussion. You may use this speil to summon any spirit from any of the spirit realms, although realm denizens that are not spirits (such as Fortunes) are immune. If you know something; specific about the spirit, either having seen it before or having intimate knowledge ofits actions [for example, "the spirit that killed my father"), you may summon that spirit in particular. The nature of the spell prevents the spirit from attacking you unless you attack first, but it will not necessarily be friendly. The spirit disappears as soon as the spell\'s duration expires. This spell can potentially summon extremely dangerous crear tures, such as oni, and should be used with caution. Pg 171 Core Book' },
+      { id:28, name:'Call the Spirit', type:'', ring:'air', level:'4', range:'Special', area_of_affect:'Target Spirit', duration:'5 minutes', raises:'Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'Essentially an extremely powerful. specific form of the basic spell Summon. Call the Spirit allows a shugenja to summon any particular spirit, regardless ofits realm, to have a discussion. You may use this speil to summon any spirit from any of the spirit realms, although realm denizens that are not spirits (such as Fortunes) are immune. If you know something; specific about the spirit, either having seen it before or having intimate knowledge ofits actions (for example, "the spirit that killed my father"), you may summon that spirit in particular. The nature of the spell prevents the spirit from attacking you unless you attack first, but it will not necessarily be friendly. The spirit disappears as soon as the spell\'s duration expires. This spell can potentially summon extremely dangerous crear tures, such as oni, and should be used with caution. Pg 171 Core Book' },
       { id:29, name:'False Realm', type:'Battle, Illusion', ring:'air', level:'4', range:'250\'', area_of_affect:'100\' radius', duration:'1 hour', raises:'Area (+10\' radius), Duration (+10 minutes)', get roll() { return spellRoll(this); }, description:'The greatest masters of the wind can create illusions of such beauty and clarity that those affected by them might truly believe they were somewhere else. You can completely a1ter the appearance of the terrain within the area of effect of this spell. You can make a miserable swamp look, sound, and smell like a beautiful garden, or vice versa. Although these illusions can be extraordinarily intricate and completely con~ vincing to all other senses, they still have no substance and cannot be touched. Pg 171 Core Book' },
       { id:30, name:'Gift of Wind', type:'Illusion', ring:'air', level:'4', range:'Personal', area_of_affect:'Self', duration:'5 minutes', raises:'Duration (+1 minute)', get roll() { return spellRoll(this); }, description:'The ultimate gift of the wind spirits is to become like the wind itself: unseen. The wind kami surround you and render you completely invisible. No nonsmagical vision can detect your presence. You can still be touched, heard, and smelled, but unless you attack someone else, you remain invisible for the duration of the spell. The kami consider attacking someone to be ruining thejoke, and immediately end the spell\'s effect if you do so. Pg 171 Core Book' },
       { id:31, name:'Know the Mind', type:'', ring:'air', level:'4', range:'10\'', area_of_affect:'Target Individual', duration:'3 rounds', raises:'Duration (+1 round), Range (+5\')', get roll() { return spellRoll(this); }, description:'Although the ultimate secrets of the human mind are hidden even to the winds, air kami can pluck the most immediate thoughts from the minds of others and whisper them to those who carry their favor. For the duration of this spell, you essentially hear the surface thoughts of the spell\'s target. You only learn things they are actively thinking about. For example, if you asked the name of the target\'s daughter, that name would appear in their mind instantly even if they had no intention of speaking it aloud. A Contested Roll using your Perception against the target\'s Awareness will also allow you to assess their true emotional state, regardless of how they appear physically. Pg 171 Core Book' },
@@ -948,6 +310,677 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       { id:189, name:'', ring:'void', type:'', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 185 Core Book' },
     ];
 
+    //this.getSkillFromMasterList = function(skill_id, attr) {
+    //  for(var i=0; i < skillsMasterList.length; i++) {
+    //    if ( skillsMasterList[i].id === skill_id ) {
+    //      if (attr === null || attr === undefined) {
+    //        return skillsMasterList[i];
+    //      } else if ( attr === 'mastery') {
+    //        return skillsMasterList[i].mastery;
+    //      } else {
+    //        return skillsMasterList[i][attr];
+    //      }
+    //    }
+    //  }
+    //  return "(error)";
+    //};
+ 
+    this.skillsMasterList = function() {
+      return skillsMasterList;
+    }
+
+    this.spellsMasterList = function() {
+      return spellsMasterList;
+    }
+
+    this.clansMasterList = function() {
+      return clansMasterList;
+    }
+
+    this.familiesMasterList = function() {
+      return familiesMasterList;
+    }
+
+    this.schoolsMasterList = function() {
+      return schoolsMasterList;
+    }
+
+    this.getSkillFromMasterList = function(skill_id, attr) {
+    //console.log("getSkillFromMasterList(" + skill_id + "," + attr + ")");
+      for(var i=0; i < skillsMasterList.length; i++) {
+        if ( skillsMasterList[i].id === skill_id ) {
+          if (attr === null || attr === undefined) {
+            //console.log("Return skill: " + JSON.stringify(skillsMasterList[i]) );
+            return skillsMasterList[i];
+          } else if ( attr === 'mastery') {
+            //console.log("Get Mastery FOO: ");
+            return skillsMasterList[i].mastery;
+          } else {
+            //console.log("Return attr: " + $scope.skillsMasterList[i][attr] );
+            return skillsMasterList[i][attr];
+          }
+        }
+      }
+      return "(error)";
+    };
+
+    this.getSpellFromMasterList = function(spell_id, attr) {
+      for(var i=0; i < spellsMasterList.length; i++) {
+        if ( spellsMasterList[i].id === spell_id ) {
+          if (attr === null || attr === undefined ) {
+            return spellsMasterList[i];
+          } else {
+            return spellsMasterList[i][attr];
+          }
+        }
+      }
+      return "(error)";
+    };
+
+  });
+
+  angular.module('myApp').service('LoadCharacterService', ['$cookieStore', function($cookieStore) {
+
+    var saved_characters_array = [];
+
+    this.returnSavedCharacter = function(index) {
+      return saved_character_array[index];
+    };
+
+    this.loadCharacters = function() {
+      var saved_character_cookie_array = $cookieStore.get('characters');
+      saved_characters_array = [];
+      if ( saved_character_cookie_array ) {
+        for ( var i = 0; i < saved_character_cookie_array.length; i++) {
+          console.log("Getting Character " +i+ " : " + saved_character_cookie_array[i]);
+          var character = $cookieStore.get(saved_character_cookie_array[i]);
+          if ( character ) {
+            console.log("Pushing Character Into Array : " + character.name);
+            saved_characters_array.push(character);
+          }
+        }
+      }
+      console.log("Saved Characters Array : " + saved_characters_array);
+      console.log("Saved Characters Array : " + saved_characters_array.length );
+      return saved_characters_array;
+    }
+
+    this.deleteSavedCharacter = function(character_date_string) {
+      $cookieStore.remove(character_date_string);
+      var stored_char_strings = $cookieStore.get('characters');
+      var idx = stored_char_strings(character_date_string);
+      stored_char_strings.splice(idx,1);
+      $cookieStore.put('characters', stored_char_strings);
+    };
+
+  }]);
+
+  angular.module('myApp').controller('MainController', ['$scope', '$cookieStore', 'ModalService', 'DataService', 'LoadCharacterService', function($scope, $cookieStore, ModalService, DataService, LoadCharacterService) {
+
+    $scope.test = "Main Controller";
+    
+    $scope.character = {
+      name: "",
+      clan: null,
+      family: null,
+      school: null,
+      experience_points: 0,
+      experience_points_earned: 0,
+      get initiative() { return ((this.insight_rank + this.reflexes) + "K" + this.reflexes); },
+      get current_tn() { return ((this.reflexes * 5 ) + 5); },
+      insight       : 100,
+      insight_rank  : 1,
+      earth         : 2,
+      air           : 2,
+      water         : 2,
+      fire          : 2,
+      void          : 2,
+      void_s        : 2,
+      stamina       : 2,
+      stamina_s     : 2,
+      willpower     : 2,
+      willpower_s   : 2,
+      reflexes      : 2,
+      reflexes_s    : 2,
+      awareness     : 2,
+      awareness_s   : 2,
+      strength      : 2,
+      strength_s    : 2,
+      perception    : 2,
+      perception_s  : 2,
+      agility       : 2,
+      agility_s     : 2,
+      intelligence  : 2,
+      intelligence_s: 2,
+      armor         : { rating:0, bonus:0, notes:""},
+      get armor_tn() { return ( 5 * this.reflexes + 5 + this.armor.rating + this.armor.bonus ); },
+      honor         : 0,
+      glory         : 0,
+      'status'      : 0,
+      taint         : 0,
+      skills        : [],
+      spells        : [],
+      key_word_bonus: '',
+      spell_affinity: {air:false, earth:false, fire:false, water:false, void:false },
+      spell_deficiency: {air:false, earth:false, fire:false, water:false, void:false },
+      get wounds() { return ( ((this.earth * 2) * this.insight_rank) + " : " + (this.earth * 5)); },
+      get healing() { return ( this.stamina * 2 + this.insight_rank ); },
+      healing_modifiers:0,
+      get current_heal_rate() { return ( (this.stamina * 2) + this.insight_rank + this.healing_modifiers + " per day" ); },
+      weapon_one    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
+      weapon_two    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
+    };
+    
+    $scope.show = function() {
+      ModalService.showModal({
+        templateUrl: "templates/modal.html",
+        controller: "ModalController"
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(result) {
+          console.log("Show Result: " + result);
+        });
+      }); 
+    };
+
+    // blah blah lbha
+    $scope.saved_characters_array = ['Aaa','Bbb','Ccc'];
+    $scope.loadCharacterModal = function() {
+      console.log("Load Characters");
+      $scope.saved_characters_array = LoadCharacterService.loadCharacters()
+      console.log("Loaded Characters : " + $scope.saved_characters_array);
+      ModalService.showModal({
+        templateUrl: "templates/character_load.html",
+        controller: "MainController",
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(result) {
+          console.log("loadCharacterModal Result: " + result);
+        });
+      }); 
+    };
+
+    $scope.calculateBonus = function(obj) {
+      var key;
+      for( key in obj ) {
+        console.log("KEY : " + key + "  VALUE: " + obj[key]);
+        switch(key) {
+          case 'stamina':
+            $scope.character.stamina +=  obj[key];
+            break;
+          case 'willpower':
+            $scope.character.willpower +=  obj[key];
+            break;
+          case 'reflexes':
+            $scope.character.reflexes +=  obj[key];
+            break;
+          case 'awareness':
+            $scope.character.awareness +=  obj[key];
+            break;
+          case 'agility':
+            $scope.character.agility +=  obj[key];
+            break;
+          case 'intelligence':
+            $scope.character.intelligence +=  obj[key];
+            break;
+          case 'strength':
+            $scope.character.strength +=  obj[key];
+            break;
+          case 'perception':
+            $scope.character.perception +=  obj[key];
+            break;
+          case 'honor':
+            $scope.character.honor +=  obj[key];
+            break;
+          case 'affinity':
+            var ring = obj[key];
+            $scope.character.affinity.ring = true;
+            break;
+          case 'deficiency':
+            var ring = obj[key];
+            $scope.character.deficiency.ring = true;
+            break;
+          case 'skills':
+              for(var i=0; i < obj[key].length; i++ ) {
+                console.log("Add this skill: " + obj[key][i] );
+                var skill =  obj[key][i];
+                if ( isFinite(skill) ) {
+                  $scope.addASkill(skill, 1);
+                } else if ( skill.match(/:/) ) {
+                  var arr = skill.split(":");
+		          var skill = arr[0];
+		          var emp = (arr[1]) ? arr[1] : null;
+		          var lvl = (arr[2]) ? arr[2] : 1;
+                  $scope.addASkill(skill, lvl, emp);
+		        } else {
+                  alert("You Also Get " + skill + " skill");
+                  $scope.skillSearchText = "bugei";
+                  $scope.toggleShowSkillsList();
+                }
+              }
+            break;
+          case 'techniques':
+            break;
+        }
+      }
+    };
+
+    $scope.addASkill = function(skill_id, rank, emp) {
+      var skill = $scope.getSkillFromMasterList(skill_id);
+      var lvl = ( rank )? rank : 0;
+      var emph = ( emp ) ? emp : null;
+      var new_skill = { id:skill_id, rank:lvl, rank_s:lvl, emphasis:emph, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
+      if ( $scope.getCharacterSkillById(skill_id) === null) {
+        $scope.character.skills.push(new_skill);
+      }
+      if (emp) {
+      
+      }
+    };
+
+    $scope.getCharacterSkillById = function(skill_id) {
+      for(var i = 0; i < $scope.character.skills.length; i++) {
+        if ( $scope.character.skills[i] != undefined ) {
+          if ( $scope.character.skills[i].id === skill_id ) {
+            return $scope.character.skills[i];
+          }
+        }
+      }
+      return null;
+    };
+
+    var getSkillRoll = function(skill_id, skill_rank) {
+      var skill = DataService.getSkillFromMasterList(skill_id);
+      if ( skill ) {
+        var trait = skill.trait;
+        var ring  = skill.ring;
+        var roll =  ( skill_rank + $scope.character[trait] ) + "K" + $scope.character[ring];
+        return roll;
+      } else {
+        return '0K0';
+      }
+    };
+
+    var skillMastery = function(obj) {
+      var master_skill = DataService.getSkillFromMasterList(obj.id);
+      if ( master_skill ) {
+        var text = '';
+        for(var x in master_skill.masteries ) {
+          if ( obj.rank >= x ) {
+            text += "Level " + x + " : " + master_skill.masteries[x] + "<br />\n";
+          }
+        }
+        return text;
+      } else {
+        return 'none';
+      }
+    };
+
+    var mastery = function(obj) {
+      var text = '';
+      for(var x in obj.masteries ) {
+        if ( obj.rank >= x ) {
+          text += "Level " + x + " : " + obj.masteries[x] + "<br />\n";
+        }
+      }
+      // console.log("Text: " + text);
+      return text;
+    };
+
+  }]);//end main controller
+
+
+  angular.module('myApp').controller('HomeController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
+
+    $scope.test = "Home Controller";
+
+
+  }]);//end HomeController
+
+  angular.module('myApp').controller('CharacterController', ['$scope', '$cookieStore','DataService', function($scope, $cookieStore, DataService) {
+
+    $scope.test = "Character Controller";
+
+    $scope.saveCharacter = function() {
+      var d = new Date();
+      var date_string = d.toString().replace(/ /g, "_");
+      var date_string = d.toString().replace(/:/g, "-");
+      console.log("Date : " + date_string );
+
+      var stored_chars = $cookieStore.get('characters');
+      if ( stored_chars != null ) {
+        for( var i=0; i < stored_chars.length; i++ ) {
+          $scope.saved_characters_date_array.push(stored_chars[i]);
+        }
+      }
+      $scope.saved_characters_date_array.push('character_' + date_string);
+      console.log("Saved Character Dates: " + $scope.saved_characters_date_array);
+      $cookieStore.put('characters', $scope.saved_characters_date_array  );
+      $cookieStore.put('character_' + date_string, $scope.character);
+    };
+
+    $scope.updateExp = function(attr, value) {
+      var cost = 4;
+      if ( attr == 'void') {
+        cost = 6;
+      }
+      //console.log(attr + " : val: " + value + " Old Val: " + $scope.character[attr + "_s"]);
+      if ( $scope.character[attr] > $scope.character[attr + "_s"] ) {
+          $scope.character.experience_points -= ( value * cost );
+           } else if ( $scope.character[attr] < $scope.character[attr + "_s"] ) {
+          $scope.character.experience_points += ($scope.character[attr + "_s"] * cost );
+          $scope.character[attr + "_s"] = $scope.character[attr];
+      } else {
+          //console.log("No Change to " + attr);
+      } };
+    $scope.updateEarth = function(attr, value) {
+      $scope.updateExp(attr,value);
+      if ( $scope.character.stamina === $scope.character.willpower) {
+        $scope.character.earth = $scope.character.stamina;
+      } else if ( $scope.character.willpower <  $scope.character.stamina ) {
+        $scope.character.earth = $scope.character.willpower;
+      } else if ( $scope.character.stamina < $scope.character.willpower ) {
+        $scope.character.earth = $scope.character.stamina;
+      }
+      $scope.updateInsightRank();
+      //$scope.updateSkills(attr,'earth');
+    };
+    $scope.updateAir = function(attr, value) {
+      $scope.updateExp(attr,value);
+      if ( $scope.character.reflexes === $scope.character.awareness) {
+        $scope.character.air = $scope.character.reflexes;
+      } else if ( $scope.character.reflexes <  $scope.character.awareness ) {
+        $scope.character.air = $scope.character.reflexes;
+      } else if ( $scope.character.awareness < $scope.character.reflexes ) {
+        $scope.character.air = $scope.character.awareness;
+      }
+      $scope.updateInsightRank();
+      //$scope.updateSkills(attr,'air');
+    };
+    $scope.updateWater = function(attr, value) {
+      $scope.updateExp(attr,value);
+      if ( $scope.character.strength === $scope.character.perception) {
+        $scope.character.water = $scope.character.strength;
+      } else if ( $scope.character.strength <  $scope.character.perception ) {
+        $scope.character.water = $scope.character.strength;
+      } else if ( $scope.character.perception < $scope.character.strength ) {
+        $scope.character.water = $scope.character.perception;
+      }
+      $scope.updateInsightRank();
+      //$scope.updateSkills(attr,'water');
+    };
+    $scope.updateFire = function(attr, value) {
+      $scope.updateExp(attr,value);
+      if ( $scope.character.agility === $scope.character.intelligence) {
+        $scope.character.fire = $scope.character.agility;
+      } else if ( $scope.character.agility <  $scope.character.intelligence ) {
+        $scope.character.fire = $scope.character.agility;
+      } else if ( $scope.character.intelligence < $scope.character.agility ) {
+        $scope.character.fire = $scope.character.intelligence;
+      }
+      $scope.updateInsightRank();
+      //$scope.updateSkills(attr,'fire');
+    };
+    $scope.updateVoid = function(attr, value) {
+      $scope.updateExp(attr,value);
+      $scope.updateInsightRank();
+      //$scope.updateSkills(attr,'void');
+    };
+
+    $scope.updateInsightRank = function() {
+      var skillRanks = 0;
+      for(var i = 0; i < $scope.character.skills.length; i++) {
+        if ( $scope.character.skills[i] != undefined ) {
+          skillRanks += $scope.character.skills[i].rank;
+        }
+      }
+      $scope.character.insight = skillRanks + (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10);
+    };
+
+    $scope.showClansList = false;
+    $scope.toggleShowClansList = function() {
+        $scope.showClansList = !$scope.showClansList;
+    };
+
+    $scope.selectClan = function(id) {
+      console.log("Select Clan : " + id );
+      $scope.character.clan = $scope.clansMasterList[id];
+      $scope.toggleShowClansList();
+    };
+
+    $scope.showFamiliesList = false;
+    $scope.toggleShowFamiliesList = function() {
+        $scope.showFamiliesList = !$scope.showFamiliesList;        
+    };
+
+    $scope.selectFamily = function(id) {
+      $scope.character.family = $scope.familiesMasterList[id];
+      $scope.toggleShowFamiliesList();
+      $scope.calculateBonus( $scope.familiesMasterList[id].bonus );
+    };
+
+    $scope.showSchoolsList = false;
+    $scope.toggleShowSchoolsList = function() {
+      $scope.showSchoolsList = !$scope.showSchoolsList;
+    };
+
+    $scope.selectSchool = function(id) {
+      $scope.character.school = $scope.schoolsMasterList[id];
+      $scope.toggleShowSchoolsList();
+      $scope.calculateBonus( $scope.schoolsMasterList[id].bonus );
+    };
+
+  }]);//end CharacterController
+
+  angular.module('myApp').controller('SkillsController', function($scope) {
+
+    $scope.test = "Skills Controller";
+
+    $scope.clickedSkillRank = null;
+    $scope.showSkillList = false;
+    $scope.skillSearchText = "";
+
+    $scope.toggleShowSkillsList = function() {
+        $scope.showSkillsList = !$scope.showSkillsList;
+        $scope.skillSearchText = ""
+    };
+
+    $scope.emphasesList = ["One", "Two"];
+    $scope.currentSkillId = null;
+    $scope.showEmphasesList = false;
+
+    $scope.toggleShowEmphasesList = function(skill_id) {
+        //console.log("Skill Id : " + skill_id);
+        $scope.currentSkillId = skill_id;
+        //console.log("Current Skill Id : " + $scope.currentSkillId);
+        $scope.emphasesList = [];
+        var skill = $scope.getSkillFromMasterList(skill_id);
+    if ( skill ) {
+        //console.log("FOUND skill : " + skill_id);
+          for ( var i in skill.emphases ) {
+            $scope.emphasesList.push( skill.emphases[i] ) ;
+          }
+    }
+        $scope.showEmphasesList = !$scope.showEmphasesList;
+    };
+
+    var getSkillRoll = function(skill_id, skill_rank) {
+      var skill = $scope.getSkillFromMasterList(skill_id);
+      //console.log("get Roll of skill : " + skill_id + " with rank of " + skill_rank);
+      if ( skill ) {
+        //console.log("found skill : " + skill + " :: " + JSON.stringify(skill_rank));
+        var trait = skill.trait;
+        var ring  = skill.ring;
+        var roll =  ( skill_rank + $scope.character[trait] ) + "K" + $scope.character[ring];
+        return roll;
+      } else {
+        return '0K0';
+      }
+    };
+
+    var skillMastery = function(obj) {
+      //console.log("get Mastery of skill : " + obj.id + " with rank of " + obj.rank);
+      var master_skill = $scope.getSkillFromMasterList(obj.id);
+      if ( master_skill ) {
+        //console.log("Master Skill: " + JSON.stringify(master_skill));
+        //console.log("Master Skill Masteries: " + JSON.stringify(master_skill.masteries));
+        var text = '';
+        for(var x in master_skill.masteries ) {
+          if ( obj.rank >= x ) {
+            text += "Level " + x + " : " + master_skill.masteries[x] + "<br />\n";
+          }
+    }
+        //console.log("Text: " + text);
+        return text;
+      } else {
+        return 'none';
+      }
+    };
+
+    $scope.addSkill = function(skill_id) {
+      //console.log("Before Skills1 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
+      var skill = $scope.getSkillFromMasterList(skill_id);
+      var new_skill = { id:skill_id, rank:0, rank_s:0, emphasis:null, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
+      //console.log("Make Sure Skill " + skill_id + " does not exist");
+      if ( getCharacterSkillById(skill_id) === null) {
+        //console.log("Add Skill " + skill_id );
+        //console.log("Before Skills2 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
+        $scope.character.skills.push(new_skill);
+        //console.log("After Skills1 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
+        $scope.toggleShowSkillsList();
+      } else {
+        //console.log("skill " + skill_id + " already exists");
+      }
+        //console.log("After Skills2 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
+    };
+
+    $scope.getSkill = function(skill_id, attr) {
+        //console.log("Get : " + attr);
+        return $scope.getSkillFromMasterList(skill_id, attr);
+    };
+
+    $scope.removeSkill = function(id) {
+       // METHOD OF GIVING BACK ALL EXP PTS WHEN SKILL IS Removed!
+       replaceCharacterSkillById(id, null);
+    };
+
+    $scope.addEmphasis = function(emp_index) {
+      console.log("ADD EMPHASIS TWO");
+      var master_skill = $scope.getSkillFromMasterList($scope.currentSkillId);
+      var emp = master_skill.emphases[emp_index];
+      var skill = getCharacterSkillById($scope.currentSkillId);
+      skill.emphasis = emp;
+      //console.log("Add Emphasis Index : " + emp_index + " to Character Skill Id : " + $scope.currentSkillId + " Emp: " + emp + " Emphasis: " + skill.emphasis );
+      replaceCharacterSkillById($scope.currentSkillId, skill);
+      $scope.character.experience_points -= 2;
+      $scope.toggleShowEmphasesList();
+    }
+
+    var getCharacterSkillById = function(skill_id) {
+      //console.log("Before Skills : " + JSON.stringify($scope.character.skills) + " (getCharacterSkillById)");
+      for(var i = 0; i < $scope.character.skills.length; i++) {
+        //console.log("Each Skill " + JSON.stringify($scope.character.skills[i]));
+        if ( $scope.character.skills[i] != undefined ) {
+          if ( $scope.character.skills[i].id === skill_id ) {
+            //console.log("Afterr Skills : " + JSON.stringify($scope.character.skills) + " (getCharacterSkillById)");
+            //console.log("Skill " + skill_id + " FOUND (getcharacterskillbyid)");
+            return $scope.character.skills[i];
+          }
+        }
+      }
+      //console.log("Skill " + skill_id + " Not Found (getcharacterskillbyid)");
+      return null;
+    };
+
+    var replaceCharacterSkillById = function(skill_id, skill) {
+      for(var i = 0; i < $scope.character.skills.length; i++) {
+        if ( $scope.character.skills[i] != undefined ) {
+          //console.log("Skill : " + JSON.stringify($scope.character.skills[i]) + "  Skill Id : " + $scope.character.skills[i].id + "  i:" + i + "(replaceCharacterSkillById)");
+          if ( $scope.character.skills[i].id === skill_id ) {
+            if ( skill === null ) {
+              //console.log("Remove Skill");
+              $scope.character.skills.splice(i,1);
+              return;
+            } else {
+              //console.log("Replace Skill");
+              $scope.character.skills.splice(i,1,skill);
+              //console.log("Before Skills : " + JSON.stringify($scope.character.skills) + " (replaceCharacterSkillById)");
+              //$scope.character.skills.push(skill);
+              //console.log("After Skills : " + JSON.stringify($scope.character.skills) + " (replaceCharacterSkillById)");
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    $scope.updateSkillRank = function(id) {
+      //console.log("Before Skills : " + JSON.stringify($scope.character.skills) + " (updateSkillRank)");
+      var skill = getCharacterSkillById(id);
+      if ( skill != null && skill.id >= 0 ) {
+        if ( skill.rank < skill.rank_s ) {
+          var diff = skill.rank_s - skill.rank;
+          $scope.character.experience_points += skill.rank_s;
+          $scope.character.insight -= diff;
+        } else if ( skill.rank > skill.rank_s ) {
+          var diff = skill.rank - skill.rank_s;
+      $scope.character.experience_points -= skill.rank;
+          $scope.character.insight += diff;
+        }
+        skill.rank_s = skill.rank;
+        replaceCharacterSkillById(id, skill);
+        $scope.updateInsightRank();
+      } else {
+        //console.log("Skill Not Found (updateskillrank)");
+      }
+    };
+
+  });//end SkillsController
+
+  angular.module('myApp').controller('SpellsController', 'DataService', function($scope, DataService) {
+
+    $scope.test = "Spells Controller";
+    $scope.spellSearchFilter;
+    $scope.spellSearchText = "";
+
+    var spellRoll = function(obj) {
+      var roll = '';
+      var spell_ring = obj.ring;
+      var insight_rank = $scope.character.insight_rank;
+      var ring_val = "R"
+      var affinity = "+AD+";
+      var bonus = '';
+      if ( doesCharacterHaveSpellcraftBonus() && spell_ring != 'all' ) {
+          bonus = 1;
+      } else if ( doesCharacterHaveSpellcraftBonus() && spell_ring == 'all' ) {
+          bonus = "+1";
+      } 
+      if ( spell_ring != 'all' ) {
+        ring_val = $scope.character[spell_ring];
+        affinity = 0;
+      }
+      if ( $scope.character.spell_affinity[spell_ring] == true ) {
+          affinity = 1;
+      }
+      if ( $scope.character.spell_deficiency[spell_ring] == true ) {
+          affinity = -1;
+      }
+      roll = ring_val + ( bonus ) + ( affinity + insight_rank ) + 'K' + ring_val;
+      return roll;
+    };
+
+    var doesCharacterHaveSpellcraftBonus = function() {
+      for(var i=0; i < $scope.character.skills.length; i++) {
+        if( $scope.character.skills[i].id == 54 ) { // 54 is the spellcraft skill id in the skillsMasterList
+          if(  $scope.character.skills[i].rank >= 5 ) {
+            return true;
+          }
+        }
+      }
+    };
+
     $scope.showSpellsList = false;
 
     $scope.toggleShowSpellsList = function() {
@@ -959,18 +992,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
         return $scope.getSpellFromMasterList(spell_id, attr);
     };
 
-    $scope.getSpellFromMasterList = function(spell_id, attr) {
-      for(var i=0; i < $scope.spellsMasterList.length; i++) {
-        if ( $scope.spellsMasterList[i].id === spell_id ) {
-          if (attr === null || attr === undefined ) {
-            return $scope.spellsMasterList[i];
-          } else {
-            return $scope.spellsMasterList[i][attr];
-          }
-        }
-      }
-      return "(error)";
-    };
+
 
     $scope.addSpell = function(spell_id) {
       var master_spell = $scope.getSpellFromMasterList(spell_id);
