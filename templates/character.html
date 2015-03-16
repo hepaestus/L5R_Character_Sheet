@@ -6,20 +6,19 @@
       <button ng-click="loadCharacterModal()">Load Character</button>
       <button ng-click="show()">Show a Modal</button>
       <br/>
-      <p>{{message}}</p>
 
       <div class="info">
-        <label class="line">Clan</label><input class="line clan" class="clan" name="clan" type="text" ng-click="launch('clan')" n g-click="toggleShowClansList()" ng-model="character.clan.name"/>
+        <label class="line">Clan</label><input class="line clan" class="clan" name="clan" type="text" ng-click="showClansListModal()" ng-model="character.clan.name"/>
         <label class="line">Insight Rank</label><input class="line insight_rank" name="school" type="number" ng-model="character.insight_rank"/>
         <label class="line">Experience Points</label><input class="line experience_points" name="experience_points" type="number" ng-model="character.experience_points"/>
-	  <br/>
-	  <label class="line">Name</label>
-	  <input class="line family" class="family" name="family" type="text" ng-click="launch('family')" ng-cl ick="toggleShowFamiliesList()" ng-model="character.family.name"/>
-	  <input class="line name" class="name" name="name" type="text" ng-model="character.name"/>
-      <label class="line">Total Earned</label><input class="line experience_points_earned" name="experience_points_earned" type="number" ng-model="character.experience_points_earned"><br/>
-      <label class="line">School</label><input class="line school" name="school" type="text" ng-click="toggleShowSchoolsList()" ng-model="character.school.name"/>
-      <label class="line">Insight</label><input class="line insight" name="insight" type="number" ng-model="character.insight"/><span class="small">(Rings x 10 + skills)</span><br/>
-    </div>
+	    <br/>
+	    <label class="line">Name</label>
+	    <input class="line family" class="family" name="family" type="text" ng-click="showFamiliesListModal()" ng-model="character.family.name"/>
+	    <input class="line name" class="name" name="name" type="text" ng-model="character.name"/>
+        <label class="line">Total Earned</label><input class="line experience_points_earned" name="experience_points_earned" type="number" ng-model="character.experience_points_earned"><br/>
+        <label class="line">School</label><input class="line school" name="school" type="text" ng-click="showSchoolsListModal()" ng-model="character.school.name"/>
+        <label class="line">Insight</label><input class="line insight" name="insight" type="number" ng-model="character.insight"/><span class="small">(Rings x 10 + skills)</span><br/>
+      </div>
 
       <!-- div class="row">
       <div id="earth_ring" class="ring">

@@ -325,6 +325,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
     //  return "(error)";
     //};
  
+
     this.skillsMasterList = function() {
       return skillsMasterList;
     }
@@ -383,7 +384,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
 
     var saved_characters_array = [];
 
-    this.returnSavedCharacter = function(index) {
+    this.returnSavedCharacterArray = function(index) {
       return saved_character_array[index];
     };
 
@@ -392,26 +393,51 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       saved_characters_array = [];
       if ( saved_character_cookie_array ) {
         for ( var i = 0; i < saved_character_cookie_array.length; i++) {
-          console.log("Getting Character " +i+ " : " + saved_character_cookie_array[i]);
+          //console.log("Getting Character " +i+ " : " + saved_character_cookie_array[i]);
           var character = $cookieStore.get(saved_character_cookie_array[i]);
           if ( character ) {
-            console.log("Pushing Character Into Array : " + character.name);
+            //console.log("Pushing Character Into Array : " + character.name);
             saved_characters_array.push(character);
           }
         }
       }
-      console.log("Saved Characters Array : " + saved_characters_array);
+      //console.log("Saved Characters Array : " + saved_characters_array);
       console.log("Saved Characters Array : " + saved_characters_array.length );
       return saved_characters_array;
+    }
+
+    this.getSavedCharacter = function(index) {
+      console.log("Getting Character : " + saved_characters_array[index]);
+      return saved_characters_array[index];
     }
 
     this.deleteSavedCharacter = function(character_date_string) {
       $cookieStore.remove(character_date_string);
       var stored_char_strings = $cookieStore.get('characters');
-      var idx = stored_char_strings(character_date_string);
+      var idx = stored_char_strings[character_date_string];
       stored_char_strings.splice(idx,1);
       $cookieStore.put('characters', stored_char_strings);
     };
+
+    var saved_characters_date_array = [];    
+
+    this.saveCharacter = function(character) {
+      var d = new Date();
+      var date_string = d.toString().replace(/ /g, "_");
+      var date_string = d.toString().replace(/:/g, "-");
+      console.log("Date : " + date_string );
+      character.last_saved = date_string;
+      var stored_chars = $cookieStore.get('characters');
+      if ( stored_chars != null ) {
+        for( var i=0; i < stored_chars.length; i++ ) {
+          saved_characters_date_array.push(stored_chars[i]);
+        }
+      }
+      saved_characters_date_array.push('character_' + date_string);
+      console.log("Saved Character Dates: " + saved_characters_date_array);
+      $cookieStore.put('characters', saved_characters_date_array  );
+      $cookieStore.put('character_' + date_string, character);
+    }; 
 
   }]);
 
@@ -469,6 +495,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       get current_heal_rate() { return ( (this.stamina * 2) + this.insight_rank + this.healing_modifiers + " per day" ); },
       weapon_one    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
       weapon_two    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
+      last_saved    : null,
     };
     
     $scope.show = function() {
@@ -484,11 +511,57 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       }); 
     };
 
-    // blah blah lbha
-    $scope.saved_characters_array = ['Aaa','Bbb','Ccc'];
+    $scope.clansMasterList = DataService.clansMasterList();
+    console.log("Clans MasterList: " + $scope.clansMasterList);
+
+    $scope.showClansListModal = function() {
+      ModalService.showModal({
+        templateUrl: "templates/clans_list.html",
+        controller: "MainController"
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(result) {
+          console.log("Show Result: " + result);
+        });
+      }); 
+    };
+
+    $scope.familiesMasterList = DataService.familiesMasterList();
+    console.log("Families MasterList: " + $scope.familiesMasterList);
+
+    $scope.showFamiliesListModal = function() {
+      ModalService.showModal({
+        templateUrl: "templates/family_list.html",
+        controller: "MainController"
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(result) {
+          console.log("Show Result: " + result);
+        });
+      }); 
+    };
+
+    $scope.schoolsMasterList = DataService.schoolsMasterList();
+    console.log("Schools MasterList: " + $scope.schoolsMasterList);
+
+    $scope.showSchoolsListModal = function() {
+      ModalService.showModal({
+        templateUrl: "templates/school_list.html",
+        controller: "MainController"
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(result) {
+          console.log("Show Result: " + result);
+        });
+      }); 
+    };
+
+    $scope.saved_characters_array = LoadCharacterService.loadCharacters();
+
     $scope.loadCharacterModal = function() {
-      console.log("Load Characters");
-      $scope.saved_characters_array = LoadCharacterService.loadCharacters()
       console.log("Loaded Characters : " + $scope.saved_characters_array);
       ModalService.showModal({
         templateUrl: "templates/character_load.html",
@@ -500,6 +573,26 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
           console.log("loadCharacterModal Result: " + result);
         });
       }); 
+    };
+
+    $scope.loadSavedCharacter = function(index) {
+      //console.log("Old Character : " + JSON.stringify($scope.character));
+      //console.log("Load Saved Character : " + index);
+      var loadChar = LoadCharacterService.getSavedCharacter(index);
+      console.log("Loaded Character : " + JSON.stringify(loadChar));
+      $scope.character = loadChar;
+      console.log("New? Character : " + JSON.stringify($scope.character));
+    };
+
+    $scope.removeSavedCharacter = function(date_string) {
+      console.log("Remove Index : " + date_string );
+      LoadCharacterService.deleteSavedCharacter(date_string);
+      $scope.saved_characters_array = LoadCharacterService.loadCharacters();      
+    };
+
+    $scope.saveCharacter = function() {
+      console.log("Save Current Character");
+      LoadCharacterService.saveCharacter($scope.character);
     };
 
     $scope.calculateBonus = function(obj) {
@@ -568,7 +661,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
     };
 
     $scope.addASkill = function(skill_id, rank, emp) {
-      var skill = $scope.getSkillFromMasterList(skill_id);
+      var skill = DataService.getSkillFromMasterList(skill_id);
       var lvl = ( rank )? rank : 0;
       var emph = ( emp ) ? emp : null;
       var new_skill = { id:skill_id, rank:lvl, rank_s:lvl, emphasis:emph, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
@@ -643,24 +736,6 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
 
     $scope.test = "Character Controller";
 
-    $scope.saveCharacter = function() {
-      var d = new Date();
-      var date_string = d.toString().replace(/ /g, "_");
-      var date_string = d.toString().replace(/:/g, "-");
-      console.log("Date : " + date_string );
-
-      var stored_chars = $cookieStore.get('characters');
-      if ( stored_chars != null ) {
-        for( var i=0; i < stored_chars.length; i++ ) {
-          $scope.saved_characters_date_array.push(stored_chars[i]);
-        }
-      }
-      $scope.saved_characters_date_array.push('character_' + date_string);
-      console.log("Saved Character Dates: " + $scope.saved_characters_date_array);
-      $cookieStore.put('characters', $scope.saved_characters_date_array  );
-      $cookieStore.put('character_' + date_string, $scope.character);
-    };
-
     $scope.updateExp = function(attr, value) {
       var cost = 4;
       if ( attr == 'void') {
@@ -669,12 +744,15 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       //console.log(attr + " : val: " + value + " Old Val: " + $scope.character[attr + "_s"]);
       if ( $scope.character[attr] > $scope.character[attr + "_s"] ) {
           $scope.character.experience_points -= ( value * cost );
+          $scope.character[attr + "_s"] = $scope.character[attr];
            } else if ( $scope.character[attr] < $scope.character[attr + "_s"] ) {
           $scope.character.experience_points += ($scope.character[attr + "_s"] * cost );
           $scope.character[attr + "_s"] = $scope.character[attr];
       } else {
           //console.log("No Change to " + attr);
-      } };
+      }
+    };
+      
     $scope.updateEarth = function(attr, value) {
       $scope.updateExp(attr,value);
       if ( $scope.character.stamina === $scope.character.willpower) {
@@ -685,7 +763,6 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
         $scope.character.earth = $scope.character.stamina;
       }
       $scope.updateInsightRank();
-      //$scope.updateSkills(attr,'earth');
     };
     $scope.updateAir = function(attr, value) {
       $scope.updateExp(attr,value);
@@ -697,7 +774,6 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
         $scope.character.air = $scope.character.awareness;
       }
       $scope.updateInsightRank();
-      //$scope.updateSkills(attr,'air');
     };
     $scope.updateWater = function(attr, value) {
       $scope.updateExp(attr,value);
@@ -709,7 +785,6 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
         $scope.character.water = $scope.character.perception;
       }
       $scope.updateInsightRank();
-      //$scope.updateSkills(attr,'water');
     };
     $scope.updateFire = function(attr, value) {
       $scope.updateExp(attr,value);
@@ -721,12 +796,10 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
         $scope.character.fire = $scope.character.intelligence;
       }
       $scope.updateInsightRank();
-      //$scope.updateSkills(attr,'fire');
     };
     $scope.updateVoid = function(attr, value) {
       $scope.updateExp(attr,value);
       $scope.updateInsightRank();
-      //$scope.updateSkills(attr,'void');
     };
 
     $scope.updateInsightRank = function() {
@@ -737,11 +810,6 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
         }
       }
       $scope.character.insight = skillRanks + (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10);
-    };
-
-    $scope.showClansList = false;
-    $scope.toggleShowClansList = function() {
-        $scope.showClansList = !$scope.showClansList;
     };
 
     $scope.selectClan = function(id) {
@@ -796,7 +864,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
         $scope.currentSkillId = skill_id;
         //console.log("Current Skill Id : " + $scope.currentSkillId);
         $scope.emphasesList = [];
-        var skill = $scope.getSkillFromMasterList(skill_id);
+        var skill = DataService.getSkillFromMasterList(skill_id);
     if ( skill ) {
         //console.log("FOUND skill : " + skill_id);
           for ( var i in skill.emphases ) {
@@ -807,7 +875,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
     };
 
     var getSkillRoll = function(skill_id, skill_rank) {
-      var skill = $scope.getSkillFromMasterList(skill_id);
+      var skill = DataService.getSkillFromMasterList(skill_id);
       //console.log("get Roll of skill : " + skill_id + " with rank of " + skill_rank);
       if ( skill ) {
         //console.log("found skill : " + skill + " :: " + JSON.stringify(skill_rank));
@@ -822,7 +890,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
 
     var skillMastery = function(obj) {
       //console.log("get Mastery of skill : " + obj.id + " with rank of " + obj.rank);
-      var master_skill = $scope.getSkillFromMasterList(obj.id);
+      var master_skill = DataService.getSkillFromMasterList(obj.id);
       if ( master_skill ) {
         //console.log("Master Skill: " + JSON.stringify(master_skill));
         //console.log("Master Skill Masteries: " + JSON.stringify(master_skill.masteries));
@@ -841,7 +909,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
 
     $scope.addSkill = function(skill_id) {
       //console.log("Before Skills1 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
-      var skill = $scope.getSkillFromMasterList(skill_id);
+      var skill = DataService.getSkillFromMasterList(skill_id);
       var new_skill = { id:skill_id, rank:0, rank_s:0, emphasis:null, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
       //console.log("Make Sure Skill " + skill_id + " does not exist");
       if ( getCharacterSkillById(skill_id) === null) {
@@ -858,7 +926,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
 
     $scope.getSkill = function(skill_id, attr) {
         //console.log("Get : " + attr);
-        return $scope.getSkillFromMasterList(skill_id, attr);
+        return DataService.getSkillFromMasterList(skill_id, attr);
     };
 
     $scope.removeSkill = function(id) {
@@ -868,7 +936,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
 
     $scope.addEmphasis = function(emp_index) {
       console.log("ADD EMPHASIS TWO");
-      var master_skill = $scope.getSkillFromMasterList($scope.currentSkillId);
+      var master_skill = DataService.getSkillFromMasterList($scope.currentSkillId);
       var emp = master_skill.emphases[emp_index];
       var skill = getCharacterSkillById($scope.currentSkillId);
       skill.emphasis = emp;
@@ -989,13 +1057,13 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
     };
 
     $scope.getSpell = function (spell_id,attr) {
-        return $scope.getSpellFromMasterList(spell_id, attr);
+        return DataService.getSpellFromMasterList(spell_id, attr);
     };
 
 
 
     $scope.addSpell = function(spell_id) {
-      var master_spell = $scope.getSpellFromMasterList(spell_id);
+      var master_spell = DataService.getSpellFromMasterList(spell_id);
       if( master_spell ) {
         var new_id = master_spell.id;
         //var new_roll = master_spell.roll;
