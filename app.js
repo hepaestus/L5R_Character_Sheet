@@ -402,7 +402,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
         }
       }
       //console.log("Saved Characters Array : " + saved_characters_array);
-      console.log("Saved Characters Array : " + saved_characters_array.length );
+      //console.log("Saved Characters Array : " + saved_characters_array.length );
       return saved_characters_array;
     }
 
@@ -442,6 +442,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
   }]);
 
   angular.module('myApp').controller('MainController', ['$scope', '$cookieStore', 'ModalService', 'DataService', 'LoadCharacterService', function($scope, $cookieStore, ModalService, DataService, LoadCharacterService) {
+	  
 
     $scope.test = "Main Controller";
     
@@ -511,8 +512,13 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       }); 
     };
 
+    $scope.close = function(result) {
+      console.log("MainController Result: " + result);
+      close(result, 550); 
+    };
+
     $scope.clansMasterList = DataService.clansMasterList();
-    console.log("Clans MasterList: " + $scope.clansMasterList);
+    //console.log("Clans MasterList: " + $scope.clansMasterList);
 
     $scope.showClansListModal = function() {
       ModalService.showModal({
@@ -522,13 +528,19 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
         //it's a bootstrap element, use 'modal' to show it
         modal.element.modal();
         modal.close.then(function(result) {
+          $scope.selectClan(result); 
           console.log("Show Result: " + result);
         });
       }); 
     };
 
+    $scope.selectClan = function(id) {
+      console.log("Select Clan : " + id );
+      $scope.character.clan = id;
+    };
+
     $scope.familiesMasterList = DataService.familiesMasterList();
-    console.log("Families MasterList: " + $scope.familiesMasterList);
+    //console.log("Families MasterList: " + $scope.familiesMasterList);
 
     $scope.showFamiliesListModal = function() {
       ModalService.showModal({
@@ -544,7 +556,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
     };
 
     $scope.schoolsMasterList = DataService.schoolsMasterList();
-    console.log("Schools MasterList: " + $scope.schoolsMasterList);
+    //console.log("Schools MasterList: " + $scope.schoolsMasterList);
 
     $scope.showSchoolsListModal = function() {
       ModalService.showModal({
@@ -812,11 +824,6 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       $scope.character.insight = skillRanks + (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10);
     };
 
-    $scope.selectClan = function(id) {
-      console.log("Select Clan : " + id );
-      $scope.character.clan = $scope.clansMasterList[id];
-      $scope.toggleShowClansList();
-    };
 
     $scope.showFamiliesList = false;
     $scope.toggleShowFamiliesList = function() {
