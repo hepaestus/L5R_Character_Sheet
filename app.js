@@ -310,22 +310,6 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       { id:189, name:'', ring:'void', type:'', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 185 Core Book' },
     ];
 
-    //this.getSkillFromMasterList = function(skill_id, attr) {
-    //  for(var i=0; i < skillsMasterList.length; i++) {
-    //    if ( skillsMasterList[i].id === skill_id ) {
-    //      if (attr === null || attr === undefined) {
-    //        return skillsMasterList[i];
-    //      } else if ( attr === 'mastery') {
-    //        return skillsMasterList[i].mastery;
-    //      } else {
-    //        return skillsMasterList[i][attr];
-    //      }
-    //    }
-    //  }
-    //  return "(error)";
-    //};
- 
-
     this.skillsMasterList = function() {
       return skillsMasterList;
     }
@@ -362,7 +346,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
           }
         }
       }
-      return "(error)";
+      return "(error - skill id not found)";
     };
 
     this.getSpellFromMasterList = function(spell_id, attr) {
@@ -375,7 +359,34 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
           }
         }
       }
-      return "(error)";
+      return "(error - spell id not found)";
+    };
+    
+    this.getClanFromMasterList = function(clan_id) {
+      for(var i=0; i < clansMasterList.length; i++) {
+        if ( clansMasterList[i].id === clan_id ) {
+            return clansMasterList[i];
+        }
+      }
+      return "(error - clan id not found)";
+    };
+
+    this.getFamilyFromMasterList = function(clan_id) {
+      for(var i=0; i < familiesMasterList.length; i++) {
+        if ( familiesMasterList[i].id === clan_id ) {
+            return familiesMasterList[i];
+        }
+      }
+      return "(error - family id not found)";
+    };
+    
+    this.getSchoolFromMasterList = function(clan_id) {
+      for(var i=0; i < schoolsMasterList.length; i++) {
+        if ( schoolsMasterList[i].id === clan_id ) {
+            return schoolsMasterList[i];
+        }
+      }
+      return "(error - school id not found)";
     };
 
   });
@@ -738,12 +749,10 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
 
 
   angular.module('myApp').controller('HomeController', ['$scope', '$cookieStore', function($scope, $cookieStore) {
-
     $scope.test = "Home Controller";
-
-
   }]);//end HomeController
 
+  
   angular.module('myApp').controller('CharacterController', ['$scope', '$cookieStore','DataService', function($scope, $cookieStore, DataService) {
 
     $scope.test = "Character Controller";
@@ -831,9 +840,9 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
     };
 
     $scope.selectFamily = function(id) {
-      $scope.character.family = $scope.familiesMasterList[id];
+      $scope.character.family_id = id;
       $scope.toggleShowFamiliesList();
-      $scope.calculateBonus( $scope.familiesMasterList[id].bonus );
+      $scope.calculateBonus( DataService.getFamilyFromMasterList(id).bonus );
     };
 
     $scope.showSchoolsList = false;
@@ -842,14 +851,14 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
     };
 
     $scope.selectSchool = function(id) {
-      $scope.character.school = $scope.schoolsMasterList[id];
+      $scope.character.school_id = id;
       $scope.toggleShowSchoolsList();
-      $scope.calculateBonus( $scope.schoolsMasterList[id].bonus );
+      $scope.calculateBonus( DataService.getSchoolFromMasterList(id).bonus );
     };
 
   }]);//end CharacterController
 
-  angular.module('myApp').controller('SkillsController', function($scope) {
+  angular.module('myApp').controller('SkillsController', 'DataService', function($scope, DataService) {
 
     $scope.test = "Skills Controller";
 
@@ -919,6 +928,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       var skill = DataService.getSkillFromMasterList(skill_id);
       var new_skill = { id:skill_id, rank:0, rank_s:0, emphasis:null, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
       //console.log("Make Sure Skill " + skill_id + " does not exist");
+      // ONLY Add new skill if it does not already exist
       if ( getCharacterSkillById(skill_id) === null) {
         //console.log("Add Skill " + skill_id );
         //console.log("Before Skills2 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
@@ -937,7 +947,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
     };
 
     $scope.removeSkill = function(id) {
-       // METHOD OF GIVING BACK ALL EXP PTS WHEN SKILL IS Removed!
+       // ADD METHOD OF GIVING BACK ALL EXP PTS WHEN SKILL IS Removed!
        replaceCharacterSkillById(id, null);
     };
 
