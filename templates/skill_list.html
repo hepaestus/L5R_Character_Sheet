@@ -1,0 +1,28 @@
+<div class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" ng-click="close(false)" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2>Choose A Skill</h2>
+            </div>
+            <div class="modal-body">
+                <h4>Choose A Skill</h4>
+                <h4 ng-if="modalMessage">{{modalMessage}}</h4>
+                <label for="search">Search:</label><input name="search" type="search" ng-model="skillSearchText"/>
+                <!-- label for="type_high">High:</label><input name="type_high" type="radio" value="high" ng-model="skillSearchType.sub_type"/>
+                <label for="type_bugei">Bugei:</label><input name="type_bugei" type="radio" value="bugei" ng-model="skillSearchType.sub_type"/>
+                <label for="type_merchant">Merchant:</label><input name="type_merchant" value="merchant" type="radio" ng-model="skillSearchType.sub_type"/>
+                <label for="type_low">Low:</label><input name="type_low" type="radio" value="low" ng-model="skillSearchType.sub_type"/ -->
+                <ul class="list-group">                  
+                    <li class="list-group-item" ng-repeat="each in skillsMasterList | filter:skillSearchText | filter:skillSearchType">
+                        <a href="" ng-click="close(each.id)">{{each.type}} {{each.sub_type}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="close(false)" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" ng-click="close(true)" class="btn btn-primary" data-dismiss="modal">Done</button>
+            </div>
+        </div>
+    </div>
+</div>

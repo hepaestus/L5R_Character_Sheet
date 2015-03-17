@@ -160,34 +160,18 @@
 	          <td class="skill_desc" style="line-height: 60%"><span class="small">{{getSkill(each.id,'description')}}</span></td>
 	          <td class="skill_button"><button ng-click="removeSkill(each.id)"><span class="glyphhicon glyphicons-remove">X</span></button></td>
           </tr>
-          <tr ng-hide="showEmphasesList">
-              <td colspan="8"><a href="" ng-click="toggleShowSkillsList()">Add a Skill</a>              
-                <div ng-show="showSkillsList">
-                  <label for="search">Search:</label><input name="search" type="search" ng-model="skillSearchText"/>
-                  <!-- label for="type_high">High:</label><input name="type_high" type="radio" value="high" ng-model="skillSearch.type"/>
-                  <label for="type_bugei">Bugei:</label><input name="type_bugei" type="radio" value="bugei" ng-model="skillSearch.type"/>
-                  <label for="type_merchant">Merchant:</label><input name="type_merchant" value="bugei" type="radio" ng-model="skillSearch.type"/>
-                  <label for="type_low">Low:</label><input name="type_low" type="radio" value="low" ng-model="skillSearch.type"/ -->
-                </div>
-              </td>
+          <tr>
+              <td colspan="8"><a href="" ng-click="showSkillsListModal()">Add a Skill</a></td>
           </tr>
           <tr ng-show="showEmphasesList"> 
               <td colspan="4">Emphasis List</td>
               <td colspan="3">
-              <ul class="add_skill_list">
+                <ul class="add_skill_list">
                   <li ng-repeat="emph in emphasesList">                      
                   <a href="" ng-click="addEmphasis($index)">{{emph}}</a>
                   <li>
-              </ul>
-            </td>
-          <tr ng-show="showSkillsList"> 
-            <td colspan="7">
-              <ul class="add_skill_list">                  
-                  <li ng-repeat="each in skillsMasterList | filter:skillSearchText">
-                      <a href="" ng-click="addSkill(each.id)">{{each.type}} {{each.sub_type}}</a>
-                  <li>
-              </ul>
-            </td>
+                </ul>
+              </td>
           </tr>
         </table>
       </div>
@@ -195,7 +179,6 @@
         <table class="weapons-table">
           <tr>
             <th colspan="2">Weapon One</th><th colspan="2">Weapon Two</th>
-            
             <th colspan="4" class="border-wide-left">Arrows</th>
           </tr>
           <tr>

@@ -1,0 +1,58 @@
+<div class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" ng-click="close(false)" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2>Choose A Spell</h2>
+            </div>
+            <div class="modal-body">
+                <h4>Choose A Spell</h4>
+                <h4 ng-if="modalMessage">{{modalMessage}}</h4>
+                <label>Search</label><input name="spellSearchFilter.text" ng-model="spellSearchFilter" type="search"/><br/>
+                <label>Type</label><input name="spellSearchFilter.type" ng-model="spellSearchFilter.type" list="numbers" /><br/>
+                  <datalist id="numbers">
+                    <option value=" "/>
+                    <option value="Battle"/>
+                    <option value="Craft"/>
+                    <option value="Defense"/>
+                    <option value="Illusion"/>
+                    <option value="Jade"/>
+                    <option value="Thunder"/>
+                    <option value="Travel"/>
+                    <option value="Ward"/>
+                  </datalist>
+                <label>Level</label><input name="spellSearchFilter.level" ng-model="spellSearchFilter.level" list="numbers" /><br/>
+                  <datalist id="numbers">
+                    <option value=" "/>
+                    <option value="1"/>
+                    <option value="2"/>
+                    <option value="3"/>
+                    <option value="4"/>
+                    <option value="5"/>
+                    <option value="6"/>
+                  </datalist>
+                <label>Ring</label><input name="spellSearchFilter.ring" ng-model="spellSearchFilter.ring" list="elements"/>
+                  <datalist id="elements">
+                    <option value=" "/>
+                    <option value="Air"/>
+                    <option value="Earth"/>
+                    <option value="Fire"/>
+                    <option value="Water"/>
+                    <option value="Void"/>
+                  </datalist>
+                <ul class="list-group">
+                  <li class="list-group-item" ng-repeat="spell in spellsMasterList | filter:spellSearchFilter">
+                    <a href="" ng-click="close(spell.id)"><strong>{{spell.name}}</strong>, Level:{{spell.level}}, Ring:{{spell.ring}}<span ng-if="spell.type">, Type: {{spell.type}}</span></a>
+                    <ul>
+                      <li class="medium"><span ng-bind-html="spell.description"></span></li>
+                    </ul>
+                  </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="close(false)" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" ng-click="close(true)" class="btn btn-primary" data-dismiss="modal">Done</button>
+            </div>
+        </div>
+    </div>
+</div>

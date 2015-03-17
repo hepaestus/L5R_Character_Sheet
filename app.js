@@ -82,6 +82,17 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       {id:12, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:1',13,31,39,54,'1 high or bugie skill'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}} },
     ];
 
+    var mastery = function(obj) {
+      var text = '';
+      for(var x in obj.masteries ) {
+        if ( obj.rank >= x ) {
+          text += "Level " + x + " : " + obj.masteries[x] + "<br />\n";
+        }
+      }
+      // console.log("Text: " + text);
+      return text;
+    };
+
     var skillsMasterList = [
       // id:, level, type, subtype, trait, ring, rank, roll, emphasis, emphases{}, get mastery(), masteries{}, description
       { id:1000, level:'Debug', type:'Debug', sub_type:'debug', trait:'void', ring:'void', emphases:{0:'E Zero', 1:'E One', 2:'E Two'}, get mastery() { return mastery(this); }, masteries:{ 3:'M Three', 5:'M Five', 7:'M Seven'}, description:'debug description'},
@@ -178,6 +189,32 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       { id:92, level:'Low', type:'Stealth*', sub_type:'', trait:'agility', ring:'fire', emphases:{0:'Ambush', 1:'Shadowing', 2:'Sneaking', 3:'Spell Casting'}, get mastery() { return mastery(this); }, masteries:{3:'Simple Move Actions while using Stealth allow character to move a distance equal to her Water x5.', 5:'Simple Move Actions while using Stealth allow character to move a distance equal to her Water x10.', 7:'A character using stealth may make Free Move Actions as normal.'}, description:'Pg. 143 Core Book'},
       { id:93, level:'Low', type:'Temptation*', sub_type:'Social Skill', trait:'awareness', ring:'air', emphases:{0:'Bribery', 1:'Seduction'}, get mastery() { return mastery(this); }, masteries:{5:'Character gains +5 Bonus to the total of any contested Roll using Temptation.'}, description:'Pg. 143 Core Book'},
     ];
+
+    var spellRoll = function(thisSpell) {
+      var roll = '';
+      var spell_ring = thisSpell.ring;
+      var insight_rank = $scope.character.insight_rank;
+      var ring_val = "R"
+      var affinity = "+AD+";
+      var bonus = '';
+      if ( doesCharacterHaveSpellcraftBonus() && spell_ring != 'all' ) {
+          bonus = 1;
+      } else if ( doesCharacterHaveSpellcraftBonus() && spell_ring == 'all' ) {
+          bonus = "+1";
+      } 
+      if ( spell_ring != 'all' ) {
+        ring_val = $scope.character[spell_ring];
+        affinity = 0;
+      }
+      if ( $scope.character.spell_affinity[spell_ring] == true ) {
+          affinity = 1;
+      }
+      if ( $scope.character.spell_deficiency[spell_ring] == true ) {
+          affinity = -1;
+      }
+      roll = ring_val + ( bonus ) + ( affinity + insight_rank ) + 'K' + ring_val;
+      return roll;
+    };
 
     var spellsMasterList = [
       { id:0, name:'Sense', type:'', ring:'all', level: '1', range:'Personal', area_of_affect:'50\' radius from the caster', duration:'Instantaneous', raises: 'Range(+10\')', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the four standard elements. It allows for the caster to sense the presense, quantity, and rough location of the elemental spirits (not evil spirits known as <i>kansen</i> of that element within the range of the spell. This is most frequently applied when looking for spirits with which to Commune (See Commune), but can also can be useful as a crude basic location device. For example, a caster lost in the wilderness could cast Snese(Water) in hopes of locating the sourceof drinking water. Pg 166 Core Book' },
@@ -513,7 +550,12 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
     $scope.show = function() {
       ModalService.showModal({
         templateUrl: "templates/modal.html",
-        controller: "ModalController"
+        controller: "ModalController",
+        inputs : {
+          dataOne: "Foo Bar",
+          dataTwo: "Flim Flam",
+          dataThree: ['Aaa', 'Bbb', 'Ccc'],
+        },
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
         modal.element.modal();
@@ -573,6 +615,26 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       ModalService.showModal({
         templateUrl: "templates/school_list.html",
         controller: "MainController"
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(result) {
+          console.log("Show Result: " + result);
+        });
+      }); 
+    };
+
+    $scope.skillsMasterList = DataService.skillsMasterList();
+    //console.log("Skills MasterList: " + $scope.skilllsMasterList);
+
+    $scope.showSkillsListModal = function(message, searchText) {
+      ModalService.showModal({
+        templateUrl: "templates/skill_list.html",
+        controller: "MainController",
+        inputs : {
+          modalMessage : message,
+          skillSearchText : searchText,          
+        },
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
         modal.element.modal();
@@ -734,16 +796,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       }
     };
 
-    var mastery = function(obj) {
-      var text = '';
-      for(var x in obj.masteries ) {
-        if ( obj.rank >= x ) {
-          text += "Level " + x + " : " + obj.masteries[x] + "<br />\n";
-        }
-      }
-      // console.log("Text: " + text);
-      return text;
-    };
+
 
   }]);//end main controller
 
@@ -858,7 +911,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
 
   }]);//end CharacterController
 
-  angular.module('myApp').controller('SkillsController', 'DataService', function($scope, DataService) {
+  angular.module('myApp').controller('SkillsController', ['$scope', 'DataService', function($scope, DataService) {
 
     $scope.test = "Skills Controller";
 
@@ -1022,39 +1075,39 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       }
     };
 
-  });//end SkillsController
+  }]);//end SkillsController
 
-  angular.module('myApp').controller('SpellsController', 'DataService', function($scope, DataService) {
+  angular.module('myApp').controller('SpellsController', ['$scope', 'DataService', 'ModalService', function($scope, DataService, ModalService) {
 
     $scope.test = "Spells Controller";
     $scope.spellSearchFilter;
     $scope.spellSearchText = "";
 
-    var spellRoll = function(obj) {
-      var roll = '';
-      var spell_ring = obj.ring;
-      var insight_rank = $scope.character.insight_rank;
-      var ring_val = "R"
-      var affinity = "+AD+";
-      var bonus = '';
-      if ( doesCharacterHaveSpellcraftBonus() && spell_ring != 'all' ) {
-          bonus = 1;
-      } else if ( doesCharacterHaveSpellcraftBonus() && spell_ring == 'all' ) {
-          bonus = "+1";
-      } 
-      if ( spell_ring != 'all' ) {
-        ring_val = $scope.character[spell_ring];
-        affinity = 0;
-      }
-      if ( $scope.character.spell_affinity[spell_ring] == true ) {
-          affinity = 1;
-      }
-      if ( $scope.character.spell_deficiency[spell_ring] == true ) {
-          affinity = -1;
-      }
-      roll = ring_val + ( bonus ) + ( affinity + insight_rank ) + 'K' + ring_val;
-      return roll;
+    $scope.spellsMasterList = DataService.spellsMasterList();
+
+    $scope.showSpellsListModal = function(message, searchText) {
+      ModalService.showModal({
+        templateUrl: "templates/spell_list.html",
+        controller: "SpellsController",
+        inputs : {
+          message: message,
+          spellSearchFilter: searchText,
+        },
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(result) {
+          console.log("Show Result: " + result);
+        });
+      }); 
     };
+
+    $scope.close = function(result) {
+      console.log("MainController Result: " + result);
+      close(result, 550); 
+    };
+
+
 
     var doesCharacterHaveSpellcraftBonus = function() {
       for(var i=0; i < $scope.character.skills.length; i++) {
@@ -1076,8 +1129,6 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
     $scope.getSpell = function (spell_id,attr) {
         return DataService.getSpellFromMasterList(spell_id, attr);
     };
-
-
 
     $scope.addSpell = function(spell_id) {
       var master_spell = DataService.getSpellFromMasterList(spell_id);
@@ -1115,6 +1166,6 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
       return null;
     };
 
-  });//end SpellsController
+  }]);//end SpellsController
 
 })();//end myApp

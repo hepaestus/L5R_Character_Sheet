@@ -31,20 +31,7 @@
       <input type="checkbox" name="spell_deficiency" ng-model="character.spell_deficiency.void" value="void"/>
   </section>
 
-  <a href="" ng-click="toggleShowSpellsList()">Add Spell</a>
-  <div ng-show="showSpellsList">
-    <label>Search</label><input name="spellSearchFilter.text" ng-model="spellSearchFilter.$" type="search"/><br/>
-    <label>Level</label><input name="spellSearchFilter.level" ng-model="spellSearchFilter.level" type="number" min='1' max='6'/><br/>
-    <label>Ring</label><input name="spellSearchFilter.ring" ng-model="spellSearchFilter.ring" type="text"/>
-    <ul>
-      <li ng-repeat="spell in spellsMasterList | filter:spellSearchFilter">
-      <a href="" ng-click="addSpell(spell.id)"><strong>{{spell.name}}</strong>, Level:{{spell.level}}, Ring:{{spell.ring}}<span ng-if="spell.type">, Type: {{spell.type}}</span></a>
-        <ul>
-          <li class="medium"><span ng-bind-html="spell.description"></span></li>
-         </ul>
-      </li>
-    </ul>
-  </div>
+  <a href="" ng-click="showSpellsListModal()">Add Spell</a>
 
   <h1>Known Spells</h1>
   <div class="container-fluid"> 
