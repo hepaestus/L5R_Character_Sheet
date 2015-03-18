@@ -15,7 +15,7 @@
                 <label for="type_low">Low:</label><input name="type_low" type="radio" value="low" ng-model="skillSearchType.sub_type"/ -->
                 <ul class="list-group">                  
                     <li class="list-group-item" ng-repeat="each in skillsMasterList | filter:skillSearchText | filter:skillSearchType">
-                        <a href="" ng-click="close(each.id)">{{each.type}} {{each.sub_type}}</a>
+                        <a href="" ng-click="addASkill(each.id)">{{each.type}} {{each.sub_type}}</a>
                     </li>
                 </ul>
             </div>

@@ -20,55 +20,6 @@
         <label class="line">Insight</label><input class="line insight" name="insight" type="number" ng-model="character.insight"/><span class="small">(Rings x 10 + skills)</span><br/>
       </div>
 
-      <!-- div class="row">
-      <div id="earth_ring" class="ring">
-        <div class="c ol-xs-3 c ol-xs-offset-3">
-          <div class="row label center">Earth</div>
-          <div class="row right"><label for="stamina">Stamina</label><input name="stamina" type="number" min="0" class="ring_input" ng-model="character.stamina" ng-change="updateEarth('stamina',character.stamina)"></div>
-          <div class="row right"><label for="willpower">Willpower</label><input name="willpower" type="number" min="0" class="ring_input" ng-model="character.willpower" ng-change="updateEarth('willpower',character.willpower)"></div>
-          <div class="row right"><input name="earth_ring" type="number" min="0" class="ring_input" ng-model="character.earth" ng-change="updateEarthRing(character.earth)"></div>
-        </div>
-      </div>
-
-      <div id="air_ring" class="ring">
-        <div class="c ol-xs-3 c ol-xs-offset-2">
-          <div class="row label center">Air</div>
-          <div class="row"><input name="reflexes" type="number" min="0" class="ring_input" ng-model="character.reflexes" ng-change="updateAir('reflexes',character.reflexes)"><label for="reflexes">Reflexes</label></div>
-          <div class="row"><input name="awareness" type="number" min="0" class="ring_input" ng-model="character.awareness" ng-change="updateAir('awareness',character.awareness)"><label for="awareness">Awareness</label></div>
-          <div class="row"><input name="air_ring" type="number" min="0" class="ring_input" ng-model="character.air" ng-change="updateAirRing(character.air)"></div>
-        </div>
-      </div>
-      </div>
-
-      <div class="row">
-        <div id="water_ring" class="ring">
-          <div class="c ol-xs-3 c ol-xs-offset-1">
-            <div class="row right"><input name="water_ring" type="number" min="0" class="ring_input" ng-model="character.water" ng-change="updateWaterRing(character.water)"></div>
-            <div class="row right"><label for="strength">Strength</label><input name="strength" type="number" min="0" class="ring_input" ng-model="character.strength" ng-change="updateWater('strength',character.strength)"></div>
-            <div class="row right"><label for="perception">Perception</label><input name="perception" type="number" min="0" class="ring_input" ng-model="character.perception" ng-change="updateWater('perception',character.perception)"></div>
-            <div class="row label center">Water</div>
-          </div>
-        </div>
-  
-        <div id="void_ring" class="ring">
-          <div class="c ol-xs-3 c ol-xs-offset-2">
-            <div class="row center"><input name="void_ring" type="number" min="0" class="ring_input" ng-model="character.void" ng-change="updateVoid('void',character.void)"></div>
-            <div class="row label center">Void</div>
-            <div class="row center">Void Slots</div>
-          </div>
-        </div>
-
-        <div id="fire_ring" class="ring">
-          <div class="c ol-xs-3 c ol-xs-offset-6">
-            <div class="row left"><input name="fire_ring" type="number" min="0" class="ring_input" ng-model="character.fire" ng-change="updateFileRing(character.fire)"></div>
-            <div class="row left"><input name="agility" type="number" min="0" class="ring_input" ng-model="character.agility" ng-change="updateFire('agility',character.agility)"><label for="agility">Agility</label></div>
-            <div class="row left"><input name="intelligence" type="number" min="0" class="ring_input" ng-model="character.intelligence" ng-change="updateFire('intelligence',character.intelligence)"><label for="intelligence">Intelligence</label></div>
-            <div class="row label center">Fire</div>
-          </div>
-        </div>
-      </div -->
-
-
       <table class="rings-table">
         <tr>
             <th colspan="1" class="center" >EARTH</th>
@@ -220,52 +171,52 @@
      <section class="bushido-stats">
        <h4>HONOR</h4>
        <input type="number" name="honor-rank" min="0" class="stats-rank" ng-model="character.honor"/>
-       <input type="checkbox" name="honor"/>
-       <input type="checkbox" name="honor"/>
-       <input type="checkbox" name="honor"/>
-       <input type="checkbox" name="honor"/>
-       <input type="checkbox" name="honor"/>
-       <input type="checkbox" name="honor"/>
-       <input type="checkbox" name="honor"/>
-       <input type="checkbox" name="honor"/>
-       <input type="checkbox" name="honor"/>
-       <input type="checkbox" name="honor"/>
+       <input type="checkbox" name="honor.one"/>
+       <input type="checkbox" name="honor.two"/>
+       <input type="checkbox" name="honor.three"/>
+       <input type="checkbox" name="honor.four"/>
+       <input type="checkbox" name="honor.five"/>
+       <input type="checkbox" name="honor.six"/>
+       <input type="checkbox" name="honor.seven"/>
+       <input type="checkbox" name="honor.eight"/>
+       <input type="checkbox" name="honor.nine"/>
+       <input type="checkbox" name="honor.ten"/>
        <h4>GLORY</h4>
        <input type="number" name="glory-rank" min="0" class="stats-rank" ng-model="character.glory"/>
-       <input type="checkbox" name="glory"/>
-       <input type="checkbox" name="glory"/>
-       <input type="checkbox" name="glory"/>
-       <input type="checkbox" name="glory"/>
-       <input type="checkbox" name="glory"/>
-       <input type="checkbox" name="glory"/>
-       <input type="checkbox" name="glory"/>
-       <input type="checkbox" name="glory"/>
-       <input type="checkbox" name="glory"/>
-       <input type="checkbox" name="glory"/>
+       <input type="checkbox" name="glory.one"/>
+       <input type="checkbox" name="glory.two"/>
+       <input type="checkbox" name="glory.three"/>
+       <input type="checkbox" name="glory.four"/>
+       <input type="checkbox" name="glory.five"/>
+       <input type="checkbox" name="glory.six"/>
+       <input type="checkbox" name="glory.seven"/>
+       <input type="checkbox" name="glory.eight"/>
+       <input type="checkbox" name="glory.nine"/>
+       <input type="checkbox" name="glory.ten"/>
        <h4>STATUS</h4>
        <input type="number" name="status-rank" min="0" class="stats-rank" ng-model="character.status"/>
-       <input type="checkbox" name="status"/>
-       <input type="checkbox" name="status"/>
-       <input type="checkbox" name="status"/>
-       <input type="checkbox" name="status"/>
-       <input type="checkbox" name="status"/>
-       <input type="checkbox" name="status"/>
-       <input type="checkbox" name="status"/>
-       <input type="checkbox" name="status"/>
-       <input type="checkbox" name="status"/>
-       <input type="checkbox" name="status"/>
+       <input type="checkbox" name="status.one"/>
+       <input type="checkbox" name="status.two"/>
+       <input type="checkbox" name="status.three"/>
+       <input type="checkbox" name="status.four"/>
+       <input type="checkbox" name="status.five"/>
+       <input type="checkbox" name="status.six"/>
+       <input type="checkbox" name="status.seven"/>
+       <input type="checkbox" name="status.eight"/>
+       <input type="checkbox" name="status.nine"/>
+       <input type="checkbox" name="status.ten"/>
        <h4>SHADOWLAND TAINT</h4>
        <input type="number" name="taint-rank" min="0" class="stats-rank" ng-model="character.taint"/>
-       <input type="checkbox" name="taint"/>
-       <input type="checkbox" name="taint"/>
-       <input type="checkbox" name="taint"/>
-       <input type="checkbox" name="taint"/>
-       <input type="checkbox" name="taint"/>
-       <input type="checkbox" name="taint"/>
-       <input type="checkbox" name="taint"/>
-       <input type="checkbox" name="taint"/>
-       <input type="checkbox" name="taint"/>
-       <input type="checkbox" name="taint"/>
+       <input type="checkbox" name="taint.one"/>
+       <input type="checkbox" name="taint.two"/>
+       <input type="checkbox" name="taint.three"/>
+       <input type="checkbox" name="taint.four"/>
+       <input type="checkbox" name="taint.five"/>
+       <input type="checkbox" name="taint.six"/>
+       <input type="checkbox" name="taint.seven"/>
+       <input type="checkbox" name="taint.eight"/>
+       <input type="checkbox" name="taint.nine"/>
+       <input type="checkbox" name="taint.ten"/>
      </section>
 
      <table class="stats-table">
