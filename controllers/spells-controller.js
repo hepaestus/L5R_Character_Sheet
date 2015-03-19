@@ -3,6 +3,7 @@
     $scope.test = "Spells Controller";
     $scope.spellSearchFilter;
     $scope.spellSearchText = "";
+    $scope.character = DataService.character();
 
     $scope.spellsMasterList = DataService.spellsMasterList();
 
@@ -24,18 +25,8 @@
     };
 
     $scope.close = function(result) {
-      console.log("MainController Result: " + result);
+      console.log("SpellsController Result: " + result);
       close(result, 550); 
-    };
-
-    var doesCharacterHaveSpellcraftBonus = function() {
-      for(var i=0; i < $scope.character.skills.length; i++) {
-        if( $scope.character.skills[i].id == 54 ) { // 54 is the spellcraft skill id in the skillsMasterList
-          if(  $scope.character.skills[i].rank >= 5 ) {
-            return true;
-          }
-        }
-      }
     };
 
     $scope.showSpellsList = false;
@@ -59,7 +50,8 @@
         //$scope.character.spells.push( $scope.spellsMasterList[index]) ;
         if ( getCharacterSpellById(spell_id) === null) {
           $scope.character.spells.push( new_spell ) ;
-          $scope.toggleShowSpellsList();
+          close(true, 500); // ATTEMP! to close the modal window.
+          $scope.character = DataService.updateCharacter($scope.character);
         }
       } else {
         console.log("Spell " + spell_id + " Not Found");
@@ -70,6 +62,7 @@
       for( var i=0; i < $scope.character.spells.length; i++) {
         if ( $scope.character.spells[i].id == spell_id ) {
           $scope.character.spells.splice(i,1);
+          $scope.character = DataService.updateCharacter($scope.character);
         }
       }
     };

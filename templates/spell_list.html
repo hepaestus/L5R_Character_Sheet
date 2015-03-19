@@ -42,7 +42,7 @@
                   </datalist>
                 <ul class="list-group">
                   <li class="list-group-item" ng-repeat="spell in spellsMasterList | filter:spellSearchFilter">
-                    <a href="" ng-click="close(spell.id)"><strong>{{spell.name}}</strong>, Level:{{spell.level}}, Ring:{{spell.ring}}<span ng-if="spell.type">, Type: {{spell.type}}</span></a>
+                    <a href="" ng-click="addSpell(spell.id)"><strong>{{spell.name}}</strong>, Level:{{spell.level}}, Ring:{{spell.ring}}<span ng-if="spell.type">, Type: {{spell.type}}</span></a>
                     <ul>
                       <li class="medium"><span ng-bind-html="spell.description"></span></li>
                     </ul>

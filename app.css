@@ -127,6 +127,9 @@ section.bushido-stats input.stats-rank{
     text-align:center;
     width: 3em;
 }
+section.bushido-stats h4{
+    text-align:left;
+}
 
 table.skill-table {
   width:100%;

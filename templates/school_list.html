@@ -2,13 +2,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Choose your School</h2>
                 <button type="button" class="close" ng-click="close(false)" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2>Choose your School</h2>
             </div>
             <div class="modal-body">
                 <h4>Choose Your School</h4>
                 <ul class="list-group">
-                  <li class="list-group-item " ng-repeat="school in schoolsMasterList | filter:character.clan.name"><a href="" ng-click='selectSchool(school.id)'>{{school.name}}</a></li>
+                  <li class="list-group-item " ng-repeat="school in schoolsMasterList | filter:character.clan.name | filter:filterBy"><a href="" ng-click='selectSchool(school.id)'>{{school.name}}</a></li>
                 </ul>	
             </div>
             <div class="modal-footer">

@@ -109,13 +109,14 @@
     $scope.skillsMasterList = DataService.skillsMasterList();
     //console.log("Skills MasterList: " + $scope.skilllsMasterList);
 
-    $scope.showSkillsListModal = function(message, searchText) {
+    $scope.showSkillsListModal = function(message, searchText, rank) {
       ModalService.showModal({
         templateUrl: "templates/skill_list.html",
         controller: "MainController",
         inputs : {
           modalMessage : message,
           skillSearchText : searchText,          
+          rank: rank,
         },
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
@@ -196,11 +197,11 @@
             break;
           case 'affinity':
             var ring = obj[key];
-            $scope.character.affinity.ring = true;
+            $scope.character.spell_affinity.ring = true;
             break;
           case 'deficiency':
             var ring = obj[key];
-            $scope.character.deficiency.ring = true;
+            $scope.character.spell_deficiency.ring = true;
             break;
           case 'skills':
               for(var i=0; i < obj[key].length; i++ ) {
@@ -210,14 +211,14 @@
                   $scope.addASkill(skill, 1);
                 } else if ( skill.match(/:/) ) {
                   var arr = skill.split(":");
-                  var skill = arr[0];
-                  var emp = (arr[1]) ? arr[1] : null;
-                  var lvl = (arr[2]) ? arr[2] : 1;
+                  var skill = parseInt(arr[0]);
+                  var emp = (arr[1]) ? parseInt(arr[1]) : null;
+                  var lvl = (arr[2]) ? parseInt(arr[2]) : 1;
                   $scope.addASkill(skill, lvl, emp);
                 } else {
                   $scope.close(true,500);
                   //alert("You Also Get " + skill + " skill");
-                  $scope.showSkillsListModal("You also get a " + skill + " skill.", skill);
+                  $scope.showSkillsListModal("You also get a " + skill + " skill.", skill, 1);
                 }
               }
             break;
@@ -231,7 +232,10 @@
     $scope.addASkill = function(skill_id, rank, emp) {
       var skill = DataService.getSkillFromMasterList(skill_id);
       var lvl = ( rank )? rank : 0;
-      var emph = ( emp ) ? emp : null;
+      var emph = ( emp != null || emp != undefinded  ) ? emp : null;
+      if ( emph != null ) {
+        emph = skill.emphases[emph];
+      }
       var new_skill = { id:skill_id, rank:lvl, rank_s:lvl, emphasis:emph, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
       if ( $scope.getCharacterSkillById(skill_id) === null) {
         $scope.character.skills.push(new_skill);

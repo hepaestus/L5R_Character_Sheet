@@ -94,12 +94,13 @@
       {id:8, name:'Daidoji', clan:'Crane', bonus:{ attr:1 } },
       {id:9, name:'Kakita', clan:'Crane', bonus:{ attr:1 } },
       {id:10, name:'Yasuki', clan:'Crane', bonus:{ attr:1 } },
-      {id:11, name:'Kitsu', clan:'Lion', bonus:{ stamina:1 } },
+      {id:11, name:'Kitsu', clan:'Lion', bonus:{ intelligence:1 } },
     ];
 
     var schoolsMasterList = [
+      // id, name, clan, bonus{ various attributes, skills[ array of numbers of a string in the form "skill_id:empahasis_id:rank", or a string describing other skills, and finally techniques 
       {id:0, name:'Hida Bushi', clan:'Crab', bonus:{ stamina:1, honor:3.5, skills:[56, 58, 65, 90, 66, 36, '+1 bugei'], techniques:{1:'The Way of the Crab Pg. 106', 2:'The Mountain Does Not Move. Pg. 106', 3:'Two Pincers, One Mind. Pg. 106', 4:'Devastating Blow. Pg. 106', 5:'The Mountain Does Not Fall. Pg. 107' } } },
-      {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['10:1','36::2',39,54,'+1 weapon skill'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
+      {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['10:0','36::2',39,54,'+1 weapon skill'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
       {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['76:0',11,58,13,90,'53:1','+1 merchant skill'], techniques:{1:'The Way of the Carp. pg. 107', 2:'Do As We Say. pg. 108', 3:'Treasures of the Carp. pg 108', 4:'Wiles of the Carp. pg 108', 5:'What is Yours is Mine. pg 108'} } },
       {id:3, name:'Hirumi Bushi', clan:'Crab', bonus:{ willpower:1, honor:4.5, skills:[56,60,'66:0',68,36,92,'+1 skill'], techniques:{1:'Torch Flame Flickers. pg 108', 2:'Wolf\'s Little Lesson. pg 108', 3:'Hummingbird Wings. pg 108', 4:'Shark Smells Blood. pg 108', 5:'Daylight Wastes No Movement. pg 108'} } },
       {id:5, name:'', clan:'Crane', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
@@ -109,7 +110,7 @@
       {id:9, name:'', clan:'Phoenix', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:10, name:'', clan:'Scorpion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:11, name:'', clan:'Unicorn', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
-      {id:12, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:1',13,31,39,54,'1 high or bugie skill'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}} },
+      {id:12, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:0',13,31,39,54,'+1 high or bugie skill'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}} },
     ];
 
     var mastery = function(obj) {
@@ -219,6 +220,19 @@
       { id:92, level:'Low', type:'Stealth*', sub_type:'', trait:'agility', ring:'fire', emphases:{0:'Ambush', 1:'Shadowing', 2:'Sneaking', 3:'Spell Casting'}, get mastery() { return mastery(this); }, masteries:{3:'Simple Move Actions while using Stealth allow character to move a distance equal to her Water x5.', 5:'Simple Move Actions while using Stealth allow character to move a distance equal to her Water x10.', 7:'A character using stealth may make Free Move Actions as normal.'}, description:'Pg. 143 Core Book'},
       { id:93, level:'Low', type:'Temptation*', sub_type:'Social Skill', trait:'awareness', ring:'air', emphases:{0:'Bribery', 1:'Seduction'}, get mastery() { return mastery(this); }, masteries:{5:'Character gains +5 Bonus to the total of any contested Roll using Temptation.'}, description:'Pg. 143 Core Book'},
     ];
+
+
+    var doesCharacterHaveSpellcraftBonus = function() {
+      if ( character.skills ) {
+        for(var i=0; i < character.skills.length; i++) {
+          if( character.skills[i].id == 54 ) { // 54 is the spellcraft skill id in the skillsMasterList
+            if(  character.skills[i].rank >= 5 ) {
+              return true;
+            }
+          }
+        }
+      }
+    };
 
     var spellRoll = function(thisSpell) {
       var roll = '';
@@ -422,7 +436,7 @@
           }
         }
       }
-      return "(error - skill id not found)";
+      return "(error - skill " + skill_id + " not found)";
     };
 
     this.getSpellFromMasterList = function(spell_id, attr) {
@@ -435,7 +449,7 @@
           }
         }
       }
-      return "(error - spell id not found)";
+      return "(error - spell " + spell_id + " not found)";
     };
     
     var getClan = function() {
@@ -452,7 +466,7 @@
             return clansMasterList[i];
         }
       }
-      return "(error - clan id not found)";
+      return "(error - clan " + clan_id + " not found)";
     };
 
     var getFamily = function() {
@@ -463,13 +477,13 @@
         }
     };
 
-    this.getFamilyFromMasterList = function(clan_id) {
+    this.getFamilyFromMasterList = function(family_id) {
       for(var i=0; i < familiesMasterList.length; i++) {
-        if ( familiesMasterList[i].id === clan_id ) {
+        if ( familiesMasterList[i].id === family_id ) {
             return familiesMasterList[i];
         }
       }
-      return "(error - family id not found)";
+      return "(error - family " + family_id + " not found)";
     };
     
     var getSchool = function() {
@@ -480,13 +494,13 @@
         }
     };
 
-    this.getSchoolFromMasterList = function(clan_id) {
+    this.getSchoolFromMasterList = function(school_id) {
       for(var i=0; i < schoolsMasterList.length; i++) {
-        if ( schoolsMasterList[i].id === clan_id ) {
+        if ( schoolsMasterList[i].id === school_id ) {
             return schoolsMasterList[i];
         }
       }
-      return "(error - school id not found)";
+      return "(error - school " + school_id + " not found)";
     };
 
   });//end dataservice

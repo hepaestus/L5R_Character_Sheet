@@ -169,9 +169,11 @@
 <div="column">
    <aside class="col-md-3 col-xs-12">
      <section class="bushido-stats">
-       <h4>HONOR</h4>
-       <input type="number" name="honor-rank" min="0" class="stats-rank" ng-model="character.honor"/>
-       <input type="checkbox" name="honor.one"/>
+       <h4> 
+         <input type="number" name="honor-rank" min="0" step="0.1" class="stats-rank" ng-model="character.honor" />
+         HONOR
+       </h4>
+       <!-- input type="checkbox" name="honor.one"/>
        <input type="checkbox" name="honor.two"/>
        <input type="checkbox" name="honor.three"/>
        <input type="checkbox" name="honor.four"/>
@@ -180,10 +182,12 @@
        <input type="checkbox" name="honor.seven"/>
        <input type="checkbox" name="honor.eight"/>
        <input type="checkbox" name="honor.nine"/>
-       <input type="checkbox" name="honor.ten"/>
-       <h4>GLORY</h4>
-       <input type="number" name="glory-rank" min="0" class="stats-rank" ng-model="character.glory"/>
-       <input type="checkbox" name="glory.one"/>
+       <input type="checkbox" name="honor.ten"/ -->
+       <h4>
+         <input type="number" name="glory-rank" min="0" step="0.1" class="stats-rank" ng-model="character.glory"/>
+         GLORY
+       </h4>
+       <!-- input type="checkbox" name="glory.one"/>
        <input type="checkbox" name="glory.two"/>
        <input type="checkbox" name="glory.three"/>
        <input type="checkbox" name="glory.four"/>
@@ -192,10 +196,12 @@
        <input type="checkbox" name="glory.seven"/>
        <input type="checkbox" name="glory.eight"/>
        <input type="checkbox" name="glory.nine"/>
-       <input type="checkbox" name="glory.ten"/>
-       <h4>STATUS</h4>
-       <input type="number" name="status-rank" min="0" class="stats-rank" ng-model="character.status"/>
-       <input type="checkbox" name="status.one"/>
+       <input type="checkbox" name="glory.ten"/ -->
+       <h4>
+         <input type="number" name="status-rank" min="0" step="0.1" class="stats-rank" ng-model="character.status"/>
+         STATUS
+       </h4>
+       <!-- input type="checkbox" name="status.one"/>
        <input type="checkbox" name="status.two"/>
        <input type="checkbox" name="status.three"/>
        <input type="checkbox" name="status.four"/>
@@ -204,10 +210,12 @@
        <input type="checkbox" name="status.seven"/>
        <input type="checkbox" name="status.eight"/>
        <input type="checkbox" name="status.nine"/>
-       <input type="checkbox" name="status.ten"/>
-       <h4>SHADOWLAND TAINT</h4>
-       <input type="number" name="taint-rank" min="0" class="stats-rank" ng-model="character.taint"/>
-       <input type="checkbox" name="taint.one"/>
+       <input type="checkbox" name="status.ten"/ -->
+       <h4>
+         <input type="number" name="taint-rank" min="0" step="0.1" class="stats-rank" ng-model="character.taint"/>
+         SHADOWLAND TAINT
+       </h4>
+       <!-- input type="checkbox" name="taint.one"/>
        <input type="checkbox" name="taint.two"/>
        <input type="checkbox" name="taint.three"/>
        <input type="checkbox" name="taint.four"/>
@@ -216,7 +224,7 @@
        <input type="checkbox" name="taint.seven"/>
        <input type="checkbox" name="taint.eight"/>
        <input type="checkbox" name="taint.nine"/>
-       <input type="checkbox" name="taint.ten"/>
+       <input type="checkbox" name="taint.ten"/ -->
      </section>
 
      <table class="stats-table">
