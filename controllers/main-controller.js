@@ -28,32 +28,24 @@
       close(result, 500); 
     };
 
-    $scope.clansMasterList = DataService.clansMasterList();
-    //console.log("Clans MasterList: " + $scope.clansMasterList);
-
     $scope.showClansListModal = function(message, filterBy) {
       ModalService.showModal({
         templateUrl: "templates/clans_list.html",
-        controller: "MainController",
+        controller: "ClansController",
         inputs : {
-          modalMessage: message,
-          filterBy: filterBy,
+          clansMasterList: DataService.clansMasterList()
         },
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
         modal.element.modal();
-        modal.close.then(function(result) {
-          $scope.selectClan(result); 
-          console.log("Show Result: " + result);
+        modal.close.then(function(clanId) {
+          //  If we have selected a clan, set it.
+          if(clanId) {
+            $scope.character.clan_id = clanId;
+            $scope.character = DataService.updateCharacter($scope.character);
+          }
         });
       }); 
-    };
-
-    $scope.selectClan = function(id) {
-      console.log("Select Clan : " + id );
-      $scope.character.clan_id = id;
-      $scope.character = DataService.updateCharacter($scope.character);
-      $scope.close(true, 500); 
     };
 
     $scope.familiesMasterList = DataService.familiesMasterList();
