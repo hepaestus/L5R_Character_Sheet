@@ -12,9 +12,8 @@ angular.module('myApp').controller('ClansController', ['$scope', 'clansMasterLis
   };
 
   $scope.selectClan = function(clanId) {
+    console.log("Select Clan " + clanId);
     $scope.selectedClanId = clanId;
   };
-
-  
 
 }]);

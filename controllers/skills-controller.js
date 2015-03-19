@@ -1,4 +1,4 @@
-  angular.module('myApp').controller('SkillsController', ['$scope', 'DataService', function($scope, DataService) {
+  angular.module('myApp').controller('SkillsController', ['$scope', 'DataService', 'ModalService', function($scope, DataService, ModalService) {
 
     $scope.test = "Skills Controller";
 

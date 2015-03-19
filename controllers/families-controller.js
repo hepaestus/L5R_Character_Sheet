@@ -1,0 +1,21 @@
+angular.module('myApp').controller('FamiliesController', ['$scope', 'familiesMasterList', 'close', 'modalMessage', 'filterBy', function($scope, familiesMasterList, close, modalMessage, filterBy) {
+
+  $scope.familiesMasterList = familiesMasterList;
+  $scope.modalMessage = modalMessage;
+  $scope.filterBy = filterBy;
+  $scope.selectedFamilyId = null;
+
+  $scope.done = function() {
+    close($scope.selectedFamilyId, 500); 
+  };
+
+  $scope.cancel = function() {
+    close(null, 500); 
+  };
+
+  $scope.selectFamily = function(familyId) {
+    $scope.selectedFamilyId = familyId;
+    console.log("Select Family " + $scope.selectedFamilyId);
+  };
+
+}]);

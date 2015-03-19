@@ -5,6 +5,11 @@
     $scope.character = {name:'test'};
     $scope.character = DataService.character();
     
+    $scope.close = function(result) {
+      console.log("MainController Result: " + result);
+      close(result, 500); 
+    };
+
     $scope.show = function() {
       ModalService.showModal({
         templateUrl: "templates/modal.html",
@@ -23,79 +28,80 @@
       }); 
     };
 
-    $scope.close = function(result) {
-      console.log("MainController Result: " + result);
-      close(result, 500); 
-    };
-
     $scope.showClansListModal = function(message, filterBy) {
       ModalService.showModal({
         templateUrl: "templates/clans_list.html",
         controller: "ClansController",
         inputs : {
-          clansMasterList: DataService.clansMasterList()
+          clansMasterList: DataService.clansMasterList(),
+          modalMessage: message,
+          filterby: filterBy,
         },
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
         modal.element.modal();
         modal.close.then(function(clanId) {
           //  If we have selected a clan, set it.
-          if(clanId) {
+          if(clanId != null) {
+            console.log("Show Clan Id: " + clanId);
             $scope.character.clan_id = clanId;
+            $scope.calculateBonus( DataService.getClanFromMasterList(clanId).bonus );
             $scope.character = DataService.updateCharacter($scope.character);
+          } else {
+            console.log("No Clan Id");
           }
         });
       }); 
     };
 
-    $scope.familiesMasterList = DataService.familiesMasterList();
-    //console.log("Families MasterList: " + $scope.familiesMasterList);
-
     $scope.showFamiliesListModal = function(message, filterBy) {
       ModalService.showModal({
         templateUrl: "templates/family_list.html",
-        controller: "MainController",
+        controller: "FamiliesController",
         inputs: {
+          familiesMasterList: DataService.familiesMasterList(),
           modalMessage : message,
           filterBy : filterBy, 
         },
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
         modal.element.modal();
-        modal.close.then(function(result) {
-          console.log("Show Result: " + result);
+        modal.close.then(function(familyId) {
+          if(familyId != null) {
+            console.log("Show Family Id: " + familyId);
+            $scope.character.family_id = familyId;
+            $scope.calculateBonus( DataService.getFamilyFromMasterList(familyId).bonus );
+            $scope.character = DataService.updateCharacter($scope.character);
+          } else {
+            console.log("No Family Id");
+          }
         });
       }); 
     };
     
-    $scope.selectFamily = function(id) {
-      console.log("Select Family : " + id );
-      $scope.character.family_id = id;
-      $scope.calculateBonus( DataService.getFamilyFromMasterList(id).bonus );
-      $scope.character = DataService.updateCharacter($scope.character);      
-    };
-
-    $scope.schoolsMasterList = DataService.schoolsMasterList();
-    //console.log("Schools MasterList: " + $scope.schoolsMasterList);
-
-    $scope.showSchoolsListModal = function() {
+    $scope.showSchoolsListModal = function(message, filterBy) {
       ModalService.showModal({
         templateUrl: "templates/school_list.html",
-        controller: "MainController",
+        controller: "SchoolsController",
+        inputs: {
+          schoolsMasterList: DataService.schoolsMasterList(),
+          modalMessage: message,
+          filterBy: filterBy,
+        }
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
         modal.element.modal();
-        modal.close.then(function(result) {
-          console.log("Show Result: " + result);
+        modal.close.then(function(schoolId) {
+          if( schoolId != null ) {
+            console.log("Show School Id: " + schoolId);
+            $scope.character.school_id = schoolId;
+            $scope.calculateBonus( DataService.getSchoolFromMasterList(schoolId).bonus );
+            $scope.character = DataService.updateCharacter($scope.character);      
+          } else {
+            console.log("No School Id");
+          }
         });
       }); 
-    };
-
-    $scope.selectSchool = function(id) {
-      console.log("Select School : " + id );
-      $scope.character.school_id = id;
-      $scope.calculateBonus( DataService.getSchoolFromMasterList(id).bonus );
-      $scope.character = DataService.updateCharacter($scope.character);
     };
 
     $scope.skillsMasterList = DataService.skillsMasterList();
@@ -224,7 +230,7 @@
     $scope.addASkill = function(skill_id, rank, emp) {
       var skill = DataService.getSkillFromMasterList(skill_id);
       var lvl = ( rank )? rank : 0;
-      var emph = ( emp != null || emp != undefinded  ) ? emp : null;
+      var emph = ( emp != null || emp != undefined  ) ? emp : null;
       if ( emph != null ) {
         emph = skill.emphases[emph];
       }
