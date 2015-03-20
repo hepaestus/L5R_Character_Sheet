@@ -9,4 +9,5 @@
       console.log("ModalController Result: " + result);
       close(result, 550); 
     };
+
   }]);//end ModalController

@@ -6,11 +6,11 @@
         <h4 class="modal-title">Load Character</h4>
         <div class="modal-body">
           <h4>Choose Your Character</h4>
-          <!-- h5>Controller: {{test}}</h5>
-          <h5>Test: {{saved_characters_array}}</h5 --> 
+          <!-- h5>Controller: {{test}}</h5 -->
+          <h5 ng-if="modalMessage">{{modalMessage}}</h5> 
           <ul class="list-group">
-            <li class="list-group-item" ng-repeat="character in saved_characters_array">
-              <a ng-click="loadSavedCharacter($index)">{{$index}} {{character.name}} {{character.clan}} {{character.school}} {{character.last_saved}}</a>
+            <li class="list-group-item" ng-repeat="character in characterLoadList">
+              <a ng-click="loadSavedCharacter($index)">{{character.clan.name}} {{character.family.name}} {{character.name}} - {{character.school.name}} : {{character.last_saved}}</a>
               <button type="button" class="glyphicon glyphicon-remove" ng-click="removeSavedCharacter(character.last_saved)"></button>        
             </li>
           </ul>

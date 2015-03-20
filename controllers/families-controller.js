@@ -1,7 +1,7 @@
 angular.module('myApp').controller('FamiliesController', ['$scope', 'familiesMasterList', 'close', 'modalMessage', 'filterBy', function($scope, familiesMasterList, close, modalMessage, filterBy) {
 
   $scope.familiesMasterList = familiesMasterList;
-  $scope.modalMessage = modalMessage;
+  $scope.modalMessage = modalMessage
   $scope.filterBy = filterBy;
   $scope.selectedFamilyId = null;
 

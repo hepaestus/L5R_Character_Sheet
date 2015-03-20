@@ -22,12 +22,12 @@
       //console.log("Saved Characters Array : " + saved_characters_array);
       //console.log("Saved Characters Array : " + saved_characters_array.length );
       return saved_characters_array;
-    }
+    };
 
     this.getSavedCharacter = function(index) {
       console.log("Getting Character : " + saved_characters_array[index]);
       return saved_characters_array[index];
-    }
+    };
 
     this.deleteSavedCharacter = function(character_date_string) {
       $cookieStore.remove(character_date_string);

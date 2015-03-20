@@ -104,9 +104,6 @@
       }); 
     };
 
-    $scope.skillsMasterList = DataService.skillsMasterList();
-    //console.log("Skills MasterList: " + $scope.skilllsMasterList);
-
     $scope.showSkillsListModal = function(message, searchText, rank) {
       ModalService.showModal({
         templateUrl: "templates/skill_list.html",
@@ -125,35 +122,24 @@
       }); 
     };
 
-    $scope.saved_characters_array = LoadCharacterService.loadCharacters();
-
-    $scope.loadCharacterModal = function() {
+    $scope.loadCharacterModal = function(message, filterBy) {
       console.log("Loaded Characters : " + $scope.saved_characters_array);
       ModalService.showModal({
         templateUrl: "templates/character_load.html",
-        controller: "MainController",
+        controller: "CharacterLoadController",
+        inputs: {
+          modalMessage: message,
+          filterBy: filterBy,
+          characterLoadList: LoadCharacterService.loadCharacters(),
+        },
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
         modal.element.modal();
         modal.close.then(function(result) {
-          console.log("loadCharacterModal Result: " + result);
+          console.log("loadCharacterModal Result: " + result);          
+          $scope.character = DataService.character();
         });
       }); 
-    };
-
-    $scope.loadSavedCharacter = function(index) {
-      //console.log("Old Character : " + JSON.stringify($scope.character));
-      //console.log("Load Saved Character : " + index);
-      var loadChar = LoadCharacterService.getSavedCharacter(index);
-      console.log("Loaded Character : " + JSON.stringify(loadChar));
-      $scope.character = DataService.updateCharacter(loadChar);
-      console.log("New? Character : " + JSON.stringify($scope.character));
-    };
-
-    $scope.removeSavedCharacter = function(date_string) {
-      console.log("Remove Index : " + date_string );
-      LoadCharacterService.deleteSavedCharacter(date_string);
-      $scope.saved_characters_array = LoadCharacterService.loadCharacters();      
     };
 
     $scope.saveCharacter = function() {

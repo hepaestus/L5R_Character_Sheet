@@ -7,7 +7,7 @@
             </div>
             <div class="modal-body">
                 <h4>Choose Your Family</h4>
-                <h4 ng-if="modalMessage">{{modalMessage}}</h4>
+                <h5 ng-if="modalMessage">{{modalMessage}}</h5>
                 <ul class="list-group">
                     <li class="list-group-item" ng-repeat="family in familiesMasterList | filter:filterBy"><a href="" ng-click='selectFamily(family.id)'>{{family.name}}</a></li>
                 </ul>
