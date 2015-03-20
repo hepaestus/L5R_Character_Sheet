@@ -29,7 +29,7 @@
       } else if ( $scope.character.stamina < $scope.character.willpower ) {
         $scope.character.earth = $scope.character.stamina;
       }
-      $scope.updateInsightRank();
+      $scope.updateInsight();
       $scope.character = DataService.updateCharacter($scope.character);
     };
     $scope.updateAir = function(attr, value) {
@@ -41,7 +41,7 @@
       } else if ( $scope.character.awareness < $scope.character.reflexes ) {
         $scope.character.air = $scope.character.awareness;
       }
-      $scope.updateInsightRank();
+      $scope.updateInsight();
       $scope.character = DataService.updateCharacter($scope.character);
     };
     $scope.updateWater = function(attr, value) {
@@ -53,7 +53,7 @@
       } else if ( $scope.character.perception < $scope.character.strength ) {
         $scope.character.water = $scope.character.perception;
       }
-      $scope.updateInsightRank();
+      $scope.updateInsight();
       $scope.character = DataService.updateCharacter($scope.character);
     };
     $scope.updateFire = function(attr, value) {
@@ -65,16 +65,16 @@
       } else if ( $scope.character.intelligence < $scope.character.agility ) {
         $scope.character.fire = $scope.character.intelligence;
       }
-      $scope.updateInsightRank();
+      $scope.updateInsight();
       $scope.character = DataService.updateCharacter($scope.character);
     };
     $scope.updateVoid = function(attr, value) {
       $scope.updateExp(attr,value);
-      $scope.updateInsightRank();
+      $scope.updateInsight();
       $scope.character = DataService.updateCharacter($scope.character);
     };
 
-    $scope.updateInsightRank = function() {
+    $scope.updateInsight = function() {
       var skillRanks = 0;
       for(var i = 0; i < $scope.character.skills.length; i++) {
         if ( $scope.character.skills[i] != undefined ) {
@@ -84,5 +84,22 @@
       $scope.character.insight = skillRanks + (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10);
       $scope.character = DataService.updateCharacter($scope.character);
     };
+
+    $scope.updateInsightRank = function() {
+      if( $scope.character.insight < 150 ) {
+        $scope.character.insight_rank = 1;
+      } else if ( $scope.character.insight >= 150 && $scope.character.insight < 200  ) {
+        $scope.character.insight_rank = 2;
+      } else if ( $scope.character.insight >= 200 && $scope.character.insight < 300  ) {
+        $scope.character.insight_rank = 3;
+      } else if ( $scope.character.insight >= 300 && $scope.character.insight < 400  ) {
+        $scope.character.insight_rank = 4;
+      } else if ( $scope.character.insight >= 400 && $scope.character.insight < 500  ) {
+        $scope.character.insight_rank = 5;
+      } else if ( $scope.character.insight >= 500 ) {
+        $scope.character.insight_rank = 6;
+      }
+      $scope.character = DataService.updateCharacter($scope.character);
+    }
 
   }]);//end CharacterController
