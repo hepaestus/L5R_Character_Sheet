@@ -455,7 +455,9 @@
     var getClan = function() {
         for(var i=0; i < clansMasterList.length; i++) {
           if ( clansMasterList[i].id === character.clan_id ) {
-            return clansMasterList[i];
+            var clan = {id:character.clan_id, name:clansMasterList[i].name}
+            return clan
+            //return clansMasterList[i];
           }
         }
     };
@@ -472,7 +474,9 @@
     var getFamily = function() {
         for(var i=0; i < familiesMasterList.length; i++) {
           if ( familiesMasterList[i].id === character.family_id ) {
-            return familiesMasterList[i];
+            var family = {id:character.family_id, name:familiesMasterList[i].name}
+            return family;
+            //return familiesMasterList[i];
           }
         }
     };
@@ -489,7 +493,9 @@
     var getSchool = function() {
         for(var i=0; i < schoolsMasterList.length; i++) {
           if ( schoolsMasterList[i].id === character.school_id ) {
-            return schoolsMasterList[i];
+            var school = {id:character.school_id, name:schoolsMasterList[i].name}
+            return school;
+            //return schoolsMasterList[i];
           }
         }
     };
