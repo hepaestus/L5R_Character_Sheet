@@ -32,6 +32,7 @@
       $scope.updateInsight();
       $scope.character = DataService.updateCharacter($scope.character);
     };
+
     $scope.updateAir = function(attr, value) {
       $scope.updateExp(attr,value);
       if ( $scope.character.reflexes === $scope.character.awareness) {
@@ -44,6 +45,7 @@
       $scope.updateInsight();
       $scope.character = DataService.updateCharacter($scope.character);
     };
+
     $scope.updateWater = function(attr, value) {
       $scope.updateExp(attr,value);
       if ( $scope.character.strength === $scope.character.perception) {
@@ -56,6 +58,7 @@
       $scope.updateInsight();
       $scope.character = DataService.updateCharacter($scope.character);
     };
+
     $scope.updateFire = function(attr, value) {
       $scope.updateExp(attr,value);
       if ( $scope.character.agility === $scope.character.intelligence) {
@@ -68,6 +71,7 @@
       $scope.updateInsight();
       $scope.character = DataService.updateCharacter($scope.character);
     };
+    
     $scope.updateVoid = function(attr, value) {
       $scope.updateExp(attr,value);
       $scope.updateInsight();
