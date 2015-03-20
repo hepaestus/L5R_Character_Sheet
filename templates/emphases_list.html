@@ -3,18 +3,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" ng-click="close(false)" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2>Choose your School</h2>
+                <h2>Choose An Emphasis</h2>
             </div>
             <div class="modal-body">
-                <h4>Choose Your School</h4>
+                <h4>Choose An Emphasis</h4>
                 <h5 ng-if="modalMessage">{{modalMessage}}</h5>
                 <h5 ng-if="filterBy">Filter: {{filterBy}}</h5>
                 <ul class="list-group">
-                  <li class="list-group-item " ng-repeat="school in schoolsMasterList | filter:filterBy"><a href="" ng-click='selectSchool(school.id)'>{{school.name}}</a></li>
-                </ul>	
+                    <li class="list-group-item" ng-repeat="emphasis in emphasesList | filter:filterBy"><a href="" ng-click='selectEmphasis($index)'>{{emphasis}}</a></li>
+                </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" ng-click="canel()" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" ng-click="cancel()" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="button" ng-click="done()" class="btn btn-primary" data-dismiss="modal">Done</button>
             </div>
         </div>
