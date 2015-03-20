@@ -11,16 +11,12 @@
       saved_characters_array = [];
       if ( saved_character_cookie_array ) {
         for ( var i = 0; i < saved_character_cookie_array.length; i++) {
-          //console.log("Getting Character " +i+ " : " + saved_character_cookie_array[i]);
           var character = $cookieStore.get(saved_character_cookie_array[i]);
           if ( character ) {
-            //console.log("Pushing Character Into Array : " + character.name);
             saved_characters_array.push(character);
           }
         }
       }
-      //console.log("Saved Characters Array : " + saved_characters_array);
-      //console.log("Saved Characters Array : " + saved_characters_array.length );
       return saved_characters_array;
     };
 

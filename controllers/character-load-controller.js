@@ -14,24 +14,21 @@ angular.module('myApp').controller('CharacterLoadController', ['$scope', 'charac
     close(null, 500); 
   };
 
-  $scope.selectCharacterLoad = function(schoolId) {
-    console.log("Select CharacterLoad " + schoolId);
-    $scope.selectedCharacterLoadId = schoolId;
+  $scope.selectCharacterLoad = function(charId) {
+    //console.log("Select CharacterLoad " + charId);
+    $scope.selectedCharacterLoadId = charId;
   };
 
   $scope.removeSavedCharacter = function(date_string) {
-    console.log("Remove Index : " + date_string );
+    //console.log("Remove Index : " + date_string );
     LoadCharacterService.deleteSavedCharacter(date_string);
     $scope.characterLoadList = LoadCharacterService.loadCharacters();      
   };
 
   $scope.loadSavedCharacter = function(index) {
-    //console.log("Old Character : " + JSON.stringify($scope.character));
-    console.log("Load Saved Character : " + index);
+    //console.log("Load Saved Character : " + index);
     var loadChar = LoadCharacterService.getSavedCharacter(index);
-    console.log("Loaded Character : " + JSON.stringify(loadChar));
     DataService.updateCharacter(loadChar);
-    console.log("New? Character : " + JSON.stringify($scope.character));
   };
     
 }]);
