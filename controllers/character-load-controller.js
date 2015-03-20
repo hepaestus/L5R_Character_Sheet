@@ -1,5 +1,6 @@
-angular.module('myApp').controller('CharacterLoadController', ['$scope', 'characterLoadList', 'close', 'modalMessage', 'filterBy', 'LoadCharacterService', function($scope, characterLoadList, close, modalMessage, filterBy, LoadCharacterService) {
+angular.module('myApp').controller('CharacterLoadController', ['$scope', 'characterLoadList', 'close', 'modalMessage', 'filterBy', 'LoadCharacterService', 'DataService', function($scope, characterLoadList, close, modalMessage, filterBy, LoadCharacterService, DataService) {
 
+  $scope.test = "CharacterLoadController";
   $scope.characterLoadList = characterLoadList;
   $scope.modalMessage = modalMessage;
   $scope.filterBy = filterBy;
