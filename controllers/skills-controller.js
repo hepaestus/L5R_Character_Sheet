@@ -15,19 +15,64 @@
     $scope.currentSkillId = null;
     $scope.showEmphasesList = false;
 
-    $scope.toggleShowEmphasesList = function(skill_id) {
-        //console.log("Skill Id : " + skill_id);
-        $scope.currentSkillId = skill_id;
-        //console.log("Current Skill Id : " + $scope.currentSkillId);
-        $scope.emphasesList = [];
-        var skill = DataService.getSkillFromMasterList(skill_id);
-    if ( skill ) {
-        //console.log("FOUND skill : " + skill_id);
-          for ( var i in skill.emphases ) {
-            $scope.emphasesList.push( skill.emphases[i] ) ;
+    $scope.showSkillsListModal = function(message, searchText, filterBy, rank) {
+      ModalService.showModal({
+        templateUrl: "templates/skill_list.html",
+        controller: "SkillsModalListController",
+        inputs : {
+          modalMessage : message,
+          skillSearchText : searchText,          
+          filterBy: filterBy,
+          rank: rank,
+          skillsMasterList: DataService.skillsMasterList(),
+        },
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(skillId) {
+          if( skillId != null ) {
+            console.log("Show Skill Id: " + skillId);
+            $scope.addSkill(skillId);
+            $scope.character = DataService.updateCharacter($scope.character);
           }
-    }
-        $scope.showEmphasesList = !$scope.showEmphasesList;
+        });
+      }); 
+    };
+
+    $scope.showEmphasesListModal = function(skill_id, message, filterBy) {
+      console.log("Show Emphases List");
+      ModalService.showModal({
+        templateUrl: "templates/emphases_list.html",
+        controller: "EmphasesController",
+        inputs : {
+          modalMessage: message,
+          filterBy: filterBy,          
+          emphasesList: $scope.getEmphasesList(skill_id),
+        },
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(emphasisId) {
+          if ( emphasisId != null ) {
+            console.log("Show Emphsis Id: " + emphasisId);
+            $scope.addEmphasis(emphasisId);
+            $scope.character = DataService.updateCharacter($scope.character);
+            $scope.currentSkillId = null;
+          }
+        });
+      }); 
+    };   
+
+    $scope.getEmphasesList = function(skill_id) {
+      $scope.currentSkillId = skill_id;
+      $scope.emphasesList = [];
+      var skill = DataService.getSkillFromMasterList(skill_id);
+      if ( skill ) {
+        for ( var i in skill.emphases ) {
+          $scope.emphasesList.push( skill.emphases[i] ) ;
+        }
+      }
+      return $scope.emphasesList;
     };
 
     var getSkillRoll = function(skill_id, skill_rank) {
@@ -82,7 +127,6 @@
     };
 
     $scope.getSkill = function(skill_id, attr) {
-        //console.log("Get : " + attr);
         return DataService.getSkillFromMasterList(skill_id, attr);
     };
 
@@ -92,15 +136,13 @@
     };
 
     $scope.addEmphasis = function(emp_index) {
-      console.log("ADD EMPHASIS TWO");
       var master_skill = DataService.getSkillFromMasterList($scope.currentSkillId);
       var emp = master_skill.emphases[emp_index];
       var skill = getCharacterSkillById($scope.currentSkillId);
       skill.emphasis = emp;
-      //console.log("Add Emphasis Index : " + emp_index + " to Character Skill Id : " + $scope.currentSkillId + " Emp: " + emp + " Emphasis: " + skill.emphasis );
       replaceCharacterSkillById($scope.currentSkillId, skill);
       $scope.character.experience_points -= 2;
-      $scope.toggleShowEmphasesList();
+      $scope.character = DataService.updateCharacter($scope.character);
     }
 
     var getCharacterSkillById = function(skill_id) {

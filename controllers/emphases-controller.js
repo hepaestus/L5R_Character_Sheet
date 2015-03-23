@@ -1,6 +1,6 @@
-angular.module('myApp').controller('EmphasisController', ['$scope', 'emphasisList', 'close', 'modalMessage', 'filterBy', function($scope, emphasisMasterList, close, modalMessage, filterBy) {
+angular.module('myApp').controller('EmphasesController', ['$scope', '$element', 'emphasesList', 'close', 'modalMessage', 'filterBy', function($scope, $element, emphasesList, close, modalMessage, filterBy) {
 
-  $scope.emphasisList = emphasisList;
+  $scope.emphasesList = emphasesList;
   $scope.modalMessage = modalMessage;
   $scope.filterBy = filterBy;
   $scope.selectedEmphasisId = null;
@@ -16,6 +16,8 @@ angular.module('myApp').controller('EmphasisController', ['$scope', 'emphasisLis
   $scope.selectEmphasis = function(emphasisId) {
     console.log("Select Emphasis " + emphasisId);
     $scope.selectedEmphasisId = emphasisId;
+    $element.modal('hide'); // Let bootstrap know we are done with the modal
+    close($scope.selectedEmphasisId, 500);
   };
 
 }]);

@@ -1,4 +1,4 @@
-angular.module('myApp').controller('SchoolsController', ['$scope', 'schoolsMasterList', 'close', 'modalMessage', 'filterBy', function($scope, schoolsMasterList, close, modalMessage, filterBy) {
+angular.module('myApp').controller('SchoolsController', ['$scope', '$element', 'schoolsMasterList', 'close', 'modalMessage', 'filterBy', function($scope, $element, schoolsMasterList, close, modalMessage, filterBy) {
 
   $scope.schoolsMasterList = schoolsMasterList;
   $scope.modalMessage = modalMessage;
@@ -16,6 +16,8 @@ angular.module('myApp').controller('SchoolsController', ['$scope', 'schoolsMaste
   $scope.selectSchool = function(schoolId) {
     console.log("Select School " + schoolId);
     $scope.selectedSchoolId = schoolId;
+    $element.modal('hide'); // Let bootstrap know we are done with the modal
+    close($scope.selectedSchoolId, 500);
   };
 
 }]);

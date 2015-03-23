@@ -100,9 +100,9 @@
     var schoolsMasterList = [
       // id, name, clan, bonus{ various attributes, skills[ array of numbers of a string in the form "skill_id:empahasis_id:rank", or a string describing other skills, and finally techniques 
       {id:0, name:'Hida Bushi', clan:'Crab', bonus:{ stamina:1, honor:3.5, skills:[56, 58, 65, 90, 66, 36, '+1 bugei'], techniques:{1:'The Way of the Crab Pg. 106', 2:'The Mountain Does Not Move. Pg. 106', 3:'Two Pincers, One Mind. Pg. 106', 4:'Devastating Blow. Pg. 106', 5:'The Mountain Does Not Fall. Pg. 107' } } },
-      {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['10:0','36::2',39,54,'+1 weapon skill'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
-      {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['76:0',11,58,13,90,'53:1','+1 merchant skill'], techniques:{1:'The Way of the Carp. pg. 107', 2:'Do As We Say. pg. 108', 3:'Treasures of the Carp. pg 108', 4:'Wiles of the Carp. pg 108', 5:'What is Yours is Mine. pg 108'} } },
-      {id:3, name:'Hirumi Bushi', clan:'Crab', bonus:{ willpower:1, honor:4.5, skills:[56,60,'66:0',68,36,92,'+1 skill'], techniques:{1:'Torch Flame Flickers. pg 108', 2:'Wolf\'s Little Lesson. pg 108', 3:'Hummingbird Wings. pg 108', 4:'Shark Smells Blood. pg 108', 5:'Daylight Wastes No Movement. pg 108'} } },
+      {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['10:0','36::2',39,54,'+1 weapon'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
+      {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['76:0',11,58,13,90,'53:1','+1 merchant'], techniques:{1:'The Way of the Carp. pg. 107', 2:'Do As We Say. pg. 108', 3:'Treasures of the Carp. pg 108', 4:'Wiles of the Carp. pg 108', 5:'What is Yours is Mine. pg 108'} } },
+      {id:3, name:'Hirumi Bushi', clan:'Crab', bonus:{ willpower:1, honor:4.5, skills:[56,60,'66:0',68,36,92,'+1 Any'], techniques:{1:'Torch Flame Flickers. pg 108', 2:'Wolf\'s Little Lesson. pg 108', 3:'Hummingbird Wings. pg 108', 4:'Shark Smells Blood. pg 108', 5:'Daylight Wastes No Movement. pg 108'} } },
       {id:5, name:'', clan:'Crane', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:6, name:'', clan:'Dragon', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:7, name:'', clan:'Lion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
@@ -110,7 +110,7 @@
       {id:9, name:'', clan:'Phoenix', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:10, name:'', clan:'Scorpion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:11, name:'', clan:'Unicorn', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
-      {id:12, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:0',13,31,39,54,'+1 high or bugie skill'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}} },
+      {id:12, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:0',13,31,39,54,'+1 high or bugie'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}} },
     ];
 
     var mastery = function(obj) {

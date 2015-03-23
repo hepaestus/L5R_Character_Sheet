@@ -104,20 +104,30 @@
       }); 
     };
 
-    $scope.showSkillsListModal = function(message, searchText, rank) {
+    $scope.showSkillsListModal = function(message, searchText, filterBy, rank) {
       ModalService.showModal({
         templateUrl: "templates/skill_list.html",
-        controller: "MainController",
+        controller: "SkillsModalListController",
         inputs : {
           modalMessage : message,
-          skillSearchText : searchText,          
+          skillsSearchText : searchText,          
+          filterBy: filterBy,
           rank: rank,
+          skillsMasterList: DataService.skillsMasterList(),
         },
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
         modal.element.modal();
-        modal.close.then(function(result) {
-          console.log("Show Result: " + result);
+        modal.close.then(function(skillId) {
+          if( skillId != null && skillId.rank == null ) {
+            console.log("Show Skill Id: " + skillId);
+            $scope.addASkill(skillId);
+            $scope.character = DataService.updateCharacter($scope.character);
+          } else if ( skillId.Id != null && skillId.rank != null ) {
+            console.log("Show Skill Id: " + skillId.id + " Show Rank: " + skillId.rank );
+            $scope.addASkill(skillId.id, skillId.rank);
+            $scope.character = DataService.updateCharacter($scope.character);
+          }
         });
       }); 
     };
@@ -197,16 +207,23 @@
                   var arr = skill.split(":");
                   var skill = parseInt(arr[0]);
                   var emp = (arr[1]) ? parseInt(arr[1]) : null;
-                  var lvl = (arr[2]) ? parseInt(arr[2]) : 1;
+                  var lvl = (arr[2]) ? parseInt(arr[2]) : 1;                  
                   $scope.addASkill(skill, lvl, emp);
                 } else {
                   $scope.close(true,500);
                   //alert("You Also Get " + skill + " skill");
-                  $scope.showSkillsListModal("You also get a " + skill + " skill.", skill, 1);
+                  //$scope.showSkillsListModal = function(message, searchText, filterBy, rank) {
+                  var message = "You also get a " + skill + " skill.";
+                  var searchText = skill.replace(/\+. /, "");
+                  //var searchText = searchText.replace(//, "");
+                  var filter = null;
+                  var rank = 1;
+                  $scope.showSkillsListModal(message, searchText, filter,  rank);
                 }
               }
             break;
           case 'techniques':
+            // Add these to the character at each level and display them on the character sheet somewhere.
             break;
         }
       }
@@ -214,6 +231,7 @@
     };
 
     $scope.addASkill = function(skill_id, rank, emp) {
+      console.log("Add A Skill:  id:" + skill_id + "  rank:" + rank + "  emp:" + emp);
       var skill = DataService.getSkillFromMasterList(skill_id);
       var lvl = ( rank )? rank : 0;
       var emph = ( emp != null || emp != undefined  ) ? emp : null;

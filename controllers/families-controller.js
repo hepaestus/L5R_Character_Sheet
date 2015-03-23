@@ -1,4 +1,4 @@
-angular.module('myApp').controller('FamiliesController', ['$scope', 'familiesMasterList', 'close', 'modalMessage', 'filterBy', function($scope, familiesMasterList, close, modalMessage, filterBy) {
+angular.module('myApp').controller('FamiliesController', ['$scope', '$element', 'familiesMasterList', 'close', 'modalMessage', 'filterBy', function($scope, $element, familiesMasterList, close, modalMessage, filterBy) {
 
   $scope.familiesMasterList = familiesMasterList;
   $scope.modalMessage = modalMessage
@@ -16,6 +16,8 @@ angular.module('myApp').controller('FamiliesController', ['$scope', 'familiesMas
   $scope.selectFamily = function(familyId) {
     $scope.selectedFamilyId = familyId;
     console.log("Select Family " + $scope.selectedFamilyId);
+    $element.modal('hide'); // Let bootstrap know we are done with the modal
+    close($scope.selectedFamilyId, 500);
   };
 
 }]);

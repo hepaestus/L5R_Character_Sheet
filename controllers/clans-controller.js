@@ -1,4 +1,4 @@
-angular.module('myApp').controller('ClansController', ['$scope', 'clansMasterList', 'close', function($scope, clansMasterList, close) {
+angular.module('myApp').controller('ClansController', ['$scope', '$element', 'clansMasterList', 'close', function($scope, $element, clansMasterList, close) {
 
   $scope.clansMasterList = clansMasterList;
   $scope.selectedClanId = null;
@@ -14,6 +14,8 @@ angular.module('myApp').controller('ClansController', ['$scope', 'clansMasterLis
   $scope.selectClan = function(clanId) {
     console.log("Select Clan " + clanId);
     $scope.selectedClanId = clanId;
+    $element.modal('hide'); // Let bootstrap know we are done with the modal
+    close($scope.selectedClanId, 500);
   };
 
 }]);
