@@ -109,24 +109,27 @@
         templateUrl: "templates/skill_list.html",
         controller: "SkillsModalListController",
         inputs : {
+          skillsMasterList: DataService.skillsMasterList(),
           modalMessage : message,
-          skillsSearchText : searchText,          
+          skillSearchText : searchText,          
           filterBy: filterBy,
           rank: rank,
-          skillsMasterList: DataService.skillsMasterList(),
         },
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
         modal.element.modal();
         modal.close.then(function(skillId) {
-          if( skillId != null && skillId.rank == null ) {
+          if( skillId != null && ( skillId.rank == null || skillId.rank == undefined ) ) {
             console.log("Show Skill Id: " + skillId);
             $scope.addASkill(skillId);
             $scope.character = DataService.updateCharacter($scope.character);
-          } else if ( skillId.Id != null && skillId.rank != null ) {
+          } else if ( skillId.id != null && skillId.rank != null ) {
             console.log("Show Skill Id: " + skillId.id + " Show Rank: " + skillId.rank );
             $scope.addASkill(skillId.id, skillId.rank);
             $scope.character = DataService.updateCharacter($scope.character);
+          } else {
+            console.log("Error No SKill Added");
+            console.log("skillId Object: " + JSON.stringify(skillId));
           }
         });
       }); 
@@ -191,11 +194,11 @@
             break;
           case 'affinity':
             var ring = obj[key];
-            $scope.character.spell_affinity.ring = true;
+            $scope.character.spell_affinity[ring] = true;
             break;
           case 'deficiency':
             var ring = obj[key];
-            $scope.character.spell_deficiency.ring = true;
+            $scope.character.spell_deficiency[ring] = true;
             break;
           case 'skills':
               for(var i=0; i < obj[key].length; i++ ) {
@@ -215,10 +218,10 @@
                   //$scope.showSkillsListModal = function(message, searchText, filterBy, rank) {
                   var message = "You also get a " + skill + " skill.";
                   var searchText = skill.replace(/\+. /, "");
-                  //var searchText = searchText.replace(//, "");
                   var filter = null;
                   var rank = 1;
-                  $scope.showSkillsListModal(message, searchText, filter,  rank);
+                  console.log("showSkillsListModal message:" + message + "  searchText:" + searchText + "  filter:" + filter + "  rank:" + rank);
+                  $scope.showSkillsListModal(message, searchText, filter, rank);
                 }
               }
             break;

@@ -2,15 +2,6 @@
 
     $scope.test = "Skills Controller";
 
-    $scope.clickedSkillRank = null;
-    $scope.showSkillList = false;
-    $scope.skillSearchText = "";
-
-    $scope.toggleShowSkillsList = function() {
-        $scope.showSkillsList = !$scope.showSkillsList;
-        $scope.skillSearchText = ""
-    };
-
     $scope.emphasesList = ["One", "Two"];
     $scope.currentSkillId = null;
     $scope.showEmphasesList = false;
@@ -20,20 +11,26 @@
         templateUrl: "templates/skill_list.html",
         controller: "SkillsModalListController",
         inputs : {
-          modalMessage : message,
-          skillSearchText : searchText,          
+          skillsMasterList: DataService.skillsMasterList(),
+          modalMessage: message,
+          skillSearchText: searchText,          
           filterBy: filterBy,
           rank: rank,
-          skillsMasterList: DataService.skillsMasterList(),
         },
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
         modal.element.modal();
         modal.close.then(function(skillId) {
-          if( skillId != null ) {
+          if( skillId != null && ( skillId.rank == null || skillId.rank == undefined ) ) {
             console.log("Show Skill Id: " + skillId);
-            $scope.addSkill(skillId);
+            $scope.addASkill(skillId);
             $scope.character = DataService.updateCharacter($scope.character);
+          } else if ( skillId.Id != null && skillId.rank != null ) {
+            console.log("Show Skill Id: " + skillId.id + " Show Rank: " + skillId.rank );
+            $scope.addASkill(skillId.id, skillId.rank);
+            $scope.character = DataService.updateCharacter($scope.character);
+          } else {
+            console.log("ERROR! No SKill Added");
           }
         });
       }); 
@@ -106,24 +103,6 @@
       } else {
         return 'none';
       }
-    };
-
-    $scope.addSkill = function(skill_id) {
-      //console.log("Before Skills1 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
-      var skill = DataService.getSkillFromMasterList(skill_id);
-      var new_skill = { id:skill_id, rank:0, rank_s:0, emphasis:null, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
-      //console.log("Make Sure Skill " + skill_id + " does not exist");
-      // ONLY Add new skill if it does not already exist
-      if ( getCharacterSkillById(skill_id) === null) {
-        //console.log("Add Skill " + skill_id );
-        //console.log("Before Skills2 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
-        $scope.character.skills.push(new_skill);
-        //console.log("After Skills1 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
-        $scope.toggleShowSkillsList();
-      } else {
-        //console.log("skill " + skill_id + " already exists");
-      }
-        //console.log("After Skills2 : " + JSON.stringify($scope.character.skills) + " (addSkill)");
     };
 
     $scope.getSkill = function(skill_id, attr) {
