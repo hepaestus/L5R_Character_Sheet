@@ -1,6 +1,7 @@
   angular.module('myApp').controller('MainController', ['$scope', '$cookieStore', 'ModalService', 'DataService', 'LoadCharacterService', function($scope, $cookieStore, ModalService, DataService, LoadCharacterService) {
 
     $scope.test = "Main Controller";
+    $scope.characterSize = DataService.characterSize(); 
     
     $scope.character = {name:'test'};
     $scope.character = DataService.character();

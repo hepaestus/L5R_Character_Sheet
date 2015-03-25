@@ -21,6 +21,10 @@ input.experience_points, input.experience_points_earned, input.school_rank, inpu
     width: 4em;
 }
 
+.right {
+  text-align: right;
+}
+
 table.rings-table {
    border: 0px solid black;
    width: 40%;   
