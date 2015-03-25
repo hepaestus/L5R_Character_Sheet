@@ -48,7 +48,7 @@
       taint_point   : 0,
       skills        : [],
       spells        : [],
-      key_word_bonus: '',
+      key_word_bonus: [],
       spell_affinity: {air:false, earth:false, fire:false, water:false, void:false },
       spell_deficiency: {air:false, earth:false, fire:false, water:false, void:false },
       get wounds() { return ( ((this.earth * 2) * this.insight_rank) + " : " + (this.earth * 5)); },
@@ -94,7 +94,7 @@
       {id:8, name:'Daidoji', clan:'Crane', bonus:{ attr:1 } },
       {id:9, name:'Kakita', clan:'Crane', bonus:{ attr:1 } },
       {id:10, name:'Yasuki', clan:'Crane', bonus:{ attr:1 } },
-      {id:11, name:'Kitsu', clan:'Lion', bonus:{ intelligence:1 } },
+      {id:11, name:'Kitsu', clan:'Lion', bonus:{ intelligence:1 , key_word: { Battle:"Free Raise" } } },
     ];
 
     var schoolsMasterList = [
@@ -234,29 +234,50 @@
       }
     };
 
+    var doesCharacterHaveKeywordBonus = function(spell_type_key_words) {
+      if( character.key_word_bonus ) {
+        var spell_words_arr = spell_type_key_word.split(",");
+        var char_words_arr = character.key_word_bonus.split(",");
+        for(var i=0; i < char_words_arr.length; i++) {            
+           if( spell_words_array.indexOf(char_words_arr[i]) ) {
+               return true;
+           }
+        }
+      }
+      return false;
+    };
+
     var spellRoll = function(thisSpell) {
       var roll = '';
       var spell_ring = thisSpell.ring;
       var insight_rank = character.insight_rank;
       var ring_val = "R"
       var affinity = "+AD+";
-      var bonus = '';
+      var sc_bonus = null; // SpellCraft Bonus
+      var kw_bonus = null; // Keyword Bonus
       if ( doesCharacterHaveSpellcraftBonus() && spell_ring != 'all' ) {
-          bonus = 1;
-      } else if ( doesCharacterHaveSpellcraftBonus() && spell_ring == 'all' ) {
-          bonus = "+1";
+          sc_bonus = 1;
+      } else if ( doesCharacterHaveSpellcraftBonus(thisSpell.type) && spell_ring == 'all' ) {
+        sc_bonus = "+1";
       } 
       if ( spell_ring != 'all' ) {
         ring_val = character[spell_ring];
         affinity = 0;
       }
       if ( character.spell_affinity[spell_ring] == true ) {
-          affinity = 1;
+        affinity = 1;
       }
       if ( character.spell_deficiency[spell_ring] == true ) {
-          affinity = -1;
+        affinity = -1;
       }
-      roll = ring_val + ( bonus ) + ( affinity + insight_rank ) + 'K' + ring_val;
+      if ( isNaN(sc_bonus) || isNaN(kw_bonus) || isNaN(affinity) || isNaN(ring_val) ) { 
+        roll =  ring_val +  sc_bonus + kw_bonus +  affinity  + insight_rank  + 'K' + ring_val;
+      } else if ( ! isNaN(sc_bonus) && ! ! isNaN(affinity) && ! isNaN(ring_val) )  {
+        roll = ( parseInt(ring_val) + parseInt(sc_bonus) + parseInt(affinity) + parseInt(insight_rank) ) + ( 'K' + ring_val );
+      } else {
+        roll =  ring_val +  sc_bonus + kw_bonus +  affinity  + insight_rank  + 'K' + ring_val;
+      }
+      console.log("ROLL : " + roll);
       return roll;
     };
 

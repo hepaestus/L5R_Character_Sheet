@@ -201,6 +201,9 @@
             var ring = obj[key];
             $scope.character.spell_deficiency[ring] = true;
             break;
+          case 'key_words':
+            
+            break;
           case 'skills':
               for(var i=0; i < obj[key].length; i++ ) {
                 console.log("Add this skill: " + obj[key][i] );
