@@ -57,6 +57,7 @@
       get current_heal_rate() { return ( (this.stamina * 2) + this.insight_rank + this.healing_modifiers + " per day" ); },
       weapon_one    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
       weapon_two    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
+      arrows        : [ { type:null, number:null, damage:null} , { type:null, number:null, damage:null}, { type:null, number:null, damage:null} ],
       last_saved    : null,
     };
 
@@ -251,14 +252,11 @@
       var roll = '';
       var spell_ring = thisSpell.ring;
       var insight_rank = character.insight_rank;
-      var ring_val = "R"
+      var ring_val = "R";
       var affinity = "+AD+";
-      var sc_bonus = null; // SpellCraft Bonus
-      var kw_bonus = null; // Keyword Bonus
-      if ( doesCharacterHaveSpellcraftBonus() && spell_ring != 'all' ) {
+      var sc_bonus = 0; // SpellCraft Bonus
+      if ( doesCharacterHaveSpellcraftBonus() ) {
           sc_bonus = 1;
-      } else if ( doesCharacterHaveSpellcraftBonus(thisSpell.type) && spell_ring == 'all' ) {
-        sc_bonus = "+1";
       } 
       if ( spell_ring != 'all' ) {
         ring_val = character[spell_ring];
@@ -270,14 +268,14 @@
       if ( character.spell_deficiency[spell_ring] == true ) {
         affinity = -1;
       }
-      if ( isNaN(sc_bonus) || isNaN(kw_bonus) || isNaN(affinity) || isNaN(ring_val) ) { 
-        roll =  ring_val +  sc_bonus + kw_bonus +  affinity  + insight_rank  + 'K' + ring_val;
-      } else if ( ! isNaN(sc_bonus) && ! ! isNaN(affinity) && ! isNaN(ring_val) )  {
+
+      if ( isNaN(affinity) || isNaN(ring_val) ) { 
+        roll =  ( ring_val + affinity ) + ( parseInt(sc_bonus) + parseInt(insight_rank) )  + 'K' + ring_val;
+      } else if ( ! isNaN(affinity) && ! isNaN(ring_val) )  {
         roll = ( parseInt(ring_val) + parseInt(sc_bonus) + parseInt(affinity) + parseInt(insight_rank) ) + ( 'K' + ring_val );
       } else {
         roll =  ring_val +  sc_bonus + kw_bonus +  affinity  + insight_rank  + 'K' + ring_val;
       }
-      console.log("ROLL : " + roll);
       return roll;
     };
 
