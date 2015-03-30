@@ -29,12 +29,12 @@
       }); 
     };
 
-    $scope.showClansListModal = function(message, filterBy) {
+    $scope.showWeaponsOneListModal = function(message, filterBy) {
       ModalService.showModal({
-        templateUrl: "templates/clans_list.html",
-        controller: "ClansController",
+        templateUrl: "templates/weapons_list.html",
+        controller: "WeaponsOneController",
         inputs : {
-          clansMasterList: DataService.clansMasterList(),
+          clansMasterList: DataService.weaponsMasterList(),
           modalMessage: message,
           filterby: filterBy,
         },
@@ -43,10 +43,9 @@
         modal.element.modal();
         modal.close.then(function(clanId) {
           //  If we have selected a clan, set it.
-          if(clanId != null) {
-            console.log("Show Clan Id: " + clanId);
-            $scope.character.clan_id = clanId;
-            $scope.calculateBonus( DataService.getClanFromMasterList(clanId).bonus );
+          if(weaponId != null) {
+            console.log("Show Weapon Id: " + weaponId);
+            $scope.character.weapon_one.id = weaponId;
             $scope.character = DataService.updateCharacter($scope.character);
           } else {
             console.log("No Clan Id");
@@ -160,6 +159,11 @@
       console.log("Save Current Character");
       LoadCharacterService.saveCharacter($scope.character);
     };
+
+
+
+
+
 
     $scope.calculateBonus = function(obj) {
       var key;

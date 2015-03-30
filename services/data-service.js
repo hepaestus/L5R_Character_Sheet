@@ -57,7 +57,7 @@
       get current_heal_rate() { return ( (this.stamina * 2) + this.insight_rank + this.healing_modifiers + " per day" ); },
       weapon_one    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
       weapon_two    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
-      arrows        : [ { type:null, number:null, damage:null} , { type:null, number:null, damage:null}, { type:null, number:null, damage:null} ],
+      arrows        : [ { type:null, number:null, damage:null} , { type:null, number:null, damage:null}, { type:null, number:null, damage:null}, { type:null, number:null, damage:null} ],
       last_saved    : null,
     };
 
@@ -474,6 +474,10 @@
 
     this.schoolsMasterList = function() {
       return schoolsMasterList;
+    }
+
+    this.weaponsMasterList = function() {
+      return weaponsMasterList;
     }
 
     this.getSkillFromMasterList = function(skill_id, attr) {
