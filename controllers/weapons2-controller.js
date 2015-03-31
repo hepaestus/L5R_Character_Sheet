@@ -1,6 +1,6 @@
-angular.module('myApp').controller('WeaponsTwoController', ['$scope', '$element', 'weaponsTwoMasterList', 'close', function($scope, $element, weaponsTwoMasterList, close) {
+angular.module('myApp').controller('WeaponsTwoController', ['$scope', '$element', 'weaponsMasterList', 'close', function($scope, $element, weaponsMasterList, close) {
 
-  $scope.weaponsTwoMasterList = weaponsTwoMasterList;
+  $scope.weaponsMasterList = weaponsMasterList;
   $scope.selectedWeaponTwoId = null;
 
   $scope.done = function() {
@@ -11,7 +11,7 @@ angular.module('myApp').controller('WeaponsTwoController', ['$scope', '$element'
     close(null, 500); 
   };
 
-  $scope.selectWeaponTwo = function(weaponTwoId) {
+  $scope.selectWeapon = function(weaponTwoId) {
     console.log("Select WeaponTwo " + weaponTwoId);
     $scope.selectedWeaponTwoId = weaponTwoId;
     $element.modal('hide'); // Let bootstrap know we are done with the modal

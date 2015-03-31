@@ -51,9 +51,9 @@
       get healing() { return ( this.stamina * 2 + this.insight_rank ); },
       healing_modifiers:0,
       get current_heal_rate() { return ( (this.stamina * 2) + this.insight_rank + this.healing_modifiers + " per day" ); },
-      weapon_one    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
-      weapon_two    : { type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
-      arrows        : [ { type:null, number:null, damage:null} , { type:null, number:null, damage:null}, { type:null, number:null, damage:null}, { type:null, number:null, damage:null} ],
+      weapon_one    : { id:null, name:null, type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
+      weapon_two    : { id:null, name:null, type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
+      arrows        : [ { id:null, type:null, number:null, damage:null} , { id:null, type:null, number:null, damage:null}, { id:null, type:null, number:null, damage:null}, { id:null, type:null, number:null, damage:null} ],
       last_saved    : null,
     };
 
@@ -71,13 +71,13 @@
       //{id:10, name:'Bear', bonus:''},	    
       //{id:11, name:'Dragonfly', bonus:''},	    
       //{id:12, name:'Fox', bonus:''},	    
-      //{id:12, name:'Hare', bonus:''},	    
-      //{id:13, name:'Tortoise', bonus:''},	    
-      //{id:14, name:'Monkey', bonus:''},	    
-      //{id:15, name:'Oriole', bonus:''},	    
-      //{id:16, name:'Ox', bonus:''},	    
-      //{id:17, name:'Sparrow', bonus:''},	    
-      //{id:18, name:'Firefly', bonus:''},	    
+      //{id:13, name:'Hare', bonus:''},	    
+      //{id:14, name:'Tortoise', bonus:''},	    
+      //{id:16, name:'Monkey', bonus:''},	    
+      //{id:17, name:'Oriole', bonus:''},	    
+      //{id:18, name:'Ox', bonus:''},	    
+      //{id:19, name:'Sparrow', bonus:''},	    
+      //{id:20, name:'Firefly', bonus:''},	    
     ];
    
     var familiesMasterList = [
@@ -219,48 +219,80 @@
       { id:93, level:'Low', type:'Temptation*', sub_type:'Social Skill', trait:'awareness', ring:'air', emphases:{0:'Bribery', 1:'Seduction'}, get mastery() { return mastery(this); }, masteries:{5:'Character gains +5 Bonus to the total of any contested Roll using Temptation.'}, description:'Pg. 143 Core Book'},
     ];
 
+    var attackRoll = function(weapon) {
+      var roll = "";
+      if ( weapon.type == 'Bow' ) {
+        if ( weapon.strength > character.strength ) {
+           roll = "0K0";
+        } else {
+           var str = weapon.strength + character.strength;
+           roll = str + "K" + chraracter.reflexes;
+        }
+        return roll;
+      } else {
+        return weapon.dr; 
+      }
+    };
+
+    var damageRoll = function(weapon) {
+     
+    };
+
     var weaponsMasterList = [
-      { id:0, name:'Dai-Kyu', type:'Bow', strength:4, key_words:'large', price:'25 koku', note:'pg 200 core book'},
-      { id:1, name:'Han-Kyu', type:'Bow', strength:1, key_words:'small', price:'6 koku', note:'pg 200 core book'},
-      { id:2, name:'Yumi', type:'Bow', strength:3, key_words:'large', price:'20 koku', note:'pg 200 core book'},
-      { id:3, name:'Kusarigama', type:'Chain', dr:'0K2', key_words:'Large', price:'5 koku', note:'pg 200 core book'},
-      { id:4, name:'Kyuketsu-shogi', type:'Chain', dr:'0K1', key_words:'large', special:'Double an opponent\'s to Armor TN from armor', price:'9 bu', note:'pg 200 core book'},
-      { id:5, name:'Manrikikusari', type:'Chain', dr:'1K1', key_words:'large', price:'3 koku', note:'pg 200 core book'},
-      { id:6, name:'Dai Tsuchi', type:'Heavy', dr:'5K2', key_words:'large', price:'15 koku', note:'pg 201 core book'},
-      { id:7, name:'Masakari', type:'Heavy', dr:'5K2', key_words:'medium', price:'8 koku', note:'pg 201 core book'},
-      { id:8, name:'Ono', type:'Heavy', dr:'0K4', key_words:'large', price:'20 koku', note:'pg 201 core book'},
-      { id:9, name:'Tetsobu', type:'Heavy', dr:'3K3', key_words:'large', price:'20 koku', note:'pg 201 core book'},
-      { id:10, name:'Aiguchi', type:'Knife', dr:'1K1', key_words:'small', price:'1 koku', note:'pg 201 core book'},
-      { id:11, name:'Tanto', type:'Knife', dr:'1K1', key_words:'small', price:'1 koku', note:'pg 201 core book'},
-      { id:12, name:'Jitte', type:'Knife', dr:'1K1', key_words:'small', price:'5 bu', note:'pg 201 core book'},
-      { id:13, name:'Sai', type:'Knife', dr:'1K1', key_words:'small', price:'5 bu', note:'pg 201 core book'},
-      { id:14, name:'Kama', type:'Knife', dr:'0K2', key_words:'peasant, small', price:'5 bu', note:'pg 201 core book'},
-      { id:15, name:'Blowgun', type:'Ninjitsu', dr:'1 wound', key_words:'medium', price:'8 zeni', note:'pg 201 core book'},
-      { id:16, name:'Shuriken', type:'Ninjitsu', dr:'1K1', key_words:'small', price:'2 bu', note:'pg 202 core book'},
-      { id:17, name:'Tsubute', type:'Ninjitsu', dr:'1K1', key_words:'small', price:'1bu', note:'pg 202 core book'},
-      { id:18, name:'Bisento', type:'Polearm', dr:'3K3', key_words:'large', price:'12 koku', note:'pg 202 core book'},
-      { id:19, name:'Nagamaki', type:'Polearm', dr:'2K3', key_words:'large', price:'8 koku', note:'pg 202 core book'},
-      { id:20, name:'Naginata', type:'Polearm', dr:'3K2', key_words:'Large, Smamurai', price:'10 koku', note:'pg 202 core book'},
-      { id:21, name:'Satsumata', type:'Polearm', dr:'0K2', key_words:'large', special:'The satsumata may be used to initiate and maintain a grapple', price:'6 koku', note:'pg 202 core book'},
-      { id:22, name:'Sodegarami', type:'Polearm', dr:'1K1', key_words:'large', special:'The sodegarami may be used to initiate and maintain a grapple', price:'', note:'pg 203 core book'},
-      { id:23, name:'Kumade', type:'Spear', dr:'1K1', key_words:'large, peasant', special:'If kumade inflicts more that 25 wounds in a single attack, it breaks', price:'3 bu', note:'pg 203 core book'},
-      { id:24, name:'Mai Chong', type:'Spear', dr:'0K3', key_words:'large', special:'The mai chong may be thrown accurately up to 25\'', price:'20 koku', note:'pg 203 core book'},
-      { id:25, name:'Lance', type:'Spear', dr:'3K4', key_words:'large', special:'The listed DR only applies if the lance is used from horseback and used to make an attack directly following a Move Action. Under any other circumstances, it possesses DR 1K2. Using the lance in melee combat without a Move Action increases the TN of all attack rolls by +5 on horseback and +10 on foot. A lance shatters is it inflicts more than 30 wounds in one attack.', price:'20 koku', note:'pg 203 core book'},
-      { id:26, name:'Nagi-Yari', type:'Spear', dr:'1K2', key_words:'medium', special:'The nagi-yari may be thrown accurately up to 50\'', price:'3 koku', note:'pg 203 core book'},
-      { id:27, name:'Yari', type:'Spear', dr:'2K2', key_words:'large', special:'The yari may be thrown a maximum range of 30\' and has a DR of 1K2 when thrown', price:'5 koku', note:'pg 203 core book'},
-      { id:28, name:'Bo', type:'Staves', dr:'1K2', key_words:'large', price:'2 bu', note:'pg 204 core book'},
-      { id:29, name:'Jo', type:'Staves', dr:'0K2', key_words:'medium', price:'1 bu', note:'pg 204 core book'},
-      { id:30, name:'Machi-Kanshisha', type:'Staves', dr:'0K2', key_words:'medium', price:'20 koku', note:'pg 203 core book'},
-      { id:31, name:'Nunchaku', type:'Staves', dr:'1K2', key_words:'peasant, small', price:'3 bu', note:'pg 203 core book'},
-      { id:32, name:'Sang Kauw', type:'Staves', dr:'1k2(blade)/2K1(shield)', key_words:'medium', price:'10 koku', note:'pg 203 core book'},
-      { id:33, name:'Tonfa', type:'Staves', dr:'0K3', key_words:'medium, peasent', price:'5 bu', note:'pg 203 core book'},
-      { id:34, name:'Katana', type:'Swords', dr:'3K2', key_words:'medium, samurai', special:'Character may spend 1 Void point to increase damage roll my 1K1', price:'N/A', note:'pg 203 core book'},
-      { id:35, name:'Ninja-To', type:'Swords', dr:'2K2', key_words:'medium, ninja', special:'Considered a small weapon for the purposes of concealment. If more than 40 wounds are inflicted in one attack it breaks.', price:'5 koku', note:'pg 203 core book'},
-      { id:36, name:'No-Dachi', type:'Swords', dr:'3K3', key_words:'large', price:'30 koku', note:'pg 203 core book'},
-      { id:37, name:'Parangu', type:'Swords', dr:'2K2', key_words:'medium, peasant', special:'It parangu inflicts more than 30 wounds it breaks', price:'10 bu', note:'pg 203 core book'},
-      { id:38, name:'Scimitar', type:'Swords', dr:'2K3', key_words:'medium', price:'20 koku', note:'pg 203 core book'},
-      { id:39, name:'Wakizashi', type:'Swords', dr:'2K2', key_words:'medium, samurai', price:'15 koku', note:'pg 203 core book'},
-      { id:40, name:'War Fan', type:'Fan', dr:'0K1', key_words:'small', price:'5 koku', note:'pg 203 core book'},
+      { id:0, name:'Dai-Kyu', type:'Bow', strength:4, key_words:'large', price:'25 koku', notes:'pg 200 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:1, name:'Han-Kyu', type:'Bow', strength:1, key_words:'small', price:'6 koku', notes:'pg 200 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:2, name:'Yumi', type:'Bow', strength:3, key_words:'large', price:'20 koku', notes:'pg 200 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:3, name:'Kusarigama', type:'Chain', dr:'0K2', key_words:'Large', price:'5 koku', notes:'pg 200 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:4, name:'Kyuketsu-shogi', type:'Chain', dr:'0K1', key_words:'large', special:'Double an opponent\'s to Armor TN from armor', price:'9 bu', notes:'pg 200 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:5, name:'Manrikikusari', type:'Chain', dr:'1K1', key_words:'large', price:'3 koku', notes:'pg 200 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:6, name:'Dai Tsuchi', type:'Heavy', dr:'5K2', key_words:'large', price:'15 koku', notes:'pg 201 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:7, name:'Masakari', type:'Heavy', dr:'5K2', key_words:'medium', price:'8 koku', notes:'pg 201 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:8, name:'Ono', type:'Heavy', dr:'0K4', key_words:'large', price:'20 koku', notes:'pg 201 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:9, name:'Tetsobu', type:'Heavy', dr:'3K3', key_words:'large', price:'20 koku', notes:'pg 201 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:10, name:'Aiguchi', type:'Knife', dr:'1K1', key_words:'small', price:'1 koku', notes:'pg 201 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:11, name:'Tanto', type:'Knife', dr:'1K1', key_words:'small', price:'1 koku', notes:'pg 201 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:12, name:'Jitte', type:'Knife', dr:'1K1', key_words:'small', price:'5 bu', notes:'pg 201 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:13, name:'Sai', type:'Knife', dr:'1K1', key_words:'small', price:'5 bu', notes:'pg 201 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:14, name:'Kama', type:'Knife', dr:'0K2', key_words:'peasant, small', price:'5 bu', notes:'pg 201 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:15, name:'Blowgun', type:'Ninjitsu', dr:'1 wound', key_words:'medium', price:'8 zeni', notes:'pg 201 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:16, name:'Shuriken', type:'Ninjitsu', dr:'1K1', key_words:'small', price:'2 bu', notes:'pg 202 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:17, name:'Tsubute', type:'Ninjitsu', dr:'1K1', key_words:'small', price:'1bu', notes:'pg 202 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:18, name:'Bisento', type:'Polearm', dr:'3K3', key_words:'large', price:'12 koku', notes:'pg 202 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:19, name:'Nagamaki', type:'Polearm', dr:'2K3', key_words:'large', price:'8 koku', notes:'pg 202 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:20, name:'Naginata', type:'Polearm', dr:'3K2', key_words:'Large, Samurai', price:'10 koku', notes:'pg 202 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:21, name:'Satsumata', type:'Polearm', dr:'0K2', key_words:'large', special:'The satsumata may be used to initiate and maintain a grapple', price:'6 koku', notes:'pg 202 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:22, name:'Sodegarami', type:'Polearm', dr:'1K1', key_words:'large', special:'The sodegarami may be used to initiate and maintain a grapple', price:'', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:23, name:'Kumade', type:'Spear', dr:'1K1', key_words:'large, peasant', special:'If kumade inflicts more that 25 wounds in a single attack, it breaks', price:'3 bu', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:24, name:'Mai Chong', type:'Spear', dr:'0K3', key_words:'large', special:'The mai chong may be thrown accurately up to 25\'', price:'20 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:25, name:'Lance', type:'Spear', dr:'3K4', key_words:'large', special:'The listed DR only applies if the lance is used from horseback and used to make an attack directly following a Move Action. Under any other circumstances, it possesses DR 1K2. Using the lance in melee combat without a Move Action increases the TN of all attack rolls by +5 on horseback and +10 on foot. A lance shatters is it inflicts more than 30 wounds in one attack.', price:'20 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:26, name:'Nagi-Yari', type:'Spear', dr:'1K2', key_words:'medium', special:'The nagi-yari may be thrown accurately up to 50\'', price:'3 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:27, name:'Yari', type:'Spear', dr:'2K2', key_words:'large', special:'The yari may be thrown a maximum range of 30\' and has a DR of 1K2 when thrown', price:'5 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:28, name:'Bo', type:'Staves', dr:'1K2', key_words:'large', price:'2 bu', notes:'pg 204 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:29, name:'Jo', type:'Staves', dr:'0K2', key_words:'medium', price:'1 bu', notes:'pg 204 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:30, name:'Machi-Kanshisha', type:'Staves', dr:'0K2', key_words:'medium', price:'20 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:31, name:'Nunchaku', type:'Staves', dr:'1K2', key_words:'peasant, small', price:'3 bu', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:32, name:'Sang Kauw', type:'Staves', dr:'1k2(blade)/2K1(shield)', key_words:'medium', price:'10 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:33, name:'Tonfa', type:'Staves', dr:'0K3', key_words:'medium, peasent', price:'5 bu', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:34, name:'Katana', type:'Swords', dr:'3K2', key_words:'medium, samurai', special:'Character may spend 1 Void point to increase damage roll my 1K1', price:'N/A', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:35, name:'Ninja-To', type:'Swords', dr:'2K2', key_words:'medium, ninja', special:'Considered a small weapon for the purposes of concealment. If more than 40 wounds are inflicted in one attack it breaks.', price:'5 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:36, name:'No-Dachi', type:'Swords', dr:'3K3', key_words:'large', price:'30 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:37, name:'Parangu', type:'Swords', dr:'2K2', key_words:'medium, peasant', special:'It parangu inflicts more than 30 wounds it breaks', price:'10 bu', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:38, name:'Scimitar', type:'Swords', dr:'2K3', key_words:'medium', price:'20 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:39, name:'Wakizashi', type:'Swords', dr:'2K2', key_words:'medium, samurai', price:'15 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:40, name:'War Fan', type:'Fan', dr:'0K1', key_words:'small', price:'5 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+    ];
+
+    var arrowDamageRoll = function(arrow) {
+      var str = character.strength;
+      return str + '+' + arrow.dr;
+    };
+
+    var arrowsMasterList = [
+      { id:0, name:'Armor Piercing', dr:'1K1', price:'2bu', special:'Ignores armor TN Bonus', get damage_roll() { return arrowDamageRoll(this) } },
+      { id:1, name:'Flesh Cutter', dr:'2K3', price:'5bu', special:'Double the Armor TN bonus, 1/2 range', get damage_roll() { return arrowDamageRoll(this) } },
+      { id:2, name:'Humming Bulb', dr:'0K1', price:'5bu', special:'Makes a loud whistling sound', get damage_roll() { return arrowDamageRoll(this) } },
+      { id:3, name:'Rope Cutter', dr:'1K1', price:'3bu', special:'2 Free Raises for Called shots against inatimate objects; 1/2 range', get damage_roll() { return arrowDamageRoll(this) } },
+      { id:5, name:'Willow Leaf', dr:'2K2', price:'1bu', special:'', get damage_roll() { return arrowDamageRoll(this) } },
     ];
 
     var doesCharacterHaveSpellcraftBonus = function() {
@@ -610,6 +642,19 @@
 
     this.characterSize = function() {
       return ( JSON.stringify(character).length );
+    };
+
+    this.getWeaponFromMasterList = function(weapon_id, attr) {
+      for(var i=0; i < weaponsMasterList.length; i++) {
+        if ( weaponsMasterList[i].id === weapon_id ) {
+          if (attr === null || attr === undefined ) {
+            return weaponsMasterList[i];
+          } else {
+            return weaponsMasterList[i][attr];
+          }
+        }
+      }
+      return "(error - weapon " + weapon_id + " not found)";
     };
 
   });//end dataservice

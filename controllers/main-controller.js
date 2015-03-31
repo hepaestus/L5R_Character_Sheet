@@ -3,13 +3,13 @@
     $scope.test = "Main Controller";
     $scope.characterSize = DataService.characterSize(); 
     
-    $scope.character = {name:'test'};
     $scope.character = DataService.character();
     
     $scope.close = function(result) {
       console.log("MainController Result: " + result);
       close(result, 500); 
     };
+
 
     $scope.show = function() {
       ModalService.showModal({
@@ -29,6 +29,34 @@
       }); 
     };
 
+
+    $scope.showClansListModal = function(message, filterBy) {
+      ModalService.showModal({
+        templateUrl: "templates/clans_list.html",
+        controller: "ClansController",
+        inputs : {
+          clansMasterList: DataService.clansMasterList(),
+          modalMessage: message,
+          filterby: filterBy,
+        },
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(clanId) {
+          //  If we have selected a clan, set it.
+          if(clanId != null) {
+            console.log("Show Clan Id: " + clanId);
+            $scope.character.clan_id = clanId;
+            $scope.calculateBonus( DataService.getClanFromMasterList(clanId).bonus );
+            $scope.character = DataService.updateCharacter($scope.character);
+          } else {
+            console.log("No Clan Id");
+          }
+        });
+      }); 
+    };
+
+
     $scope.showWeaponsOneListModal = function(message, filterBy) {
       ModalService.showModal({
         templateUrl: "templates/weapons_list.html",
@@ -41,18 +69,51 @@
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
         modal.element.modal();
-        modal.close.then(function(clanId) {
-          //  If we have selected a clan, set it.
+        modal.close.then(function(weaponId) {
+          //  If we have selected a weapon, set it.
           if(weaponId != null) {
             console.log("Show Weapon Id: " + weaponId);
             $scope.character.weapon_one.id = weaponId;
+            $scope.character.weapon_one.name = DataService.getWeaponFromMasterList(weaponId, 'name');
+            $scope.character.weapon_one.type = DataService.getWeaponFromMasterList(weaponId, 'type');
+            $scope.character.weapon_one.notes = DataService.getWeaponFromMasterList(weaponId, 'notes');
             $scope.character = DataService.updateCharacter($scope.character);
           } else {
-            console.log("No Clan Id");
+            console.log("No Weapon Id");
           }
         });
       }); 
     };
+
+
+    $scope.showWeaponsTwoListModal = function(message, filterBy) {
+      ModalService.showModal({
+        templateUrl: "templates/weapons_list.html",
+        controller: "WeaponsTwoController",
+        inputs : {
+          weaponsMasterList: DataService.weaponsMasterList(),
+          modalMessage: message,
+          filterby: filterBy,
+        },
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(weaponId) {
+          //  If we have selected a weapon, set it.
+          if(weaponId != null) {
+            console.log("Show Weapon Id: " + weaponId);
+            $scope.character.weapon_two.id = weaponId;
+            $scope.character.weapon_two.name = DataService.getWeaponFromMasterList(weaponId, 'name');
+            $scope.character.weapon_two.type = DataService.getWeaponFromMasterList(weaponId, 'type');
+            $scope.character.weapon_two.notes = DataService.getWeaponFromMasterList(weaponId, 'notes');
+            $scope.character = DataService.updateCharacter($scope.character);
+          } else {
+            console.log("No Weapon Id");
+          }
+        });
+      }); 
+    };
+
 
     $scope.showFamiliesListModal = function(message, filterBy) {
       ModalService.showModal({
@@ -79,6 +140,7 @@
       }); 
     };
     
+
     $scope.showSchoolsListModal = function(message, filterBy) {
       ModalService.showModal({
         templateUrl: "templates/school_list.html",
@@ -103,6 +165,7 @@
         });
       }); 
     };
+
 
     $scope.showSkillsListModal = function(message, searchText, filterBy, rank) {
       ModalService.showModal({
@@ -135,6 +198,7 @@
       }); 
     };
 
+
     $scope.loadCharacterModal = function(message, filterBy) {
       console.log("Loaded Characters : " + $scope.saved_characters_array);
       ModalService.showModal({
@@ -155,14 +219,11 @@
       }); 
     };
 
+
     $scope.saveCharacter = function() {
       console.log("Save Current Character");
       LoadCharacterService.saveCharacter($scope.character);
     };
-
-
-
-
 
 
     $scope.calculateBonus = function(obj) {
@@ -241,6 +302,7 @@
       $scope.character = DataService.updateCharacter($scope.character);
     };
 
+
     $scope.addASkill = function(skill_id, rank, emp) {
       console.log("Add A Skill:  id:" + skill_id + "  rank:" + rank + "  emp:" + emp);
       var skill = DataService.getSkillFromMasterList(skill_id);
@@ -257,6 +319,7 @@
       $scope.close(true, 500);
     };
 
+
     $scope.getCharacterSkillById = function(skill_id) {
       for(var i = 0; i < $scope.character.skills.length; i++) {
         if ( $scope.character.skills[i] != undefined ) {
@@ -267,6 +330,7 @@
       }
       return null;
     };
+
 
     var getSkillRoll = function(skill_id, skill_rank) {
       var skill = DataService.getSkillFromMasterList(skill_id);
@@ -279,6 +343,7 @@
         return '0K0';
       }
     };
+
 
     var skillMastery = function(obj) {
       var master_skill = DataService.getSkillFromMasterList(obj.id);
@@ -294,5 +359,6 @@
         return 'none';
       }
     };
+
 
   }]);//end main controller

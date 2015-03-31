@@ -149,8 +149,8 @@
             <th colspan="4" class="border-wide-left">Arrows</th>
           </tr>
           <tr>
-              <th class="left">Type</th><td><input name="weapon_one_type" type="text" ng-model="character.weapon_one.type" ng-click="showWeaponsOneListModal()"/></td>
-              <th class="left">Type</th><td><input name="weapon_two_type" type="text" ng-model="character.weapon_two.type" ng-click="showWeaponsTwoListModal()"/></td>
+              <th class="left">Type</th><td><input name="weapon_one_type" type="text" ng-model="character.weapon_one.name" ng-click="showWeaponsOneListModal()"/></td>
+              <th class="left">Type</th><td><input name="weapon_two_type" type="text" ng-model="character.weapon_two.name" ng-click="showWeaponsTwoListModal()"/></td>
 
               <th class="left border-wide-left">Type</th><th class="left">Damage</th><th class="left">Quantity</th>
           </tr>
@@ -173,8 +173,8 @@
               <td class="border-wide-left"><input name="arrows_three_type" type="text"/></td><td><input name="arrows_three_damage" type="text"/></td><td><input name="arrows_three_quant" type="number"/></td>
           </tr>
           <tr>
-              <th class="left">Notes</th><td><input name="weapon_one_notes" type="text"/></td>
-              <th class="left">Notes</th><td><input name="weapon_two_notes" type="text"/></td>
+              <th class="left">Notes</th><td><input name="weapon_one_notes" type="text" ng-model="character.weapon_one.notes"/></td>
+              <th class="left">Notes</th><td><input name="weapon_two_notes" type="text" ng-model="character.weapon_two.notes"/></td>
               
               <td class="border-wide-left"><input name="arrows_four_type" type="text"/></td><td><input name="arrows_four_damage" type="text"/></td><td><input name="arrows_four_quant" type="number"/></td>
           </tr>
