@@ -34,7 +34,7 @@
         templateUrl: "templates/weapons_list.html",
         controller: "WeaponsOneController",
         inputs : {
-          clansMasterList: DataService.weaponsMasterList(),
+          weaponsMasterList: DataService.weaponsMasterList(),
           modalMessage: message,
           filterby: filterBy,
         },

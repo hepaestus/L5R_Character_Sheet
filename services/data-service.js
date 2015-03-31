@@ -219,7 +219,7 @@
       { id:93, level:'Low', type:'Temptation*', sub_type:'Social Skill', trait:'awareness', ring:'air', emphases:{0:'Bribery', 1:'Seduction'}, get mastery() { return mastery(this); }, masteries:{5:'Character gains +5 Bonus to the total of any contested Roll using Temptation.'}, description:'Pg. 143 Core Book'},
     ];
 
-    var weapons = [
+    var weaponsMasterList = [
       { id:0, name:'Dai-Kyu', type:'Bow', strength:4, key_words:'large', price:'25 koku', note:'pg 200 core book'},
       { id:1, name:'Han-Kyu', type:'Bow', strength:1, key_words:'small', price:'6 koku', note:'pg 200 core book'},
       { id:2, name:'Yumi', type:'Bow', strength:3, key_words:'large', price:'20 koku', note:'pg 200 core book'},
