@@ -365,7 +365,8 @@
 
     var arrowDamageRoll = function(arrow) {
       var str = character.strength;
-      return str + '+' + arrow.dr;
+      var arr = arrow.dr.split("K");      
+      return ( str + parseInt(arr[0])) + "K" + arr[1];
     };
 
 
@@ -643,6 +644,10 @@
       return weaponsMasterList;
     }
 
+    this.arrowsMasterList = function() {
+      return arrowsMasterList;
+    }
+
     this.getSkillFromMasterList = function(skill_id, attr) {
     //console.log("getSkillFromMasterList(" + skill_id + "," + attr + ")");
       for(var i=0; i < skillsMasterList.length; i++) {
@@ -746,5 +751,17 @@
         }
       }
     };
-
+    
+    this.getArrowFromMasterList = function(arrow_id, attr) {
+      for(var i=0; i < arrowsMasterList.length; i++) {
+        if ( arrowsMasterList[i].id === arrow_id ) {
+          if (attr === null || attr === undefined ) {
+            return arrowsMasterList[i];
+          } else {
+            return arrowsMasterList[i][attr];
+          }
+        }
+      }
+    };
+    
   });//end dataservice

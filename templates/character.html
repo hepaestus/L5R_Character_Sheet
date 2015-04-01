@@ -158,29 +158,33 @@
               <th class="left">Attack Roll</th><td><input name="weapon_one_attack_roll" type="text" ng-model="character.weapon_one.attack_roll"/></td>
               <th class="left">Attack Roll</th><td><input name="weapon_two_attack_roll" type="text" ng-model="character.weapon_two.attack_roll"/></td>
               
-              <td class="border-wide-left"><input name="arrows_one_type" type="text"/></td><td><input name="arrows_one_damage" type="text"/></td><td><input name="arrows_one_quant" type="number"/></td>
+              <td class="border-wide-left"><input name="arrows_one_type" type="text" ng-model="character.arrows[0].type" ng-click="showArrowsListModal(1)"/>
+              </td><td><input name="arrows_one_damage" type="text" ng-model="character.arrows[0].damage"/></td>
+              <td><input name="arrows_one_quant" type="number" ng-model="character.arrows[0].number"/></td>
           </tr>
           <tr>
               <th class="left">Damage Roll</th><td><input name="weapon_one_damage_roll" type="text" ng-model="character.weapon_one.damage_roll"/></td>
               <th class="left">Damage Roll</th><td><input name="weapon_two_damage_roll" type="text" ng-model="character.weapon_two.damage_roll"/></td>
-              
-              <td class="border-wide-left"><input name="arrows_two_type" type="text"/></td><td><input name="arrows_two_damage" type="text"/></td><td><input name="arrows_two_quant" type="number"/></td>
+            
+              <td class="border-wide-left"><input name="arrows_two_type" type="text" ng-model="character.arrows[1].type" ng-click="showArrowsListModal(2)"/></td>
+              <td><input name="arrows_two_damage" type="text" ng-model="character.arrows[1].damage"/></td>
+              <td><input name="arrows_two_quant" type="number" ng-model="character.arrows[1].number"/></td>
           </tr>
           <tr>
               <th class="left">Bonus</th><td><input name="weapon_one_bonus" type="text" ng-model="character.weapon_one.bonus"/></td>
               <th class="left">Bonus</th><td><input name="weapon_two_bonus" type="text" ng-model="character.weapon_two.bonus"/></td>
               
-              <td class="border-wide-left"><input name="arrows_three_type" type="text"/></td>
-              <td><input name="arrows_three_damage" type="text"/></td>
-              <td><input name="arrows_three_quant" type="number"/></td>
+              <td class="border-wide-left"><input name="arrows_three_type" type="text" ng-model="character.arrows[2].type" ng-click="showArrowsListModal(3)"/></td>
+              <td><input name="arrows_three_damage" type="text" ng-model="character.arrows[2].damage"/></td>
+              <td><input name="arrows_three_quant" type="number" ng-model="character.arrows[2].number"/></td>
           </tr>
           <tr>
               <th class="left">Notes</th><td><input name="weapon_one_notes" type="text" ng-model="character.weapon_one.notes"/></td>
               <th class="left">Notes</th><td><input name="weapon_two_notes" type="text" ng-model="character.weapon_two.notes"/></td>
               
-              <td class="border-wide-left"><input name="arrows_four_type" type="text"/></td>
-              <td><input name="arrows_four_damage" type="text"/>
-              </td><td><input name="arrows_four_quant" type="number"/></td>
+              <td class="border-wide-left"><input name="arrows_four_type" type="text" ng-model="character.arrows[3].type" ng-click="showArrowsListModal(4)"/></td>
+              <td><input name="arrows_four_damage" type="text" ng-model="character.arrows[3].damage"/>
+              </td><td><input name="arrows_four_quant" type="number" ng-model="character.arrows[3].number"/></td>
           </tr>
         </table>
     </div>
@@ -193,58 +197,18 @@
          <input type="number" name="honor-rank" min="0" step="0.1" class="stats-rank" ng-model="character.honor" />
          HONOR
        </h4>
-       <!-- input type="checkbox" name="honor.one"/>
-       <input type="checkbox" name="honor.two"/>
-       <input type="checkbox" name="honor.three"/>
-       <input type="checkbox" name="honor.four"/>
-       <input type="checkbox" name="honor.five"/>
-       <input type="checkbox" name="honor.six"/>
-       <input type="checkbox" name="honor.seven"/>
-       <input type="checkbox" name="honor.eight"/>
-       <input type="checkbox" name="honor.nine"/>
-       <input type="checkbox" name="honor.ten"/ -->
        <h4>
          <input type="number" name="glory-rank" min="0" step="0.1" class="stats-rank" ng-model="character.glory"/>
          GLORY
        </h4>
-       <!-- input type="checkbox" name="glory.one"/>
-       <input type="checkbox" name="glory.two"/>
-       <input type="checkbox" name="glory.three"/>
-       <input type="checkbox" name="glory.four"/>
-       <input type="checkbox" name="glory.five"/>
-       <input type="checkbox" name="glory.six"/>
-       <input type="checkbox" name="glory.seven"/>
-       <input type="checkbox" name="glory.eight"/>
-       <input type="checkbox" name="glory.nine"/>
-       <input type="checkbox" name="glory.ten"/ -->
        <h4>
          <input type="number" name="status-rank" min="0" step="0.1" class="stats-rank" ng-model="character.status"/>
          STATUS
        </h4>
-       <!-- input type="checkbox" name="status.one"/>
-       <input type="checkbox" name="status.two"/>
-       <input type="checkbox" name="status.three"/>
-       <input type="checkbox" name="status.four"/>
-       <input type="checkbox" name="status.five"/>
-       <input type="checkbox" name="status.six"/>
-       <input type="checkbox" name="status.seven"/>
-       <input type="checkbox" name="status.eight"/>
-       <input type="checkbox" name="status.nine"/>
-       <input type="checkbox" name="status.ten"/ -->
        <h4>
          <input type="number" name="taint-rank" min="0" step="0.1" class="stats-rank" ng-model="character.taint"/>
          SHADOWLAND TAINT
        </h4>
-       <!-- input type="checkbox" name="taint.one"/>
-       <input type="checkbox" name="taint.two"/>
-       <input type="checkbox" name="taint.three"/>
-       <input type="checkbox" name="taint.four"/>
-       <input type="checkbox" name="taint.five"/>
-       <input type="checkbox" name="taint.six"/>
-       <input type="checkbox" name="taint.seven"/>
-       <input type="checkbox" name="taint.eight"/>
-       <input type="checkbox" name="taint.nine"/>
-       <input type="checkbox" name="taint.ten"/ -->
      </section>
 
      <table class="stats-table">

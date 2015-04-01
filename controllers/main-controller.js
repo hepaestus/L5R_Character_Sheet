@@ -205,6 +205,35 @@
     };
 
 
+    $scope.showArrowsListModal = function(num, message, filterBy) {
+      ModalService.showModal({
+        templateUrl: "templates/arrows_list.html",
+        controller: "ArrowsController",
+        inputs : {
+          arrowsMasterList: DataService.arrowsMasterList(),
+          num: num,
+          modalMessage: message,
+          filterby: filterBy,
+        },
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(arrowId) {
+          //  If we have selected a clan, set it.
+          if(arrowId != null) {
+            console.log("Show Arrow Num " + num + " Id: " + arrowId);
+            $scope.character.arrows[num].id = arrowId;
+            $scope.character.arrows[num].type = DataService.getArrowFromMasterList(arrowId, 'name');
+            $scope.character.arrows[num].damage = DataService.getArrowFromMasterList(arrowId, 'damage_roll');
+            $scope.character = DataService.updateCharacter($scope.character);
+          } else {
+            console.log("No Clan Id");
+          }
+        });
+      }); 
+    };
+
+
     $scope.loadCharacterModal = function(message, filterBy) {
       console.log("Loaded Characters : " + $scope.saved_characters_array);
       ModalService.showModal({
