@@ -172,7 +172,7 @@
           $scope.character.insight -= diff;
         } else if ( skill.rank > skill.rank_s ) {
           var diff = skill.rank - skill.rank_s;
-      $scope.character.experience_points -= skill.rank;
+          $scope.character.experience_points -= skill.rank;
           $scope.character.insight += diff;
         }
         skill.rank_s = skill.rank;

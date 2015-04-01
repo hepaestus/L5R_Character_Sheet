@@ -101,6 +101,10 @@
       $scope.character.weapon_one.damage_roll = DataService.getWeaponFromMasterList( $scope.character.weapon_one.id, 'damage_roll');
       $scope.character.weapon_two.attack_roll = DataService.getWeaponFromMasterList( $scope.character.weapon_two.id, 'attack_roll');
       $scope.character.weapon_two.damage_roll = DataService.getWeaponFromMasterList( $scope.character.weapon_two.id, 'damage_roll');
+      for (var i = 0; i < $scope.character.arrows; i++ ) {
+        $scope.character.arrows[i].type = DataService.getArrowFromMasterList(arrowId, 'name');
+        $scope.character.arrows[i].damage = DataService.getArrowFromMasterList(arrowId, 'damage_roll');
+      }
       $scope.character = DataService.updateCharacter($scope.character);
     };
 
