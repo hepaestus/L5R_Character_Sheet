@@ -223,10 +223,10 @@
       var roll = "";
       if ( weapon.type == 'Bow' ) {
         if ( weapon.strength > character.strength ) {
-           roll = "0K0";
+           roll = "0K" + character.reflexes;
         } else {
            var str = weapon.strength + character.strength;
-           roll = str + "K" + chraracter.reflexes;
+           roll = str + "K" + character.reflexes;
         }
         return roll;
       } else {
@@ -235,7 +235,12 @@
     };
 
     var damageRoll = function(weapon) {
-     
+      if ( weapon.type == 'Bow' ) {
+        return "See Arrows";
+      } else {
+        var dr = weapon.dr.split("K");        
+        return ( (character.strength + parseInt(dr[0])) + "K" + dr[1] );
+      }
     };
 
     var weaponsMasterList = [
@@ -665,7 +670,6 @@
           }
         }
       }
-      return "(error - weapon " + weapon_id + " not found)";
     };
 
   });//end dataservice

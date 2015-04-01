@@ -30,6 +30,7 @@
         $scope.character.earth = $scope.character.stamina;
       }
       $scope.updateInsight();
+      $scope.updateWeapons();
       $scope.character = DataService.updateCharacter($scope.character);
     };
 
@@ -43,6 +44,7 @@
         $scope.character.air = $scope.character.awareness;
       }
       $scope.updateInsight();
+      $scope.updateWeapons();
       $scope.character = DataService.updateCharacter($scope.character);
     };
 
@@ -56,6 +58,7 @@
         $scope.character.water = $scope.character.perception;
       }
       $scope.updateInsight();
+      $scope.updateWeapons();
       $scope.character = DataService.updateCharacter($scope.character);
     };
 
@@ -69,12 +72,14 @@
         $scope.character.fire = $scope.character.intelligence;
       }
       $scope.updateInsight();
+      $scope.updateWeapons();
       $scope.character = DataService.updateCharacter($scope.character);
     };
     
     $scope.updateVoid = function(attr, value) {
       $scope.updateExp(attr,value);
       $scope.updateInsight();
+      $scope.updateWeapons();
       $scope.character = DataService.updateCharacter($scope.character);
     };
 
@@ -87,6 +92,15 @@
       }
       $scope.character.insight = skillRanks + (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10);
       $scope.updateInsightRank();
+      $scope.updateWeapons();
+      $scope.character = DataService.updateCharacter($scope.character);
+    };
+
+    $scope.updateWeapons = function() {
+      $scope.character.weapon_one.attack_roll = DataService.getWeaponFromMasterList( $scope.character.weapon_one.id, 'attack_roll');
+      $scope.character.weapon_one.damage_roll = DataService.getWeaponFromMasterList( $scope.character.weapon_one.id, 'damage_roll');
+      $scope.character.weapon_two.attack_roll = DataService.getWeaponFromMasterList( $scope.character.weapon_two.id, 'attack_roll');
+      $scope.character.weapon_two.damage_roll = DataService.getWeaponFromMasterList( $scope.character.weapon_two.id, 'damage_roll');
       $scope.character = DataService.updateCharacter($scope.character);
     };
 
