@@ -228,19 +228,94 @@
            var str = weapon.strength + character.strength;
            roll = str + "K" + character.reflexes;
         }
-        return roll;
+      } else if ( weapon.type == 'Chain' ) {
+        var skill = doesCharacterHaveSkill(64);
+        if ( skill ) {
+          roll = skill.roll;
+        } else {
+          roll = character.agility + "K" + character.fire;
+        }
+      } else if ( weapon.type == 'Heavy' ) {
+        var skill = doesCharacterHaveSkill(65);
+        if ( skill ) {
+          roll = skill.roll;
+        } else {
+          roll = character.agility + "K" + character.fire;
+        }
+      } else if ( weapon.type == 'Knife' ) {
+        var skill = doesCharacterHaveSkill(67);
+        if ( skill ) {
+          roll = skill.roll;
+        } else {
+          roll = character.agility + "K" + character.fire;
+        }
+      } else if ( weapon.type == 'Ninjitsu' ) {
+        var skill1 = doesCharacterHaveSkill(69);
+        var skill2 = doesCharacterHaveSkill(70);
+        if ( skill1 ) {
+          roll = skill1.roll;
+        } else if ( skill2 ) {
+          roll = skill2.roll;
+        } else {
+          roll = character.agility + "K" + character.fire + " or " + character.reflexes + "K" + character.air;
+        }
+      } else if ( weapon.type == 'Polearm' ) {
+        var skill = doesCharacterHaveSkill(71);
+        if ( skill ) {
+          roll = skill.roll;
+        } else {
+          roll = character.agility + "K" + character.fire;
+        }
+      } else if ( weapon.type == 'Spear' ) {
+        var skill = doesCharacterHaveSkill(72);
+        if ( skill ) {
+          roll = skill.roll;
+        } else {
+          roll = character.agility + "K" + character.fire;
+        }
+      } else if ( weapon.type == 'Staves' ) {
+        var skill = doesCharacterHaveSkill(73);
+        if ( skill ) {
+          roll = skill.roll;
+        } else {
+          roll = character.agility + "K" + character.fire;
+        }
+      } else if ( weapon.type == 'Sword' ) {
+        var skill = doesCharacterHaveSkill(66);
+        if ( skill ) {
+          roll = skill.roll;
+        } else {
+          roll = character.agility + "K" + character.fire;
+        }
+      } else if ( weapon.type == 'Fan' ) {
+        var skill = doesCharacterHaveSkill(74);
+        if ( skill ) {
+          roll = skill.roll;
+        } else {
+          roll = character.agility + "K" + character.fire;
+        }
       } else {
-        return weapon.dr; 
+        roll = weapon.dr; 
       }
+      return roll;
     };
 
     var damageRoll = function(weapon) {
       if ( weapon.type == 'Bow' ) {
         return "See Arrows";
-      } else {
+      } else {        
         var dr = weapon.dr.split("K");        
         return ( (character.strength + parseInt(dr[0])) + "K" + dr[1] );
       }
+    };
+
+    var doesCharacterHaveSkill = function(skill_id) {
+      for ( var i = 0; i < character.skills.length; i++ ) {
+        if ( character.skills[i].id == skill_id ) {
+          return character.skills[i];
+        }
+      }
+      return null;
     };
 
     var weaponsMasterList = [

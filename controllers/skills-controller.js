@@ -178,6 +178,7 @@
         skill.rank_s = skill.rank;
         replaceCharacterSkillById(id, skill);
         $scope.updateInsightRank();
+        $scope.updateWeapons();
       } else {
         //console.log("Skill Not Found (updateskillrank)");
       }
