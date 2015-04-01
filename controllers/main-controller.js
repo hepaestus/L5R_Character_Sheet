@@ -76,6 +76,9 @@
             $scope.character.weapon_one.id = weaponId;
             $scope.character.weapon_one.name = DataService.getWeaponFromMasterList(weaponId, 'name');
             $scope.character.weapon_one.type = DataService.getWeaponFromMasterList(weaponId, 'type');
+            $scope.character.weapon_one.attack_roll = DataService.getWeaponFromMasterList(weaponId, 'attack_roll');
+            $scope.character.weapon_one.damage_roll = DataService.getWeaponFromMasterList(weaponId, 'dr');
+            $scope.character.weapon_one.bonus = DataService.getWeaponFromMasterList(weaponId, 'bonus');
             $scope.character.weapon_one.notes = DataService.getWeaponFromMasterList(weaponId, 'notes');
             $scope.character = DataService.updateCharacter($scope.character);
           } else {
@@ -105,6 +108,9 @@
             $scope.character.weapon_two.id = weaponId;
             $scope.character.weapon_two.name = DataService.getWeaponFromMasterList(weaponId, 'name');
             $scope.character.weapon_two.type = DataService.getWeaponFromMasterList(weaponId, 'type');
+            $scope.character.weapon_two.attack_roll = DataService.getWeaponFromMasterList(weaponId, 'attack_roll');
+            $scope.character.weapon_two.damage_roll = DataService.getWeaponFromMasterList(weaponId, 'dr');
+            $scope.character.weapon_two.bonus = DataService.getWeaponFromMasterList(weaponId, 'bonus');
             $scope.character.weapon_two.notes = DataService.getWeaponFromMasterList(weaponId, 'notes');
             $scope.character = DataService.updateCharacter($scope.character);
           } else {

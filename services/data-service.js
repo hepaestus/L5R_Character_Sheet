@@ -282,10 +282,12 @@
       { id:40, name:'War Fan', type:'Fan', dr:'0K1', key_words:'small', price:'5 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
     ];
 
+
     var arrowDamageRoll = function(arrow) {
       var str = character.strength;
       return str + '+' + arrow.dr;
     };
+
 
     var arrowsMasterList = [
       { id:0, name:'Armor Piercing', dr:'1K1', price:'2bu', special:'Ignores armor TN Bonus', get damage_roll() { return arrowDamageRoll(this) } },
@@ -294,6 +296,15 @@
       { id:3, name:'Rope Cutter', dr:'1K1', price:'3bu', special:'2 Free Raises for Called shots against inatimate objects; 1/2 range', get damage_roll() { return arrowDamageRoll(this) } },
       { id:5, name:'Willow Leaf', dr:'2K2', price:'1bu', special:'', get damage_roll() { return arrowDamageRoll(this) } },
     ];
+
+
+    var armorMasterList = [
+      {id:0, name:'Ashigari Armor', type:'', tn_bonus:'+3', reduction:'1', price:'5 koku'},
+      {id:1, name:'Light Armor', type:'', tn_bonus:'+5', reduction:'3', price:'25 koku'},
+      {id:2, name:'Heavy Armor', type:'', tn_bonus:'+10', reduction:'5', price:'40 koku', special:'Increases the TN of all Skill Rolls using Agility ot Reflexes by 5.'},
+      {id:3, name:'Riding Armor', type:'', tn_bonus:'+4/+12', reduction:'4', price:'55 koku', special:'Increases the TN of all Skill Rolls using Agility ot Reflexes by 5 except while on horseback'},
+    ];
+
 
     var doesCharacterHaveSpellcraftBonus = function() {
       if ( character.skills ) {

@@ -86,8 +86,8 @@
         }
       }
       $scope.character.insight = skillRanks + (($scope.character.earth + $scope.character.air + $scope.character.water + $scope.character.fire + $scope.character.void) * 10);
-      $scope.character = DataService.updateCharacter($scope.character);
       $scope.updateInsightRank();
+      $scope.character = DataService.updateCharacter($scope.character);
     };
 
     $scope.updateInsightRank = function() {
