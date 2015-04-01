@@ -93,16 +93,28 @@
     $scope.updateInsightRank = function() {
       if( $scope.character.insight < 150 ) {
         $scope.character.insight_rank = 1;
-      } else if ( $scope.character.insight >= 150 && $scope.character.insight < 200  ) {
+      } else if ( $scope.character.insight >= 150 && $scope.character.insight < 175  ) {
         $scope.character.insight_rank = 2;
-      } else if ( $scope.character.insight >= 200 && $scope.character.insight < 300  ) {
+      } else if ( $scope.character.insight >= 175 && $scope.character.insight < 200  ) {
         $scope.character.insight_rank = 3;
-      } else if ( $scope.character.insight >= 300 && $scope.character.insight < 400  ) {
+      } else if ( $scope.character.insight >= 200 && $scope.character.insight < 225  ) {
         $scope.character.insight_rank = 4;
-      } else if ( $scope.character.insight >= 400 && $scope.character.insight < 500  ) {
+      } else if ( $scope.character.insight >= 225 && $scope.character.insight < 250  ) {
         $scope.character.insight_rank = 5;
-      } else if ( $scope.character.insight >= 500 ) {
+      } else if ( $scope.character.insight >= 250 && $scope.character.insight < 275  ) {
         $scope.character.insight_rank = 6;
+      } else if ( $scope.character.insight >= 275 && $scope.character.insight < 300  ) {
+        $scope.character.insight_rank = 7;
+      } else if ( $scope.character.insight >= 300 && $scope.character.insight < 325 ) {
+        $scope.character.insight_rank = 8;
+      } else if ( $scope.character.insight >= 325 && $scope.character.insight < 350 ) {
+        $scope.character.insight_rank = 9;
+      } else if ( $scope.character.insight >= 350 && $scope.character.insight < 375 ) {
+        $scope.character.insight_rank = 10;
+      } else if ( $scope.character.insight >= 375 && $scope.character.insight < 400 ) {
+        $scope.character.insight_rank = 11;
+      } else {
+        $scope.character.insight_rank = 12;
       }
       $scope.character = DataService.updateCharacter($scope.character);
     }
