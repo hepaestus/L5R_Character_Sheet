@@ -223,10 +223,10 @@
       var roll = "";
       if ( weapon.type == 'Bow' ) {
         if ( weapon.strength > character.strength ) {
-           roll = "0K" + character.reflexes;
+           roll = "0K" + character.air;
         } else {
            var str = weapon.strength + character.strength;
-           roll = str + "K" + character.reflexes;
+           roll = str + "K" + character.air;
         }
       } else if ( weapon.type == 'Chain' ) {
         var skill = doesCharacterHaveSkill(64);
@@ -273,7 +273,7 @@
         } else {
           roll = character.agility + "K" + character.fire;
         }
-      } else if ( weapon.type == 'Staves' ) {
+      } else if ( weapon.type == 'Stave' ) {
         var skill = doesCharacterHaveSkill(73);
         if ( skill ) {
           roll = skill.roll;
@@ -347,18 +347,18 @@
       { id:25, name:'Lance', type:'Spear', dr:'3K4', key_words:'large', special:'The listed DR only applies if the lance is used from horseback and used to make an attack directly following a Move Action. Under any other circumstances, it possesses DR 1K2. Using the lance in melee combat without a Move Action increases the TN of all attack rolls by +5 on horseback and +10 on foot. A lance shatters is it inflicts more than 30 wounds in one attack.', price:'20 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
       { id:26, name:'Nagi-Yari', type:'Spear', dr:'1K2', key_words:'medium', special:'The nagi-yari may be thrown accurately up to 50\'', price:'3 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
       { id:27, name:'Yari', type:'Spear', dr:'2K2', key_words:'large', special:'The yari may be thrown a maximum range of 30\' and has a DR of 1K2 when thrown', price:'5 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
-      { id:28, name:'Bo', type:'Staves', dr:'1K2', key_words:'large', price:'2 bu', notes:'pg 204 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
-      { id:29, name:'Jo', type:'Staves', dr:'0K2', key_words:'medium', price:'1 bu', notes:'pg 204 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
-      { id:30, name:'Machi-Kanshisha', type:'Staves', dr:'0K2', key_words:'medium', price:'20 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
-      { id:31, name:'Nunchaku', type:'Staves', dr:'1K2', key_words:'peasant, small', price:'3 bu', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
-      { id:32, name:'Sang Kauw', type:'Staves', dr:'1k2(blade)/2K1(shield)', key_words:'medium', price:'10 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
-      { id:33, name:'Tonfa', type:'Staves', dr:'0K3', key_words:'medium, peasent', price:'5 bu', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
-      { id:34, name:'Katana', type:'Swords', dr:'3K2', key_words:'medium, samurai', special:'Character may spend 1 Void point to increase damage roll my 1K1', price:'N/A', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
-      { id:35, name:'Ninja-To', type:'Swords', dr:'2K2', key_words:'medium, ninja', special:'Considered a small weapon for the purposes of concealment. If more than 40 wounds are inflicted in one attack it breaks.', price:'5 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
-      { id:36, name:'No-Dachi', type:'Swords', dr:'3K3', key_words:'large', price:'30 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
-      { id:37, name:'Parangu', type:'Swords', dr:'2K2', key_words:'medium, peasant', special:'It parangu inflicts more than 30 wounds it breaks', price:'10 bu', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
-      { id:38, name:'Scimitar', type:'Swords', dr:'2K3', key_words:'medium', price:'20 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
-      { id:39, name:'Wakizashi', type:'Swords', dr:'2K2', key_words:'medium, samurai', price:'15 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:28, name:'Bo', type:'Stave', dr:'1K2', key_words:'large', price:'2 bu', notes:'pg 204 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:29, name:'Jo', type:'Stave', dr:'0K2', key_words:'medium', price:'1 bu', notes:'pg 204 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:30, name:'Machi-Kanshisha', type:'Stave', dr:'0K2', key_words:'medium', price:'20 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:31, name:'Nunchaku', type:'Stave', dr:'1K2', key_words:'peasant, small', price:'3 bu', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:32, name:'Sang Kauw', type:'Stave', dr:'1k2(blade)/2K1(shield)', key_words:'medium', price:'10 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:33, name:'Tonfa', type:'Stave', dr:'0K3', key_words:'medium, peasent', price:'5 bu', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:34, name:'Katana', type:'Sword', dr:'3K2', key_words:'medium, samurai', special:'Character may spend 1 Void point to increase damage roll my 1K1', price:'N/A', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:35, name:'Ninja-To', type:'Sword', dr:'2K2', key_words:'medium, ninja', special:'Considered a small weapon for the purposes of concealment. If more than 40 wounds are inflicted in one attack it breaks.', price:'5 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:36, name:'No-Dachi', type:'Sword', dr:'3K3', key_words:'large', price:'30 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:37, name:'Parangu', type:'Sword', dr:'2K2', key_words:'medium, peasant', special:'It parangu inflicts more than 30 wounds it breaks', price:'10 bu', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:38, name:'Scimitar', type:'Sword', dr:'2K3', key_words:'medium', price:'20 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
+      { id:39, name:'Wakizashi', type:'Sword', dr:'2K2', key_words:'medium, samurai', price:'15 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
       { id:40, name:'War Fan', type:'Fan', dr:'0K1', key_words:'small', price:'5 koku', notes:'pg 203 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
     ];
 
@@ -366,7 +366,7 @@
     var arrowDamageRoll = function(arrow) {
       var str = character.strength;
       var arr = arrow.dr.split("K");      
-      return ( str + parseInt(arr[0])) + "K" + arr[1];
+      return ( parseInt(str) + parseInt(arr[0])) + "K" + arr[1];
     };
 
 

@@ -6,7 +6,7 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
   angular.module('myApp').config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {
       templateUrl: "templates/home.html",
-      controller: 'HomeController'
+      controller: 'CharacterController'
     })
     .when('/character', {
       templateUrl: "templates/character.html",
@@ -15,6 +15,10 @@ angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','
     .when('/spells', {
       templateUrl: "templates/spells.html",
       controller: 'SpellsController'
+    })
+    .when('/kihos', {
+      templateUrl: "templates/kihos.html",
+      controller: 'KihosController'
     })
     .otherwise({redirectTo: '/'});
   }]);//end routes

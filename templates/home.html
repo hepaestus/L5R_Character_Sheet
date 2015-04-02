@@ -4,6 +4,16 @@
 
   <section>
       <header><h2>How To Use</h2></header>
-      <p>How to Use</p>
+      <ol>
+          <li><a href="" ng-click="showClansListModal()">Choose your Clan</a> <span ng-if="character.clan.name"> : {{character.clan.name}}</span></li>
+          <li><a href="" ng-click="showFamiliesListModal()">Choose your Family</a> <span ng-if="character.family.name"> : {{character.family.name}}</span></li>
+          <li><a href="" ng-click="showSchoolsListModal()">Choose your School</a> <span ng-if="character.school.name"> : {{character.school.name}}</span></li>          
+          <li>Add your Advantages and Disadvantages</li>
+          <li>Go to the Character Sheet</li>
+          <li>Update your Rings</li>
+          <li>Add your Skills and Emphases</li>
+          <li>Add your Weapons and Arrows</li>
+          <li>If you are a Shugenja, Go to the Spells Sheet and add your spells</li>
+      </ol>
   </section>
 
