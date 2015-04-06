@@ -88,10 +88,9 @@
       {id:4, name:'Toritaki', clan:'Crab', bonus:{ perception:1 } },
       {id:5, name:'Yasuki', clan:'Crab', bonus:{ awareness:1 } },
       {id:6, name:'Asahina', clan:'Crane', bonus:{ intelligence:1} },
-      {id:7, name:'Doji', clan:'Crane', bonus:{ attr:1 } },
-      {id:8, name:'Daidoji', clan:'Crane', bonus:{ attr:1 } },
-      {id:9, name:'Kakita', clan:'Crane', bonus:{ attr:1 } },
-      {id:10, name:'Yasuki', clan:'Crane', bonus:{ attr:1 } },
+      {id:7, name:'Doji', clan:'Crane', bonus:{ awareness:1 } },
+      {id:8, name:'Daidoji', clan:'Crane', bonus:{ stamina:1 } },
+      {id:9, name:'Kakita', clan:'Crane', bonus:{ agility:1 } },
       {id:11, name:'Kitsu', clan:'Lion', bonus:{ intelligence:1 , key_word: { Battle:"Free Raise" } } },
     ];
 
@@ -101,6 +100,9 @@
       {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['10:0','36::2',39,54,'+1 weapon'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
       {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['76:0',11,58,13,90,'53:1','+1 merchant'], techniques:{1:'The Way of the Carp. pg. 107', 2:'Do As We Say. pg. 108', 3:'Treasures of the Carp. pg 108', 4:'Wiles of the Carp. pg 108', 5:'What is Yours is Mine. pg 108'} } },
       {id:3, name:'Hirumi Bushi', clan:'Crab', bonus:{ willpower:1, honor:4.5, skills:[56,60,'66:0',68,36,92,'+1 Any'], techniques:{1:'Torch Flame Flickers. pg 108', 2:'Wolf\'s Little Lesson. pg 108', 3:'Hummingbird Wings. pg 108', 4:'Shark Smells Blood. pg 108', 5:'Daylight Wastes No Movement. pg 108'} } },
+      {id:5, name:'Kakita Bushi', clan:'Crane', bonus:{ reflexes:1, honor:6.5, skills:[13,'61:1',68,55,'+1 high or bugei'], techniques:{} } },
+      {id:5, name:'', clan:'Crane', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
+      {id:5, name:'', clan:'Crane', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:5, name:'', clan:'Crane', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:6, name:'', clan:'Dragon', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },
       {id:7, name:'', clan:'Lion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{} } },

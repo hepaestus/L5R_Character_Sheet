@@ -8,6 +8,7 @@
 
     this.loadCharacters = function() {
       var saved_character_cookie_array = $cookieStore.get('characters');
+      console.log("Loading Characters : " + JSON.stringify(saved_character_cookie_array));
       saved_characters_array = [];
       if ( saved_character_cookie_array ) {
         for ( var i = 0; i < saved_character_cookie_array.length; i++) {
@@ -21,7 +22,7 @@
     };
 
     this.getSavedCharacter = function(index) {
-      console.log("Getting Character : " + saved_characters_array[index]);
+      console.log("Getting Character : " + JSON.stringify(saved_characters_array[index]));
       return saved_characters_array[index];
     };
 
@@ -50,7 +51,15 @@
       saved_characters_date_array.push('character_' + date_string);
       console.log("Saved Character Dates: " + saved_characters_date_array);
       $cookieStore.put('characters', saved_characters_date_array  );
-      $cookieStore.put('character_' + date_string, character);
+
+      $cookieStore.put('skills_' + date_string, character.skills);
+      $cookieStore.put('spells_' + date_string, character.spells);
+      $cookieStore.put('school_' + date_string, character.school);
+      var temp_char = character;
+      temp_char.skills = null;
+      temp_char.spells = null;
+      temp_char.scholl = null;
+      $cookieStore.put('character_' + date_string, temp_char);
     }; 
 
   }]);//end loadcharacterservice

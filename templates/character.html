@@ -4,8 +4,8 @@
 
 
       <div class="info">
-        <!-- button ng-click="saveCharacter()">Save Changes Locally</button>
-        <button ng-click="loadCharacterModal()">Load Character</button  -->
+        <button ng-click="saveCharacter()">Save Changes Locally</button>
+        <button ng-click="loadCharacterModal()">Load Character</button>
         <!-- button ng-click="show()">Show a Modal</button -->
         <br/>
         <table class="info-table">
@@ -118,7 +118,7 @@
           </tr>
           <tr ng-repeat="each in character.skills track by $index" ng-show="character.skills">
               <!-- td class="skill_name">{{$index}}-{{each.id}}:{{ getSkill(each.id,'type')}} {{ getSkill(each.id,'sub_type')}} </td-->
-              <td class="small"><sup>{{$index}}</sup></td>
+              <td class="small"><sup>{{$index + 1}}</sup></td>
               <td class="skill_name">{{ getSkill(each.id,'type')}} {{ getSkill(each.id,'sub_type')}} </td>
               <td class="skill_rank"><input name="skill_rank" ng-model="character.skills[$index].rank" type="number" min="0" ng-click="updateSkillRank(each.id)"/></td>
               <td>{{getSkill(each.id,'trait')}}</td>
