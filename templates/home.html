@@ -6,10 +6,11 @@
       <header><h2>How To Use</h2></header>
       <ol>
           <li><a href="" ng-click="showClansListModal()">Choose your Clan</a> <span ng-if="character.clan.name"> : {{character.clan.name}}</span></li>
-          <li><a href="" ng-click="showFamiliesListModal()">Choose your Family</a> <span ng-if="character.family.name"> : {{character.family.name}}</span></li>
-          <li><a href="" ng-click="showSchoolsListModal()">Choose your School</a> <span ng-if="character.school.name"> : {{character.school.name}}</span></li>          
+          <li><a href="" ng-click="showFamiliesListModal(character.clan.name)">Choose your Family</a> <span ng-if="character.family.name"> : {{character.family.name}}</span></li>
+          <li><a href="" ng-click="showSchoolsListModal(character.clan.name)">Choose your School</a> <span ng-if="character.school.name"> : {{character.school.name}}</span></li>          
           <li>Add your Advantages and Disadvantages</li>
           <li>Go to the Character Sheet</li>
+          <li>Choose your Name</li>
           <li>Update your Rings</li>
           <li>Add your Skills and Emphases</li>
           <li>Add your Weapons and Arrows</li>

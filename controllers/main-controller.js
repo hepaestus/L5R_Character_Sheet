@@ -227,7 +227,33 @@
             $scope.character.arrows[num].damage = DataService.getArrowFromMasterList(arrowId, 'damage_roll');
             $scope.character = DataService.updateCharacter($scope.character);
           } else {
-            console.log("No Clan Id");
+            console.log("No Arrow Id");
+          }
+        });
+      }); 
+    };
+
+
+    $scope.showArmorListModal = function(message, filterBy) {
+      ModalService.showModal({
+        templateUrl: "templates/armor_list.html",
+        controller: "ArmorController",
+        inputs : {
+          armorMasterList: DataService.armorMasterList(),
+          modalMessage: message,
+          filterby: filterBy,
+        },
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(armorId) {
+          //  If we have selected a clan, set it.
+          if(armorId != null) {
+            console.log("Show Armor Id: " + armorId);
+            $scope.character.armor = DataService.getArmorFromMasterList(armorId);
+            $scope.character = DataService.updateCharacter($scope.character);
+          } else {
+            console.log("No Armor Id");
           }
         });
       }); 
@@ -260,6 +286,11 @@
       LoadCharacterService.saveCharacter($scope.character);
     };
 
+    
+    $scope.updateWoundPoints = function() {
+        DataService.character($scope.character);
+    };
+    
 
     $scope.calculateBonus = function(obj) {
       var key;

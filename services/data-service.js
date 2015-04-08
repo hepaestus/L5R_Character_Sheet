@@ -36,8 +36,8 @@
       agility_s     : 2,
       intelligence  : 2,
       intelligence_s: 2,
-      armor         : { rating:0, bonus:0, notes:""},
-      get armor_tn() { return ( 5 * this.reflexes + 5 + this.armor.rating + this.armor.bonus ); },
+      armor         : { id:'', name:'', type:'', tn_bonus:0, reduction:0, price:'' },
+      get armor_tn() { return ( 5 * this.reflexes + 5 + this.armor.tn_bonus ); },
       honor         : 0,
       glory         : 0,
       'status'      : 0,
@@ -47,7 +47,9 @@
       key_word_bonus: [],
       spell_affinity: {air:false, earth:false, fire:false, water:false, void:false },
       spell_deficiency: {air:false, earth:false, fire:false, water:false, void:false },
-      get wounds() { return ( ((this.earth * 2) * this.insight_rank) + " : " + (this.earth * 5)); },
+      get wounds() { return ( ((this.earth * this.points_per_wound_level) * this.insight_rank)); },
+      points_per_wound_level: 5,
+      wound_levels : 7,
       get healing() { return ( this.stamina * 2 + this.insight_rank ); },
       healing_modifiers:0,
       get current_heal_rate() { return ( (this.stamina * 2) + this.insight_rank + this.healing_modifiers + " per day" ); },
@@ -56,6 +58,7 @@
       arrows        : [ { id:null, type:null, number:null, damage:null} , { id:null, type:null, number:null, damage:null}, { id:null, type:null, number:null, damage:null}, { id:null, type:null, number:null, damage:null} ],
       last_saved    : null,
     };
+
 
     var clansMasterList = [
       {id:0, name:'Crab', bonus:''},	    
@@ -80,6 +83,7 @@
       //{id:20, name:'Firefly', bonus:''},	    
     ];
    
+
     var familiesMasterList = [
       {id:0, name:'Hida', clan:'Crab', bonus:{ strength:1 }, },
       {id:1, name:'Hiruma', clan:'Crab', bonus:{ agility:1 } },
@@ -119,8 +123,9 @@
       {id:35, name:'Utaku', clan:'Unicorn', bonus:{ stamina:1 } },
     ];
 
+
     var schoolsMasterList = [
-      // id, name, clan, bonus{ various attributes, skills[ array of numbers of a string in the form "skill_id:empahasis_id:rank", or a string describing other skills, and finally techniques 
+      // id, name, clan, bonus{ various attributes, skills[ array of numbers or a string in the form "skill_id:empahasis_id:rank", or a string describing other skills, and finally techniques 
       {id:0, name:'Hida Bushi', clan:'Crab', bonus:{ stamina:1, honor:3.5, skills:[56, 58, 65, 90, 66, 36, '+1 bugei'], techniques:{1:'The Way of the Crab Pg. 106', 2:'The Mountain Does Not Move. Pg. 106', 3:'Two Pincers, One Mind. Pg. 106', 4:'Devastating Blow. Pg. 106', 5:'The Mountain Does Not Fall. Pg. 107' } } },
       {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['10:0','36::2',39,54,'+1 weapon'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
       {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['76:0',11,58,13,90,'53:1','+1 merchant'], techniques:{1:'The Way of the Carp. pg. 107', 2:'Do As We Say. pg. 108', 3:'Treasures of the Carp. pg 108', 4:'Wiles of the Carp. pg 108', 5:'What is Yours is Mine. pg 108'} } },
@@ -134,7 +139,7 @@
       {id:10, name:'Kisuki Investigator', clan:'Dragon', bonus:{ perception:1, honor:5.5, skills:[11,'13:2','21:0',66,43,53,'+1 lore'], techniques:{1:'Kitsuki\'s Method. pg 114', 2:'Wisdom the Wind Brings', 3:'Know the Rythym of the Heart', 4:'Finding the Path', 5:'The Eyes Betray the Heart'} } },
       {id:11, name:'Togashi Tattooed Order', clan:'Dragon', bonus:{ void:1, honor:4.5, skills:[56,58,'78:19',62,'+1 lore','+1 non-low'], techniques:{1:'Blood of the Kami. pg 114', 2:'Body of Stone', 3:'Blessing of the Kami', 4:'Will of Stone', 5:'Touch of the Kami'} } },
       {id:12, name:'', clan:'Lion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
-      {id:13, name:'', clan:'Lion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
+      {id:13, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:0',13,31,39,54,'+1 high or bugei'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}, key_word:'Battle'} },
       {id:14, name:'', clan:'Lion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
       {id:15, name:'', clan:'Lion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
       {id:16, name:'', clan:'Mantis', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
@@ -153,8 +158,8 @@
       {id:00, name:'', clan:'Unicorn', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
       {id:00, name:'', clan:'Unicorn', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
       {id:00, name:'', clan:'Unicorn', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
-      {id:00, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:0',13,31,39,54,'+1 high or bugei'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}, key_word:'Battle'} },
     ];
+
 
     var mastery = function(obj) {
       var text = '';
@@ -166,6 +171,7 @@
       // console.log("Text: " + text);
       return text;
     };
+
 
     var skillsMasterList = [
       // id:, level, type, subtype, trait, ring, rank, roll, emphasis, emphases{}, get mastery(), masteries{}, description
@@ -264,6 +270,7 @@
       { id:93, level:'Low', type:'Temptation*', sub_type:'Social Skill', trait:'awareness', ring:'air', emphases:{0:'Bribery', 1:'Seduction'}, get mastery() { return mastery(this); }, masteries:{5:'Character gains +5 Bonus to the total of any contested Roll using Temptation.'}, description:'Pg. 143 Core Book'},
     ];
 
+
     var attackRoll = function(weapon) {
       var roll = "";
       if ( weapon.type == 'Bow' ) {
@@ -345,6 +352,7 @@
       return roll;
     };
 
+
     var damageRoll = function(weapon) {
       if ( weapon.type == 'Bow' ) {
         return "See Arrows";
@@ -354,6 +362,7 @@
       }
     };
 
+
     var doesCharacterHaveSkill = function(skill_id) {
       for ( var i = 0; i < character.skills.length; i++ ) {
         if ( character.skills[i].id == skill_id ) {
@@ -362,6 +371,7 @@
       }
       return null;
     };
+
 
     var weaponsMasterList = [
       { id:0, name:'Dai-Kyu', type:'Bow', strength:4, key_words:'large', price:'25 koku', notes:'pg 200 core book', get attack_roll() { return attackRoll(this) }, get damage_roll() { return damageRoll(this) } },
@@ -425,10 +435,11 @@
 
 
     var armorMasterList = [
-      {id:0, name:'Ashigari Armor', type:'', tn_bonus:'+3', reduction:'1', price:'5 koku'},
-      {id:1, name:'Light Armor', type:'', tn_bonus:'+5', reduction:'3', price:'25 koku'},
-      {id:2, name:'Heavy Armor', type:'', tn_bonus:'+10', reduction:'5', price:'40 koku', special:'Increases the TN of all Skill Rolls using Agility ot Reflexes by 5.'},
-      {id:3, name:'Riding Armor', type:'', tn_bonus:'+4/+12', reduction:'4', price:'55 koku', special:'Increases the TN of all Skill Rolls using Agility ot Reflexes by 5 except while on horseback'},
+      { id:0, name:'Ashigari Armor', type:'', tn_bonus:3, reduction:1, price:'5 koku'},
+      { id:1, name:'Light Armor', type:'', tn_bonus:5, reduction:3, price:'25 koku'},
+      { id:2, name:'Heavy Armor', type:'', tn_bonus:10, reduction:5, price:'40 koku', special:'Increases the TN of all Skill Rolls using Agility or Reflexes by 5.'},
+      { id:3, name:'Riding Armor', type:'', tn_bonus:'+4/+12', reduction:4, price:'55 koku', special:'Increases the TN of all Skill Rolls using Agility or Reflexes by 5 except while on horseback'},
+      { id:5, name:'No Armor', type:'', tn_bonus:0, reduction:0, price:''},
     ];
 
 
@@ -444,6 +455,7 @@
       }
     };
 
+
     var doesCharacterHaveKeywordBonus = function(spell_type_key_words) {
       if( character.key_word_bonus ) {
         var spell_words_arr = spell_type_key_word.split(",");
@@ -456,6 +468,7 @@
       }
       return false;
     };
+
 
     var spellRoll = function(thisSpell) {
       var roll = '';
@@ -487,6 +500,7 @@
       }
       return roll;
     };
+
 
     var spellsMasterList = [
       { id:0, name:'Sense', type:'', ring:'all', level: '1', range:'Personal', area_of_affect:'50\' radius from the caster', duration:'Instantaneous', raises: 'Range(+10\')', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the four standard elements. It allows for the caster to sense the presense, quantity, and rough location of the elemental spirits (not evil spirits known as <i>kansen</i> of that element within the range of the spell. This is most frequently applied when looking for spirits with which to Commune (See Commune), but can also can be useful as a crude basic location device. For example, a caster lost in the wilderness could cast Snese(Water) in hopes of locating the sourceof drinking water. Pg 166 Core Book' },
@@ -656,6 +670,7 @@
       { id:160, name:'', ring:'void', type:'', level:'1', range:'', area_of_affect:'', duration:'', raises:'', get roll() { return spellRoll(this); }, description:' Pg 193 Core Book' },
     ];
 
+
     this.character = function() {
       return character;
     }
@@ -693,6 +708,11 @@
       return arrowsMasterList;
     }
 
+    this.armorMasterList = function() {
+      return armorMasterList;
+    }
+
+
     this.getSkillFromMasterList = function(skill_id, attr) {
     //console.log("getSkillFromMasterList(" + skill_id + "," + attr + ")");
       for(var i=0; i < skillsMasterList.length; i++) {
@@ -712,6 +732,7 @@
       return "(error - skill " + skill_id + " not found)";
     };
 
+
     this.getSpellFromMasterList = function(spell_id, attr) {
       for(var i=0; i < spellsMasterList.length; i++) {
         if ( spellsMasterList[i].id === spell_id ) {
@@ -725,6 +746,7 @@
       return "(error - spell " + spell_id + " not found)";
     };
     
+
     var getClan = function() {
         for(var i=0; i < clansMasterList.length; i++) {
           if ( clansMasterList[i].id === character.clan_id ) {
@@ -734,6 +756,7 @@
         }
     };
 
+
     this.getClanFromMasterList = function(clan_id) {
       for(var i=0; i < clansMasterList.length; i++) {
         if ( clansMasterList[i].id === clan_id ) {
@@ -742,6 +765,7 @@
       }
       return "(error - clan " + clan_id + " not found)";
     };
+
 
     var getFamily = function() {
         for(var i=0; i < familiesMasterList.length; i++) {
@@ -753,6 +777,7 @@
         }
     };
 
+
     this.getFamilyFromMasterList = function(family_id) {
       for(var i=0; i < familiesMasterList.length; i++) {
         if ( familiesMasterList[i].id === family_id ) {
@@ -762,6 +787,7 @@
       return "(error - family " + family_id + " not found)";
     };
     
+
     var getSchool = function() {
         for(var i=0; i < schoolsMasterList.length; i++) {
           if ( schoolsMasterList[i].id === character.school_id ) {
@@ -772,6 +798,7 @@
         }
     };
 
+
     this.getSchoolFromMasterList = function(school_id) {
       for(var i=0; i < schoolsMasterList.length; i++) {
         if ( schoolsMasterList[i].id === school_id ) {
@@ -781,9 +808,11 @@
       return "(error - school " + school_id + " not found)";
     };
 
+
     this.characterSize = function() {
       return ( JSON.stringify(character).length );
     };
+
 
     this.getWeaponFromMasterList = function(weapon_id, attr) {
       for(var i=0; i < weaponsMasterList.length; i++) {
@@ -797,6 +826,7 @@
       }
     };
     
+
     this.getArrowFromMasterList = function(arrow_id, attr) {
       for(var i=0; i < arrowsMasterList.length; i++) {
         if ( arrowsMasterList[i].id === arrow_id ) {
@@ -809,4 +839,18 @@
       }
     };
     
+
+    this.getArmorFromMasterList = function(armor_id, attr) {
+      for(var i=0; i < armorMasterList.length; i++) {
+        if ( armorMasterList[i].id === armor_id ) {
+          if (attr === null || attr === undefined ) {
+            return armorMasterList[i];
+          } else {
+            return armorMasterList[i][attr];
+          }
+        }
+      }
+    };
+    
+
   });//end dataservice

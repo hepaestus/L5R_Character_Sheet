@@ -226,22 +226,31 @@
            <th class="left" colspan="2">Current Intiative</td><td colspan="2"><input name="stats_initiative" ng-model="character.initiative" type="text"/></td>
        </tr>
        <tr>
-         <th colspan="4">Armor Tn</th>
+         <th colspan="4">Armor</th>
        </tr>
        <tr>
-           <th class="left" colspan="2">TN Bonus</th><td colspan="2"><input name="stats_tn_bonus" ng-model="character.armor_tn" type="number"/></td>
+           <th class="left" colspan="2">TN</th><td colspan="2"><input name="stats_tn_bonus" ng-model="character.armor_tn" type="number"/></td>
        </tr>
        <tr>
-           <th class="left" colspan="2">Quality</th><td colspan="2"><input name="stats_quality" type="text"/></td>
+           <th class="left" colspan="2">Armor</th><td colspan="2"><input name="stats_quality" type="text" ng-model="character.armor.name" ng-click="showArmorListModal()"/></td>
        </tr>
        <tr>
-           <th class="left" colspan="2">Notes</th><td colspan="2"><input name="stats_notes" type="text"/></td>
+           <th class="left" colspan="2">Armor TN Bonus</th><td colspan="2"><input name="stats_tn_bonus" ng-model="character.armor.tn_bonus" type="number"/></td>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">Armor Damage Reduction</th><td colspan="2"><input name="stats_tn_bonus" ng-model="character.armor.reduction" type="number"/></td>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">Notes</th><td colspan="2"><input name="stats_notes" type="text" ng-model="character.armor.notes"/></td>
        </tr>
        <tr>
          <th colspan="4">Wounds</th>
        </tr>
        <tr>
-           <th class="left" colspan="2">Earth x2 per level<br/>Earth x5 for Healthy</th><td colspan="2"><input name="stats_wounds" ng-model="character.wounds" type="text"/></td>
+           <th class="left" colspan="2">Pts/Wound Lvl</th><td colspan="2"><input min="2" max="5" name="points_per_wound_level" type="number" ng-model="character.points_per_wound_level" ng-click="updateWoundPoints()"/></td>
+       </tr>
+       <tr>
+           <th class="left" colspan="2">Earth x{{character.points_per_wound_level}} per level</th><td colspan="2"><input name="stats_wounds" ng-model="character.wounds" type="text"/></td>
        </tr>
        <tr>
          <th>Wound Level</th><th>Penalties</th><th>Total</th><th>Current</th>
