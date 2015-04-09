@@ -1,4 +1,5 @@
 /* app css stylesheet */
+
 body { 
     margin: 10px;
 }
@@ -30,7 +31,7 @@ table.rings-table {
    width: 40%;   
    margin: 2em auto;
    height: 300px; 
-   width: 300px; 
+   width: 250px; 
 }
 table.rings-table td, table.rings-table th {
    font-size: .75em;
@@ -85,18 +86,18 @@ table.stats-table, table.weapons-table {
 }
 table.stats-table th, table.weapons-table th {
     text-align: center;
-    color: #fff;
-    background-color: #000;
+    color: #000;
+    background-color: #7D634A;
     font-weight: bold;
-    border: 1px solid white;
+    border: 1px solid black;
     font-size: 80%;
 }
 table.stats-table th.left, table.weapons-table th.left {
     text-align: center;
-    color: #fff;
+    color: #000;
     background-color: #BFA994;
     font-weight: bold;
-    border: 1px solid white;
+    border: 1px solid black;
     font-size: 80%;
 }
 table.stats-table th span, table.weapons-table th span{
@@ -201,13 +202,18 @@ td.spell_roll {
 strong { font-weight: bold; }
 
 div.spell-section {
-    margin-bottom: 5px;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
+    margin: 20px;
+}
+div.spell-section .row:last-child {
+    border-bottom: 1px solid black; 
+}
+div.spell-section .end {
+    border-right: 1px solid black; 
+}
+div.spell-section .begin {
+    border-left: 1px solid black; 
 }
 div.spell-section div {
-    border-top: 0px solid black;
-    border-left: 1px solid black;
     font-size: 85%;
 }
 div.spell-section div.header{
@@ -216,6 +222,10 @@ div.spell-section div.header{
     background-color: #BFA994;
 }
 
+div.spell-section div.header, div.spell-section div.value {
+    border-top: 1px solid black; 
+    border-left: 1px solid black; 
+}
 
 /*****
 div.ring {

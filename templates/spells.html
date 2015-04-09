@@ -38,33 +38,33 @@
     <div class="spell-section" ng-class="" ng-repeat="each in character.spells">
       <div class="row">
           <div class="col-xs-2 header right">Name</div>
-          <div class="col-xs-10 value"><strong>{{getSpell(each.id,'name')}}</strong> <span ng-if="getSpell(each.id,'type')">({{getSpell(each.id,'type')}})</span></div>
+          <div class="col-xs-10 value end"><strong>{{getSpell(each.id,'name')}}</strong> <span ng-if="getSpell(each.id,'type')">({{getSpell(each.id,'type')}})</span></div>
       </div>
       <div class="row">
           <div class="col-xs-2 header right">Lvl</div>
           <div class="col-xs-4 value center"><strong>{{getSpell(each.id,'level')}}</strong></div>
           <div class="col-xs-2 header right">Roll</div>
-          <div class="col-xs-4 value center">{{getSpell(each.id,'roll')}}</div>
+          <div class="col-xs-4 value center end">{{getSpell(each.id,'roll')}}</div>
       </div>
       <div class="row">
           <div class="col-xs-2 header right">Ring</div>
           <div class="col-xs-4 value center">{{getSpell(each.id,'ring')}}</div>
           <div class="col-xs-2 header right">Duration</div>
-          <div class="col-xs-4 value center">{{getSpell(each.id,'duration')}}</div>
+          <div class="col-xs-4 value center end">{{getSpell(each.id,'duration')}}</div>
       </div>
       <div class="row">
           <div class="col-xs-2 header right">Area</div>
           <div class="col-xs-4 value center">{{getSpell(each.id,'area_of_affect')}}</div>
           <div class="col-xs-2 header right">Range</div>
-          <div class="col-xs-4 value center">{{getSpell(each.id,'range')}}</div>
+          <div class="col-xs-4 value center end">{{getSpell(each.id,'range')}}</div>
       </div>
       <div class="row">
           <div class="col-xs-2 header right">Raises</div>
-          <div class="col-xs-10 value"><span ng-bind-html="getSpell(each.id,'raises')"></span></div>
+          <div class="col-xs-10 value end"><span ng-bind-html="getSpell(each.id,'raises')"></span></div>
       </div>
-      <div class="row">
+      <div class="row begin">
           <div class="col-xs-2 header right">Effect</div>
-          <div class="col-xs-10 value"><span ng-bind-html="getSpell(each.id,'description')"></span></div>
+          <div class="col-xs-10 value end"><span ng-bind-html="getSpell(each.id,'description')"></span></div>
       </div>
     </div>
   </div>
