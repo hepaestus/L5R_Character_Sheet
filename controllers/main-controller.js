@@ -260,6 +260,59 @@
     };
 
 
+    $scope.showAdvantagesListModal = function(message, filterBy) {
+      ModalService.showModal({
+        templateUrl: "templates/advantages_list.html",
+        controller: "AdvantagesController",
+        inputs : {
+          advantagesMasterList: DataService.advantagesMasterList(),
+          modalMessage: message,
+          filterby: filterBy,
+        },
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(advantageId) {
+          //  If we have selected a advantage, set it.
+          if(advantageId != null) {
+            console.log("Show Advantage Id: " + advantageId);
+            $scope.character.advantages.push(DataService.getAdvantageFromMasterList(advantageId));
+            $scope.calculateAdvantagesDisadvantagesCost(DataService.getAdvantageFromMasterList(advantageId));
+            $scope.character = DataService.updateCharacter($scope.character);
+          } else {
+            console.log("No Advantage Id");
+          }
+        });
+      }); 
+    };
+
+
+    $scope.showDisadvantagesListModal = function(message, filterBy) {
+      ModalService.showModal({
+        templateUrl: "templates/disadvantages_list.html",
+        controller: "DisadvantagesController",
+        inputs : {
+          disadvantagesMasterList: DataService.disadvantagesMasterList(),
+          modalMessage: message,
+          filterby: filterBy,
+        },
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(disadvantageId) {
+          //  If we have selected a disadvantage, set it.
+          if(disadvantageId != null) {
+            console.log("Show disadvantage Id: " + disadvantageId);
+            $scope.character.disadvantages.push(DataService.getDisadvantageFromMasterList(disadvantageId));
+            $scope.character = DataService.updateCharacter($scope.character);
+          } else {
+            console.log("No Disadvantage Id");
+          }
+        });
+      }); 
+    };
+    
+
     $scope.loadCharacterModal = function(message, filterBy) {
       console.log("Loaded Characters : " + $scope.saved_characters_array);
       ModalService.showModal({
@@ -291,6 +344,23 @@
         DataService.character($scope.character);
     };
     
+   
+    $scope.calculateAdvantagesDisadvantagesCost = function(obj) {
+      var points = obj.points;
+      console.log("Points : " + JSON.stringify(points));
+      console.log("Clan : " + $scope.character.clan.name );
+      console.log("Points Clan : " + points[$scope.character.clan.name.toLowerCase()]);
+      if ( points.all && points.all != 'var' ) {
+        $scope.character.experience_points -= points.all;
+      } else if ( points[$scope.character.clan.name.toLowerCase()] ) {
+        console.log("Found Clan Name");
+        $scope.character.experience_points -= points[$scope.character.clan.name.toLowerCase()];   
+      } else if ( points.else && points.else != 'var' ) {
+        $scope.character.experience_points -= points['else'];
+      }
+      $scope.character = DataService.updateCharacter($scope.character);
+    };
+
 
     $scope.calculateBonus = function(obj) {
       var key;

@@ -1,62 +1,65 @@
   angular.module('myApp').service('DataService', function() {
 
     var character = {
-      name: "",
-      clan_id: null,
-      get clan() { return getClan(); },
-      family_id: null,
-      get family() { return getFamily(); },
-      school_id: null,
-      get school() { return getSchool(); },
-      experience_points: 0,
-      experience_points_earned: 0,
-      get initiative() { return ((this.insight_rank + this.reflexes) + "K" + this.reflexes); },
-      get current_tn() { return ((this.reflexes * 5 ) + 5); },
-      insight       : 100,
-      insight_rank  : 1,
-      earth         : 2,
-      air           : 2,
-      water         : 2,
-      fire          : 2,
-      void          : 2,
-      void_s        : 2,
-      stamina       : 2,
-      stamina_s     : 2,
-      willpower     : 2,
-      willpower_s   : 2,
-      reflexes      : 2,
-      reflexes_s    : 2,
-      awareness     : 2,
-      awareness_s   : 2,
-      strength      : 2,
-      strength_s    : 2,
-      perception    : 2,
-      perception_s  : 2,
+      advantages    : [],
       agility       : 2,
       agility_s     : 2,
+      air           : 2,
+      armor         : { id:'', name:'', type:'', tn_bonus:0, reduction:0, price:'' },
+      arrows        : [ { id:null, type:null, number:null, damage:null} , { id:null, type:null, number:null, damage:null}, { id:null, type:null, number:null, damage:null}, { id:null, type:null, number:null, damage:null} ],
+      awareness     : 2,
+      awareness_s   : 2,
+      clan_id       : null,
+      disadvantages : [],
+      earth         : 2,
+      experience_points: 0,
+      experience_points_earned: 0,
+      family_id: null,
+      fire          : 2,
+      fire_s        : 2,
+      get armor_tn() { return ( 5 * this.reflexes + 5 + this.armor.tn_bonus ); },
+      get clan() { return getClan(); },
+      get current_heal_rate() { return ( (this.stamina * 2) + this.insight_rank + this.healing_modifiers + " per day" ); },
+      get current_tn() { return ((this.reflexes * 5 ) + 5); },
+      get family() { return getFamily(); },
+      get healing() { return ( this.stamina * 2 + this.insight_rank ); },
+      get initiative() { return ((this.insight_rank + this.reflexes) + "K" + this.reflexes); },
+      get school() { return getSchool(); },
+      get wounds() { return ( ((this.earth * this.points_per_wound_level) * this.insight_rank)); },
+      glory         : 0,
+      healing_modifiers:0,
+      honor         : 0,
+      insight       : 100,
+      insight_rank  : 1,
       intelligence  : 2,
       intelligence_s: 2,
-      armor         : { id:'', name:'', type:'', tn_bonus:0, reduction:0, price:'' },
-      get armor_tn() { return ( 5 * this.reflexes + 5 + this.armor.tn_bonus ); },
-      honor         : 0,
-      glory         : 0,
-      'status'      : 0,
-      taint         : 0,
-      skills        : [],
-      spells        : [],
       key_word_bonus: [],
+      last_saved    : null,
+      name          : "",
+      perception    : 2,
+      perception_s  : 2,
+      points_per_wound_level: 5,
+      reflexes      : 2,
+      reflexes_s    : 2,
+      school_id     : null,
+      skills        : [],
       spell_affinity: {air:false, earth:false, fire:false, water:false, void:false },
       spell_deficiency: {air:false, earth:false, fire:false, water:false, void:false },
-      get wounds() { return ( ((this.earth * this.points_per_wound_level) * this.insight_rank)); },
-      points_per_wound_level: 5,
-      wound_levels : 7,
-      get healing() { return ( this.stamina * 2 + this.insight_rank ); },
-      healing_modifiers:0,
-      get current_heal_rate() { return ( (this.stamina * 2) + this.insight_rank + this.healing_modifiers + " per day" ); },
+      spells        : [],
+      stamina       : 2,
+      stamina_s     : 2,
+      'status'      : 0,
+      strength      : 2,
+      strength_s    : 2,
+      taint         : 0,
+      void          : 2,
+      void_s        : 2,
+      water         : 2,
       weapon_one    : { id:null, name:null, type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
       weapon_two    : { id:null, name:null, type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
-      arrows        : [ { id:null, type:null, number:null, damage:null} , { id:null, type:null, number:null, damage:null}, { id:null, type:null, number:null, damage:null}, { id:null, type:null, number:null, damage:null} ],
-      last_saved    : null,
+      willpower     : 2,
+      willpower_s   : 2,
+      wound_levels  : 7,
     };
 
 
@@ -156,15 +159,15 @@
       {id:22, name:'Asako Loremaster', clan:'Phoenix', bonus:{ intelligence:1, honor:6.5, skills:[11,'13:2',31,'39:0',43,53,'+1 lore'], techniques:{1:'Temple of the Soul. pg 125', 2:'From the Ashes', 3:'Voice of the Universe', 4:'Invincible Mind', 5:'Wisdom of the Ages'} } },
       {id:23, name:'Agasha Shugenja', clan:'Phoenix', bonus:{ intelligence:1, honor:4.5, affinity:'fire', deficiency:'water', skills:['10:0','+1 craft',58,13,39,54,'+1 high or bugei'], techniques:{1:'Elements of All Things'} } },
 
-      {id:24, name:'', clan:'Scorpion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
-      {id:25, name:'', clan:'Scorpion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
-      {id:26, name:'', clan:'Scorpion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
-      {id:27, name:'', clan:'Scorpion', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
+      {id:24, name:'Bayushi Bushi', clan:'Scorpion', bonus:{ intelligence:1, honor:2.5, skills:['11:1',58,13,61,66,53,'+1 any'], techniques:{1:'The Way of the Scorpion. pg 126', 2:'Pincers and Tail', 3:'Strike at the Tail', 4:'Strike from Above, Strike From Below', 5:'The Pincers Hold, The Tail Strikes'} } },
+      {id:25, name:'Soshi Shugenja', clan:'Scorpion', bonus:{ awareness:1, honor:2.5, affinity:'air', deficiency:'earth', skills:['10:0',11,13,39,54,92,'+1 any'], techniques:{1:'The Kami\'s Whisper. pg 127'}, key_word:'Illusion'} },
+      {id:26, name:'Bayushi Courtier', clan:'Scorpion', bonus:{ awareness:1, honor:2.5, skills:[10,'11:0',13,21,'53:1',93,'+1 high'], techniques:{1:'Weakness is My Strength. pg 127', 2:'Shallow Waters', 3:'Secrets Are Birthmarks', 4:'Scrutiny\'s Sweet Sting', 5:'No More Masks'} } },
+      {id:27, name:'Shosuro Infiltrator', clan:'Scorpion', bonus:{ reflexes:1, honor:1.5, skills:[9,56,70,53,'92:2','+1 any'], techniques:{1:'The Path of Shadows. pg 129', 2:'Strike From Darkness', 3:'Steel Within Silk', 4:'Whisper of Steel', 5:'The Final Silence'} } },
 
-      {id:28, name:'', clan:'Unicorn', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
-      {id:29, name:'', clan:'Unicorn', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
-      {id:30, name:'', clan:'Unicorn', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
-      {id:31, name:'', clan:'Unicorn', bonus:{ attr:1, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'', 2:'', 3:'', 4:'', 5:''} } },
+      {id:28, name:'Moto Bushi', clan:'Unicorn', bonus:{ strength:1, honor:3.5, skills:[56,58,59,60,'66:4','+1 bugei','+1 any'], techniques:{1:'The Way of the Unicorn. pg 130', 2:'Shinsei\'s Smile', 3:'Desert Wind Strike', 4:'The Charge of Madness', 5:'Moto Cannot Yield'} } },
+      {id:29, name:'Iuchi Shugenja', clan:'Unicorn', bonus:{ perception:1, honor:5.5, affinity:'water', deficiency:'fire', skills:[57,'10:0',59,39,43,54,'+1 high or bugei'], techniques:{1:'Spirit of the Wind. pg 131'}, key_word:'Travel' } },
+      {id:30, name:'Ide Emissary', clan:'Unicorn', bonus:{ awareness:1, honor:5.5, skills:[10,76,11,'13:1',59,'53:0','+1 high or perform'], techniques:{1:'The Heart Speaks. pg 131', 2:'Peircing the Veils', 3:'The Heart Listens', 4:'Answering the Heart', 5:'The Immovable Hand of Peace'} } },
+      {id:31, name:'Utaku Battle Maiden', clan:'Unicorn', bonus:{ reflexes:1, honor:6.5, skills:[57,58,'59::2',66,53,'+1 high or bugei'], techniques:{1:'Riding in Harmony. pg 132', 2:'The Void of War', 3:'Sensing the Breeze', 4:'Wind Never Stops', 5:'Otaku\'s Blessing'} } },
     ];
 
 
@@ -182,7 +185,7 @@
 
     var skillsMasterList = [
       // id:, level, type, subtype, trait, ring, rank, roll, emphasis, emphases{}, get mastery(), masteries{}, description
-      { id:1000, level:'Debug', type:'Debug', sub_type:'debug', trait:'void', ring:'void', emphases:{0:'E Zero', 1:'E One', 2:'E Two'}, get mastery() { return mastery(this); }, masteries:{ 3:'M Three', 5:'M Five', 7:'M Seven'}, description:'debug description'},
+      //{ id:1000, level:'Debug', type:'Debug', sub_type:'debug', trait:'void', ring:'void', emphases:{0:'E Zero', 1:'E One', 2:'E Two'}, get mastery() { return mastery(this); }, masteries:{ 3:'M Three', 5:'M Five', 7:'M Seven'}, description:'debug description'},
       { id:0, level:'High', type:'Artisan', sub_type:'', trait:'awareness', ring:'air', emphases: {0:'Bonsai', 1:'Gardening', 2:'Ikebana', 3:'Origami', 4:'Painting', 5:'Poetry', 6:'Sculpture', 7:'Tattooing'}, description:'Pg. 135 Core Book'},
       { id:1, level:'High', type:'Artisan', sub_type:'Origami', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
       { id:2, level:'High', type:'Artisan', sub_type:'Bonsai', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
@@ -281,8 +284,11 @@
     var attackRoll = function(weapon) {
       var roll = "";
       if ( weapon.type == 'Bow' ) {
+        var skill = doesCharacterHaveSkill(68);
         if ( weapon.strength > character.strength ) {
            roll = "0K" + character.air;
+        } else if ( skill ) {
+            roll = skill.roll;
         } else {
            var str = weapon.strength + character.strength;
            roll = str + "K" + character.air;
@@ -678,6 +684,80 @@
     ];
 
 
+    var advantagesMasterList = [
+      { id:1, name:'Absolute Direction', subtype:'Mental', points:{ all:1 }, notes:'pg 146' },
+      { id:2, name:'Allies', subtype:'Social', points:{ else:'var', crane:-1 }, notes:'pg 146' },
+      { id:3, name:'Balance', subtype:'Mental', points:{ all:2 }, notes:'pg 146' },
+      { id:4, name:'Blackmail', subtype:'Social', points:{ else:'var', scorpion:-1 }, notes:'pg 146' },
+      { id:5, name:'Bland', subtype:'Physical', points:{ all:2 }, notes:'pg 146' },
+      { id:6, name:'Blissful Betrothal', subtype:'Social', points:{ all:3 }, notes:'pg 146' },
+      { id:7, name:'Blood of Osano-Wo', subtype:'Spiritual', points:{else:4, crab:3, mantis:3 }, notes:'pg 147' },
+      { id:8, name:'Chosen by the Oracles', subtype:'Spititual', points:{ all:6 }, notes:'pg 147' },
+      { id:9, name:'Clear Thinker', subtype:'Mental', points:{ else:3, dragon:2 }, notes:'pg 147' },
+      { id:10, name:'Crab Hands', subtype:'Physical', points:{ else:3, crab:2, bushi:2 }, notes:'pg 147' },
+      { id:11, name:'Crafty', subtype:'Mental', points:{ else:3, scorpion:2, spider:2, ninja:2 }, notes:'pg 147' },
+      { id:12, name:'Dangerous Beauty', subtype:'Physical', points:{ else:3, scorpion:2 }, notes:'pg 147' },
+      { id:13, name:'Daredevil', subtype:'Mental', points:{ else:3, mantis:2 }, notes:'pg 147' },
+      { id:14, name:'Dark Paragon', subtype:'Mental', points:{ else:5, spider:4 }, notes:'pg 147' },
+      { id:15, name:'Darling of the Court', subtype:'Social', points:{ else:2, courtier:1 }, notes:'148' },
+      { id:16, name:'Different School', subtype:'Social', points:{ all:5 }, notes:'148' },
+      { id:17, name:'Elemental Blessing', subtype:'Spiritual', points:{ else:4, phoenix:3 }, notes:'pg 148' },
+      { id:18, name:'Enlightened', subtype:'Spiritual', points:{ else:6, dragon:5, monk:5 }, notes:'148' },
+      { id:19, name:'Fame', subtype:'Social', points:{ all:3 }, notes:'pg 148' },
+      { id:20, name:'Forbidden Knowledge', subtype:'Mental', points:{ all:5 }, notes:'pg 148' },
+      { id:21, name:'Friendly Kami', subtype:'', points:{ shugenja:5 }, notes:'149' },
+      { id:22, name:'Friend of the Brotherhood', subtype:'Spiritual', points:{ else:5, dragon:4 }, notes:'149' },
+      { id:23, name:'Friend of the Elements', subtype:'Spiritual', points:{ else:4, shugenja:3 }, notes:'149' },
+      { id:24, name:'Gaijin Gear', subtype:'Material', points:{ else:5, mantis:4, unicorn:4 }, notes:'pg 149' },
+      { id:25, name:'Gentry', subtype:'Material', points:{ all:'var' }, notes:'pg 149' },
+      { id:26, name:'Heart of Vengence', subtype:'Social', points:{ else:5, spider:4 }, notes:'150' },
+      { id:27, name:'Hero of the People', subtype:'Social', points:{ all:2 }, notes:'pg 150' },
+      { id:28, name:'Higher Purpose', subtype:'Mental', points:{ all:3 }, notes:'pg 150' },
+      { id:29, name:'Imperial Spouse', subtype:'Social', points:{ all:5 }, notes:'pg 150' },
+      { id:30, name:'Inari\'s Blessing', subtype:'Spiritual', points:{ all:3 }, notes:'pg 150' },
+      { id:31, name:'Inheritance', subtype:'Material', points:{ all:5 }, notes:'pg 150' },
+      { id:32, name:'Inner Gift', subtype:'Spiritual', points:{ all:7 }, notes:'pg 150' },
+      { id:33, name:'Irreproachable', subtype:'Mental', points:{ else:2, imperial:1 }, notes:'pg 151' },
+      { id:34, name:'Ishiken-Do', subtype:'Spiritual', points:{ shugenja:8, phoenix:6 }, notes:'pg 151' },
+      { id:35, name:'Kharmic Tie', subtype:'Spiritual', points:{ all:'var' }, notes:'pg 151' },
+      { id:36, name:'Languages', subtype:'Mental', points:{ all:'var' }, notes:'pg 151' },
+      { id:37, name:'Large', subtype:'Physical', points:{ else:4, crab:3 }, notes:'pg 151' },
+      { id:38, name:'Leadership', subtype:'Social', points:{ else:6, lion:5 }, notes:'pg 151' },
+      { id:39, name:'Luck', subtype:'Spiritual', points:{ all:'var' }, notes:'pg 151' },
+      { id:40, name:'Magic Resistance', subtype:'Spiritual', points:{ all:'var' }, notes:'pg 151' },
+      { id:41, name:'Multiple Schools', subtype:'Social', points:{ all:10 }, notes:'pg 151' },
+      { id:42, name:'Paragon', subtype:'Mental', points:{ all:7 }, notes:'pg 152' },
+      { id:43, name:'Perceived Honor', subtype:'Social', points:{ all:'var' }, notes:'pg 152' },
+      { id:44, name:'Precise Memory', subtype:'Mental', points:{ all:3 }, notes:'pg 152' },
+      { id:45, name:'Prodigy', subtype:'Physical', points:{ all:12 }, notes:'pg 152' },
+      { id:46, name:'Quick', subtype:'Physical', points:{ else:6, ninja:5 }, notes:'pg 152' },
+      { id:47, name:'Quick Healer', subtype:'Physical', points:{ all:3 }, notes:'pg 152' },
+      { id:48, name:'Read Lips', subtype:'Mental', points:{ else:0, courtier:3 }, notes:'pg 152' },
+      { id:49, name:'Sacred Weapon', subtype:'Material', points:{ all:'var' }, notes:'pg 152' },
+      { id:50, name:'Sacrosanct', subtype:'Social', points:{ else:4, imperial:3 }, notes:'pg 153' },
+      { id:51, name:'Sage', subtype:'Mental', points:{ else:4, phoenix:3, shugenja:3 }, notes:'pg 153' },
+      { id:52, name:'Sensation', subtype:'Social', points:{ all:3 }, notes:'pg 153' },
+      { id:53, name:'Servant', subtype:'Material', points:{ all:5 }, notes:'pg 153' },
+      { id:54, name:'Seven Fortune\'s Blessings', subtype:'Spiritual', points:{ all:'var' }, notes:'pg 153' },
+      { id:55, name:'Silent', subtype:'Physical', points:{ else:3, ninja:2 }, notes:'pg 154' },
+      { id:56, name:'Social Position', subtype:'Social', points:{ all:6 }, notes:'pg 154' },
+      { id:57, name:'Soul of Artistry', subtype:'Mental', points:{ else:4, crane:3, courtier:3 }, notes:'pg 154' },
+      { id:58, name:'Strength of the Earth', subtype:'Physical', points:{ else:3, bushi:2 }, notes:'pg 154' },
+      { id:59, name:'Tactitian', subtype:'Mental', points:{ else:4, lion:3, bushi:3 }, notes:'pg 154' },
+      { id:60, name:'Touch of the Spirit Realms', subtype:'Spiritual', points:{ else:0, shugenja:4 }, notes:'pg 154' },
+      { id:61, name:'Virtuous', subtype:'Mental', points:{ all:3 }, notes:'pg 155' },
+      { id:62, name:'Voice', subtype:'Physical', points:{ all:3 }, notes:'pg 155' },
+      { id:63, name:'Wary', subtype:'Mental', points:{ all:3 }, notes:'pg 155' },
+      { id:64, name:'Way of the Land', subtype:'Mental', points:{ else:2, unicorn:1 }, notes:'pg 155' },
+      { id:65, name:'Wealthy', subtype:'Material', points:{ else:1, crane:-1, unicorn:-1, imperial:-1 }, notes:'pg 155' },
+    ];
+
+
+    var disadvantagesMasterList = [
+      { id:00, name:'Debug', subtype:'debug', points:0, notes:'debug' }
+    ];
+
+
     this.character = function() {
       return character;
     }
@@ -717,6 +797,14 @@
 
     this.armorMasterList = function() {
       return armorMasterList;
+    }
+
+    this.advantagesMasterList = function() {
+      return advantagesMasterList;
+    }
+
+    this.disadvantagesMasterList = function() {
+      return disadvantagesMasterList;
     }
 
 
@@ -859,5 +947,29 @@
       }
     };
     
+
+    this.getAdvantageFromMasterList = function(advantage_id, attr) {
+      for(var i=0; i < advantagesMasterList.length; i++) {
+        if ( advantagesMasterList[i].id === advantage_id ) {
+          if (attr === null || attr === undefined ) {
+            return advantagesMasterList[i];
+          } else {
+            return advantagesMasterList[i][attr];
+          }
+        }
+      }
+    };  
+
+    this.getDisadvantageFromMasterList = function(disadvantage_id, attr) {
+      for(var i=0; i < disadvantagesMasterList.length; i++) {
+        if ( disadvantagesMasterList[i].id === disadvantage_id ) {
+          if (attr === null || attr === undefined ) {
+            return disadvantagesMasterList[i];
+          } else {
+            return disadvantagesMasterList[i][attr];
+          }
+        }
+      }
+    };  
 
   });//end dataservice
