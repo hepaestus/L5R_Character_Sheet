@@ -1022,6 +1022,7 @@
       }
     };  
 
+
     this.getDisadvantageFromMasterList = function(disadvantage_id, attr) {
       for(var i=0; i < disadvantagesMasterList.length; i++) {
         if ( disadvantagesMasterList[i].id === disadvantage_id ) {
@@ -1033,5 +1034,20 @@
         }
       }
     };  
+
+    this.calculateAdvantagesDisadvantagesCost = function(obj) {
+      var points = obj;
+      console.log("Points : " + JSON.stringify(points));
+      //console.log("Clan : " + $scope.character.clan.name );
+      //console.log("Points Clan : " + points[$scope.character.clan.name.toLowerCase()]);
+      if ( points.all != null && points.all != 'var' ) {
+        character.experience_points -= points.all;
+      } else if ( points[character.clan.name.toLowerCase()] ) {
+        console.log("Found Clan Name");
+        character.experience_points -= points[character.clan.name.toLowerCase()];   
+      } else if ( points.else && points.else != 'var' ) {
+        character.experience_points -= points['else'];
+      }
+    };
 
   });//end dataservice

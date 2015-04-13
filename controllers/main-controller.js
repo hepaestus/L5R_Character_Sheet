@@ -304,6 +304,7 @@
           if(disadvantageId != null) {
             console.log("Show disadvantage Id: " + disadvantageId);
             $scope.character.disadvantages.push(DataService.getDisadvantageFromMasterList(disadvantageId));
+            $scope.calculateAdvantagesDisadvantagesCost(DataService.getDisadvantageFromMasterList(disadvantageId));
             $scope.character = DataService.updateCharacter($scope.character);
           } else {
             console.log("No Disadvantage Id");
@@ -334,6 +335,32 @@
     };
 
 
+    $scope.showEnterPointsModal = function(message, filterBy, pointsArray) {
+      ModalService.showModal({
+        templateUrl: "templates/points_questions.html",
+        controller: "PointsQuestionController",
+        inputs : {
+          pointsMasterList: pointsArray,
+          modalMessage: message,
+          filterby: filterBy,
+        },
+      }).then(function(modal) {
+        //it's a bootstrap element, use 'modal' to show it
+        modal.element.modal();
+        modal.close.then(function(pointsValue) {
+          //  If we have selected a value, set it.
+          if(pointsValue != null) {
+            console.log("Show points value: " + pointsValue);
+            return pointsValue;            
+          } else {
+            console.log("No Disadvantage Id");
+            return null;
+          }
+        });
+      }); 
+    };
+     
+
     $scope.saveCharacter = function() {
       console.log("Save Current Character");
       LoadCharacterService.saveCharacter($scope.character);
@@ -347,17 +374,29 @@
    
     $scope.calculateAdvantagesDisadvantagesCost = function(obj) {
       var points = obj.points;
+      var cost = null;
       console.log("Points : " + JSON.stringify(points));
-      console.log("Clan : " + $scope.character.clan.name );
-      console.log("Points Clan : " + points[$scope.character.clan.name.toLowerCase()]);
-      if ( points.all && points.all != 'var' ) {
-        $scope.character.experience_points -= points.all;
+      if ( points.all == 'var' || points.else == 'var' ) {
+        var entered_value = $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, [1,2,3,4,5,6,7,8] );
+        cost = entered_value;
+      } else if ( points.all != null && points['all'].toString().match(/:/) != null ) {
+        var points_array = points.split(':');
+        var entered_value = $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, points_array );
+        cost = entered_value;
+      } else if ( points.else != null && points['else'].toString().match(/:/) != null ) {
+        var points_array = points.split(':');
+        var entered_value = $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, points_array );
+        cost = entered_value;
+      } else if ( points.all != null ) {
+        cost = points.all;
       } else if ( points[$scope.character.clan.name.toLowerCase()] ) {
         console.log("Found Clan Name");
-        $scope.character.experience_points -= points[$scope.character.clan.name.toLowerCase()];   
-      } else if ( points.else && points.else != 'var' ) {
-        $scope.character.experience_points -= points['else'];
+        cost = points[$scope.character.clan.name.toLowerCase()];   
+      } else if ( points.else ) {
+        cost = points['else'];
       }
+      console.log("Point Cost : " + cost);
+      $scope.character.experience_points -= parseInt(cost);
       $scope.character = DataService.updateCharacter($scope.character);
     };
 
@@ -496,5 +535,13 @@
       }
     };
 
+    $scope.getSkill = function(skill_id, attr) {
+        return DataService.getSkillFromMasterList(skill_id, attr);
+    };
+
+    //$scope.getCost = function(obj) {
+    //  console.log("GetCost Object : " + JSON.stringify(obj));
+    //  return DataService.calculateAdvantagesDisadvantagesCost(obj);
+    //}
 
   }]);//end main controller

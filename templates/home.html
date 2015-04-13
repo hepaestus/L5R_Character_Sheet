@@ -8,14 +8,17 @@
           <li><a href="" ng-click="showClansListModal()">Choose your Clan</a> <span ng-if="character.clan.name"> : {{character.clan.name}}</span></li>
           <li><a href="" ng-click="showFamiliesListModal(null,character.clan.name)">Choose your Family</a> <span ng-if="character.family.name"> : {{character.family.name}}</span></li>
           <li><a href="" ng-click="showSchoolsListModal(null,character.clan.name)">Choose your School</a> <span ng-if="character.school.name"> : {{character.school.name}}</span></li>          
+            <ol ng-show="character.skills.length > 0">
+                <li ng-repeat="each in character.skills track by $index" ng-show="character.skills">{{getSkill(each.id,'type')}} {{ getSkill(each.id,'sub_type')}}</li>
+            </ol>
           <li>Add your <a href="" ng-click="showAdvantagesListModal()">Advantages</a>
             <ul ng-show="character.advantages.length > 0">
-                <li ng-repeat="a in character.advantages">{{a.name}} {{a.subtype}} - {{a.notes}}</li>
+                <li ng-repeat="a in character.advantages">{{a.name}} {{a.subtype}} - {{getCost(a.points)}} - {{a.notes}}</li>
             </ul>
           </li>
           <li>Add your <a href="" ng-click="showDisadvantagesListModal()">Disadvantages</a>
              <ul ng-show="character.disadvantages.length > 0">
-                <li ng-repeat="d in character.disadvantages">{{d.name}} {{d.subtype}} - {{d.notes}}</li>
+                 <li ng-repeat="d in character.disadvantages">{{d.name}} {{d.subtype}} - {{getCost(d.points)}} - {{d.notes}}</li>
              </ul>
           </li>
           <li>Go to the Character Sheet</li>

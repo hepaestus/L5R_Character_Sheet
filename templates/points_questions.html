@@ -3,13 +3,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" ng-click="cance()" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2>Choose your Advantages</h2>
+                <h2>Select A Point Value</h2>
             </div>
             <div class="modal-body">
-                <h4>Choose Your Advantages</h4>
+                <h4>Select a Point Value</h4>
                 <h4 ng-if="modalMesage">{{modalMessage}}</h4>
                 <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="advantage in advantagesMasterList | filter:filterBy"><a href="" ng-click="selectAdvantage(advantage.id)">{{advantage.name}} - {{advantage.subtype}} - {{advantage.points}} - {{advantage.notes}}</a></li>
+                    <li class="list-group-item" ng-repeat="point in pointsMasterList | filter:filterBy"><a href="" ng-click="selectPoints(point)">{{point}}</a></li>
                 </ul>	
             </div>
             <div class="modal-footer">

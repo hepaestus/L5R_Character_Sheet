@@ -9,7 +9,7 @@
                 <h4>Choose Your Disadvantages</h4>
                 <h4 ng-if="modalMesage">{{modalMessage}}</h4>
                 <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="disadvantage in disadvantagesMasterList | filter:filterBy"><a href="" ng-click="selectDisadvantage(disadvantage.id)">{{disadvantage.name}} - {{disadvantage.subtype}} - {{disadvantage.notes}}</a></li>
+                    <li class="list-group-item" ng-repeat="disadvantage in disadvantagesMasterList | filter:filterBy"><a href="" ng-click="selectDisadvantage(disadvantage.id)">{{disadvantage.name}} - {{disadvantage.subtype}} - {{disadvantage.points}} - {{disadvantage.notes}}</a></li>
                 </ul>	
             </div>
             <div class="modal-footer">
