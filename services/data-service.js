@@ -755,6 +755,69 @@
 
     var disadvantagesMasterList = [
       { id:00, name:'Debug', subtype:'debug', points:0, notes:'debug' }
+      { id:0, name:'Antisocial', subtype:'Social', points:'-2:-4', notes:'pg 156' }
+      { id:1, name:'Ascetic', subtype:'Mental', points:{else:-2, dragon:-3, monk:-3 }, notes:'pg 156' }
+      { id:2, name:'Bad Eyssight', subtype:'Physical', points:{all:-3}, notes:'pg 156' }
+      { id:3, name:'Bad Fortune', subtype:'Spiritual', points:{all:-3}, notes:'pg 156' }
+      { id:4, name:'Bad Health', subtype:'Physical', points:{all:-4}, notes:'pg 156' }
+      { id:5, name:'Bitter Betrothal', subtype:'Social', points:{else:-2, imperial:-3}, notes:'pg 156' }
+      { id:6, name:'Blackmailed', subtype:'Social', points:{all:'var'}, notes:'pg 156' }
+      { id:7, name:'Black Sheep', subtype:'Social', points:{all:-3}, notes:'pg 156' }
+      { id:8, name:'Blind', subtype:'Physical', points:{all:-6}, notes:'pg 156' }
+      { id:9, name:'Brash', subtype:'Mental', points:{else:-3, lion:-4}, notes:'pg 157' }
+      { id:10, name:'Can\'t Lie', subtype:'Mental', points:{all:-2}, notes:'pg 157' }
+      { id:11, name:'Cast Out', subtype:'Social', points:{all:'-1:-3'}, notes:'pg 157' }
+      { id:12, name:'Compulsion', subtype:'Mental', points:{all:'-1:-2:-3:-4'}, notes:'pg 157' }
+      { id:13, name:'Consumed', subtype:'Mental', points:{else:'var', spider:-1}, notes:'pg 157' }
+      { id:14, name:'Contrary', subtype:'Mental', points:{else:-3, courtier:-4, imperial:-4 }, notes:'pg 158' }
+      { id:15, name:'Cursed by the Realm', subtype:'Spiritual', points:{else:-4, shugenja:-5 }, notes:'pg 158' }
+      { id:16, name:'Dark Fate', subtype:'Spiritual', points:{all:-3}, notes:'pg 158' }
+      { id:17, name:'Dark Secret', subtype:'Social', points:{else:-4, ninja:-5 }, notes:'pg 158' }
+      { id:18, name:'Dependant', subtype:'Social', points:{all:'var'}, notes:'pg 158' }
+      { id:19, name:'Dishonored', subtype:'Social', points:{all:-5}, notes:'pg 158' }
+      { id:20, name:'Disbeliever', subtype:'Mental', points:{all:-3}, notes:'pg 158' }
+      { id:21, name:'Disturbin Countenance', subtype:'Physical', points:{all:-3}, notes:'pg 159' }
+      { id:22, name:'Doubt', subtype:'Mental', points:{all:-4}, notes:'pg 159' }
+      { id:23, name:'Driven', subtype:'Mental', points:{all:-2}, notes:'pg 159' }
+      { id:24, name:'Elemental Imbalance', subtype:'Spiritual', points:{shugenja:-2}, notes:'pg 159' }
+      { id:25, name:'Epilepsy', subtype:'Physical', points:{else:-4, crane:-5}, notes:'pg 159' }
+      { id:26, name:'Fascination', subtype:'Mental', points:{all:-1}, notes:'pg 159' }
+      { id:27, name:'Failure of Bushido', subtype:'Mental', points:{all:'var'}, notes:'pg 159' }
+      { id:28, name:'Forced Retirement', subtype:'Social', points:{else:-4, monk:-5 }, notes:'pg 159' }
+      { id:29, name:'Frail Mind', subtype:'Mental', points:{all:-3}, notes:'pg 159' }
+      { id:30, name:'Gaijin Name', subtype:'Social', points:{all:-1}, notes:'pg 159' }
+      { id:31, name:'Greedy', subtype:'Mental', points:{else:-3, mantis:-4 }, notes:'pg 160' }
+      { id:32, name:'Gullible', subtype:'Mental', points:{all:-4}, notes:'pg 160' }
+      { id:33, name:'Haunted', subtype:'Spiritual', points:{all:-3}, notes:'pg 160' }
+      { id:34, name:'Hostage', subtype:'Social', points:{all:-3}, notes:'pg 160' }
+      { id:35, name:'Idealistic', subtype:'Mental', points:{else:-2, lion:-3 }, notes:'pg 160' }
+      { id:36, name:'Infamous', subtype:'Social', points:{all:-2}, notes:'pg 160' }
+      { id:38, name:'Insensitive', subtype:'Mental', points:{else:-2, scorpion:-3 }, notes:'pg 160' }
+      { id:39, name:'Jealousy', subtype:'Mental', points:{all:-3}, notes:'pg 160' }
+      { id:40, name:'Lame', subtype:'Physical', points:{all:-4}, notes:'pg 160' }
+      { id:41, name:'Lechery', subtype:'Social', points:{all:-2}, notes:'pg 160' }
+      { id:42, name:'Lord Moon\'s Curse', subtype:'Spiritual', points:{all:'3:5:7'}, notes:'pg 160' }
+      { id:43, name:'Lost Love', subtype:'Mental', points:{all:-3}, notes:'pg 160' }
+      { id:44, name:'Low Pain Threshold', subtype:'Physical', points:{all:-4}, notes:'pg 160' }
+      { id:45, name:'Missing Limb', subtype:'Physical', points:{all:-6}, notes:'pg 161' }
+      { id:46, name:'Momoku', subtype:'Spiritual', points:{all:-8}, notes:'pg 161' }
+      { id:47, name:'Obligation', subtype:'Social', points:{all:'3:6'}, notes:'pg 161' }
+      { id:48, name:'Obtuse', subtype:'Mental', points:{else:-3, crab:-4, bushi:-4 }, notes:'pg 161' }
+      { id:49, name:'Overconfident', subtype:'Mental', points:{else:-3, lion:-4, mantis:-4}, notes:'pg 161' }
+      { id:50, name:'Permanent Wound', subtype:'Physical', points:{all:-4}, notes:'pg 161' }
+      { id:51, name:'Phobia', subtype:'Mental', points:{all:'1:2:3'}, notes:'pg 161' }
+      { id:52, name:'Rumormonger', subtype:'Social', points:{else:-4, courtier:-5 }, notes:'pg 161' }
+      { id:53, name:'Seven Fortune\'s Curse', subtype:'Spiritual', points:{all:-3}, notes:'pg 161' }
+      { id:54, name:'Shadowlands Taint', subtype:'Spiritual', points:{all:-4}, notes:'pg 162' }
+      { id:55, name:'Small', subtype:'Physical', points:{all:-3}, notes:'pg 162' }
+      { id:56, name:'Social Disadvantage', subtype:'Social', points:{all:-3}, notes:'pg 162' }
+      { id:57, name:'Soft-Hearted', subtype:'Mental', points:{else:-2, phoenix:-3}, notes:'pg 162' }
+      { id:58, name:'Sworn Enemy', subtype:'Social', points:{all:'var'}, notes:'pg 162' }
+      { id:59, name:'Touch of the Void', subtype:'Spiritual', points:{else:-3, phoenix:-4 }, notes:'pg 162' }
+      { id:60, name:'True Love', subtype:'Mental', points:{all:-3}, notes:'pg 162' }
+      { id:61, name:'Unlucky', subtype:'Spiritual', points:{all:'var'}, notes:'pg 162' }
+      { id:62, name:'Weakness', subtype:'Physical', points:{all:-6}, notes:'pg 162' }
+      { id:63, name:'Wrath of the Kami', subtype:'Spiritual', points:{else:-3, shugenja:-4}, notes:'pg 162' }
     ];
 
 
