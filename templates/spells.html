@@ -3,7 +3,7 @@
       <h1>Spells</h1>
   </header>
  
-  <section>
+  <section class="spell_affinity">
       <h4>Spell Affinity</h4>
       <label for="spell_affinity">Air:</label>
       <input type="checkbox" name="spell_affinity" ng-model="character.spell_affinity.air" value="air"/>
@@ -17,7 +17,7 @@
       <input type="checkbox" name="spell_affinity" ng-model="character.spell_affinity.void" value="void"/>
   </section>
  
-  <section>
+  <section class="spell_deficiency">
       <h4>Spell Deficiency</h4>
       <label for="spell_deficiency">Air:</label>
       <input type="checkbox" name="spell_deficiency" ng-model="character.spell_deficiency.air" value="air"/>
@@ -35,7 +35,7 @@
 
   <h1>Known Spells</h1>
   <div class="container-fluid"> 
-    <div class="spell-section" ng-class="" ng-repeat="each in character.spells">
+    <div class="spell-section {{getSpell(each.id, 'ring')}}" ng-repeat="each in character.spells">
       <div class="row">
           <div class="col-xs-2 header right">Name</div>
           <div class="col-xs-10 value end"><strong>{{getSpell(each.id,'name')}}</strong> <span ng-if="getSpell(each.id,'type')">({{getSpell(each.id,'type')}})</span></div>
