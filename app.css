@@ -80,7 +80,7 @@ input.void_box {
 }
 
 table.stats-table, table.weapons-table {
-    margin: 0em;
+    margin: 1em 0em 0em 0em;
     width: 100%;
     border: 1px solid black;
 }
@@ -201,6 +201,12 @@ td.spell_roll {
 
 strong { font-weight: bold; }
 
+section.spell_affinity input,
+section.spell_deficiency input {
+  margin-left: 0px;
+  margin-right: 20px;
+}
+
 div.spell-section {
     margin: 20px;
 }
@@ -219,7 +225,25 @@ div.spell-section div {
 div.spell-section div.header{
     font-size: 85%;
     font-weight: bold;
-    background-color: #BFA994;
+}
+
+div.spell-section.all div.header{
+    background-color:#DDDDDD;
+}
+div.spell-section.earth div.header{
+    background-color:#8D8B63;
+}
+div.spell-section.air div.header{
+    background-color:#898989;
+}
+div.spell-section.water div.header{
+    background-color:#677FB6;
+}
+div.spell-section.fire div.header{
+    background-color:#D08B4B;
+}
+div.spell-section.void div.header{
+    background-color:#746A53;
 }
 
 div.spell-section div.header, div.spell-section div.value {
