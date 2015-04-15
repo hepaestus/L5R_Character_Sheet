@@ -756,7 +756,7 @@
     var disadvantagesMasterList = [
       { id:0, name:'Antisocial', subtype:'Social', points:{all:'-2:-4'}, notes:'pg 156' },
       { id:1, name:'Ascetic', subtype:'Mental', points:{else:-2, dragon:-3, monk:-3 }, notes:'pg 156' },
-      { id:2, name:'Bad Eyssight', subtype:'Physical', points:{all:-3}, notes:'pg 156' },
+      { id:2, name:'Bad Eyesight', subtype:'Physical', points:{all:-3}, notes:'pg 156' },
       { id:3, name:'Bad Fortune', subtype:'Spiritual', points:{all:-3}, notes:'pg 156' },
       { id:4, name:'Bad Health', subtype:'Physical', points:{all:-4}, notes:'pg 156' },
       { id:5, name:'Bitter Betrothal', subtype:'Social', points:{else:-2, imperial:-3}, notes:'pg 156' },
@@ -775,7 +775,7 @@
       { id:18, name:'Dependant', subtype:'Social', points:{all:'var'}, notes:'pg 158' },
       { id:19, name:'Dishonored', subtype:'Social', points:{all:-5}, notes:'pg 158' },
       { id:20, name:'Disbeliever', subtype:'Mental', points:{all:-3}, notes:'pg 158' },
-      { id:21, name:'Disturbin Countenance', subtype:'Physical', points:{all:-3}, notes:'pg 159' },
+      { id:21, name:'Disturbing Countenance', subtype:'Physical', points:{all:-3}, notes:'pg 159' },
       { id:22, name:'Doubt', subtype:'Mental', points:{all:-4}, notes:'pg 159' },
       { id:23, name:'Driven', subtype:'Mental', points:{all:-2}, notes:'pg 159' },
       { id:24, name:'Elemental Imbalance', subtype:'Spiritual', points:{shugenja:-2}, notes:'pg 159' },

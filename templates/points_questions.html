@@ -7,9 +7,10 @@
             </div>
             <div class="modal-body">
                 <h4>Select a Point Value</h4>
-                <h4 ng-if="modalMesage">{{modalMessage}}</h4>
+                <h4 ng-if="modalMessage">{{modalMessage}}</h4>
+                <!-- p>Points: {{pointsMasterList}}</p -->
                 <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="point in pointsMasterList | filter:filterBy"><a href="" ng-click="selectPoints(point)">{{point}}</a></li>
+                    <li class="list-group-item" ng-repeat="point in pointsMasterList ">{{$index}} : <a href="" ng-click="selectPoints(point)">{{point}}</a></li>
                 </ul>	
             </div>
             <div class="modal-footer">

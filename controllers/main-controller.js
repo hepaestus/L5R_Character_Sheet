@@ -10,6 +10,7 @@
       close(result, 500); 
     };
 
+    $scope.enteredPointsValue = null;
 
     $scope.show = function() {
       ModalService.showModal({
@@ -276,8 +277,9 @@
           //  If we have selected a advantage, set it.
           if(advantageId != null) {
             console.log("Show Advantage Id: " + advantageId);
-            $scope.character.advantages.push(DataService.getAdvantageFromMasterList(advantageId));
-            $scope.calculateAdvantagesDisadvantagesCost(DataService.getAdvantageFromMasterList(advantageId));
+            var adv = DataService.getAdvantageFromMasterList(advantageId);
+            var cost = $scope.calculateAdvantagesDisadvantagesCost(adv, "advantage");
+            $scope.character.advantages.push( {id:advantageId, name:adv.name, subtype:adv.subtype, points:cost, notes:adv.notes } );
             $scope.character = DataService.updateCharacter($scope.character);
           } else {
             console.log("No Advantage Id");
@@ -303,8 +305,9 @@
           //  If we have selected a disadvantage, set it.
           if(disadvantageId != null) {
             console.log("Show disadvantage Id: " + disadvantageId);
-            $scope.character.disadvantages.push(DataService.getDisadvantageFromMasterList(disadvantageId));
-            $scope.calculateAdvantagesDisadvantagesCost(DataService.getDisadvantageFromMasterList(disadvantageId));
+            var dadv = DataService.getDisadvantageFromMasterList(disadvantageId);
+            var cost = $scope.calculateAdvantagesDisadvantagesCost(dadv, "disadvantage");            
+            $scope.character.disadvantages.push( {id:disadvantageId, name:dadv.name, subtype:dadv.subtype, points:cost, notes:dadv.notes} );
             $scope.character = DataService.updateCharacter($scope.character);
           } else {
             console.log("No Disadvantage Id");
@@ -335,14 +338,14 @@
     };
 
 
-    $scope.showEnterPointsModal = function(message, filterBy, pointsArray) {
+    $scope.showEnterPointsModal = function(message, filterBy, pointsArray, da_obj, string) {
       ModalService.showModal({
         templateUrl: "templates/points_questions.html",
         controller: "PointsQuestionController",
         inputs : {
           pointsMasterList: pointsArray,
           modalMessage: message,
-          filterby: filterBy,
+          filterBy: filterBy,
         },
       }).then(function(modal) {
         //it's a bootstrap element, use 'modal' to show it
@@ -351,7 +354,17 @@
           //  If we have selected a value, set it.
           if(pointsValue != null) {
             console.log("Show points value: " + pointsValue);
-            return pointsValue;            
+            $scope.enteredPointsValue = pointsValue;
+            $scope.character.experience_points =- pointsValue;
+            if ( string == "advantage" ) {
+              var index = $scope.getCharacterAdvantageIndexById(da_obj.id);
+              $scope.character.advantages[index].points = pointsValue;            
+            } else if ( string == 'disadvantage' ) {
+              var index = $scope.getCharacterDisadvantageIndexById(da_obj.id);
+              $scope.character.disadvantages[index].points = pointsValue;            
+            }
+            $scope.character = DataService.character($scope.character);
+            return parseInt(pointsValue);            
           } else {
             console.log("No Disadvantage Id");
             return null;
@@ -359,7 +372,22 @@
         });
       }); 
     };
-     
+    
+    $scope.getCharacterAdvantageIndexById = function(id) {
+      for( var i = 0; i < $scope.character.advantages.length; i++ ) {
+        if( $scope.character.advantages[i].id == id ) {
+          return i; 
+        }
+      }
+    };
+
+    $scope.getCharacterDisadvantageIndexById = function(id) {
+      for( var i = 0; i < $scope.character.disadvantages.length; i++ ) {
+        if( $scope.character.disadvantages[i].id == id ) {
+          return i; 
+        }
+      }
+    };
 
     $scope.saveCharacter = function() {
       console.log("Save Current Character");
@@ -372,21 +400,24 @@
     };
     
    
-    $scope.calculateAdvantagesDisadvantagesCost = function(obj) {
+    $scope.calculateAdvantagesDisadvantagesCost = function(obj, string) {
       var points = obj.points;
       var cost = null;
       console.log("Points : " + JSON.stringify(points));
       if ( points.all == 'var' || points.else == 'var' ) {
-        var entered_value = $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, [1,2,3,4,5,6,7,8] );
+        var entered_value = 0;
+        if ( string == 'advantage' ) {
+          entered_value = $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, [1,2,3,4,5,6,7,8], obj , string);
+        } else if ( string == 'disadvantage' ) {
+          entered_value = $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, [-1,-2,-3,-4,-5,-6,-7,-8], obj , string);
+        }
         cost = entered_value;
       } else if ( points.all != null && points['all'].toString().match(/:/) != null ) {
-        var points_array = points.split(':');
-        var entered_value = $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, points_array );
-        cost = entered_value;
+        var points_array = points.all.toString().split(':');
+        $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, points_array, obj ,string);
       } else if ( points.else != null && points['else'].toString().match(/:/) != null ) {
-        var points_array = points.split(':');
-        var entered_value = $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, points_array );
-        cost = entered_value;
+        var points_array = points.else.toString().split(':');
+        $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, points_array, obj, string);
       } else if ( points.all != null ) {
         cost = points.all;
       } else if ( points[$scope.character.clan.name.toLowerCase()] ) {
@@ -395,9 +426,10 @@
       } else if ( points.else ) {
         cost = points['else'];
       }
-      console.log("Point Cost : " + cost);
-      $scope.character.experience_points -= parseInt(cost);
-      $scope.character = DataService.updateCharacter($scope.character);
+      console.log("Calc Point Cost : " + cost);
+      $scope.character.experience_points -= cost;
+      $scope.character = DataService.character($scope.character);
+      return cost;
     };
 
 
@@ -538,10 +570,5 @@
     $scope.getSkill = function(skill_id, attr) {
         return DataService.getSkillFromMasterList(skill_id, attr);
     };
-
-    //$scope.getCost = function(obj) {
-    //  console.log("GetCost Object : " + JSON.stringify(obj));
-    //  return DataService.calculateAdvantagesDisadvantagesCost(obj);
-    //}
 
   }]);//end main controller

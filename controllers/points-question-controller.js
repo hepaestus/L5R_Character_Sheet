@@ -1,6 +1,8 @@
-angular.module('myApp').controller('PointsQuestionController', ['$scope', '$element', 'pointsMasterList', 'close', function($scope, $element, pointsMasterList, close) {
+angular.module('myApp').controller('PointsQuestionController', ['$scope', '$element', 'pointsMasterList', 'modalMessage', 'filterBy', 'close', function($scope, $element, pointsMasterList, modalMessage, filterBy, close) {
 
   $scope.pointsMasterList = pointsMasterList;
+  $scope.modalMessage = modalMessage;
+  $scope.filterBy = filterBy;
   $scope.selectedValue = null;
 
   $scope.done = function() {
