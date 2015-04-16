@@ -12,9 +12,9 @@
       clan_id       : null,
       disadvantages : [],
       earth         : 2,
-      experience_points: 0,
-      experience_points_earned: 0,
-      family_id: null,
+      experience_points: 40,
+      experience_points_earned: 40,
+      family_id     : null,
       fire          : 2,
       fire_s        : 2,
       get armor_tn() { return ( 5 * this.reflexes + 5 + this.armor.tn_bonus ); },
@@ -34,6 +34,7 @@
       intelligence  : 2,
       intelligence_s: 2,
       key_word_bonus: [],
+      kihos         : [],
       last_saved    : null,
       name          : "",
       perception    : 2,
@@ -43,7 +44,7 @@
       reflexes_s    : 2,
       school_id     : null,
       skills        : [],
-      spell_affinity: {air:false, earth:false, fire:false, water:false, void:false },
+      spell_affinity  : {air:false, earth:false, fire:false, water:false, void:false },
       spell_deficiency: {air:false, earth:false, fire:false, water:false, void:false },
       spells        : [],
       stamina       : 2,
@@ -51,7 +52,7 @@
       'status'      : 0,
       strength      : 2,
       strength_s    : 2,
-      taint         : 0,
+      taint         : 0,      
       void          : 2,
       void_s        : 2,
       water         : 2,
@@ -83,7 +84,8 @@
       //{id:17, name:'Oriole', bonus:''},	    
       //{id:18, name:'Ox', bonus:''},	    
       //{id:19, name:'Sparrow', bonus:''},	    
-      //{id:20, name:'Firefly', bonus:''},	    
+      //{id:20, name:'Spider', bonus:''},	    
+      //{id:21, name:'Firefly', bonus:''},	    
     ];
    
 
@@ -211,7 +213,8 @@
       { id:22, level:'High', type:'Lore', sub_type:'Anatomy', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
       { id:23, level:'High', type:'Lore', sub_type:'Architecture', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
       { id:24, level:'High', type:'Lore', sub_type:'Bushido', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
-      { id:25, level:'High', type:'Lore', sub_type:'Great Clan (Choose One)', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
+      { id:94, level:'High', type:'Lore', sub_type:'Chikushudo', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
+      { id:25, level:'High', type:'Lore', sub_type:'Great Clan', trait:'intelligence', ring:'fire', description:'(Choose One) Pg. 137 Core Book'},
       { id:26, level:'High', type:'Lore', sub_type:'Elements', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
       { id:27, level:'High', type:'Lore', sub_type:'Gaijin Culture', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
       { id:28, level:'High', type:'Lore', sub_type:'Ghosts', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
@@ -240,10 +243,10 @@
       { id:52, level:'High', type:'Perform', sub_type:'Story Telling', trait:'awareness', ring:'air', description:'Pg. 137 Core Book'},
       { id:53, level:'High', type:'Sincerity', sub_type:'Social Skill', trait:'awareness', ring:'air', emphases:{0:'Honesty', 1:'Deceit*'}, get mastery() { return mastery(this); }, masteries:{5:'+5 Bonus to all contested rolls using Sincerity'}, description:'Pg. 138 Core Book'},
       { id:54, level:'High', type:'Spellcraft', sub_type:'', trait:'intelligence', ring:'fire', emphases:{0:'Importune', 1:'Spell Research'}, get mastery() { return mastery(this); }, masteries:{5:'+1k0 on Spellcasting rolls'}, description:'Pg. 138 Core Book'},
-      { id:55, level:'High', type:'Tea Ceremony', sub_type:'', trait:'void', ring:'void', emphases:{}, get mastery() { return mastery(this); }, masteries:{5:'All participants regain 2 void points'}, description:'Pg. 139 Core Book'},
+      { id:55, level:'High', type:'Tea Ceremony', sub_type:'', trait:'void', ring:'void', get mastery() { return mastery(this); }, masteries:{5:'All participants regain 2 void points'}, description:'Pg. 139 Core Book'},
       { id:56, level:'Bugei', type:'Athletics', sub_type:'', trait:'strength', ring:'water', emphases:{0:'Climbing', 1:'Running', 2:'Swimming', 3:'Throwing'}, get mastery() { return mastery(this); }, masteries:{ 3:'Moderate terrain no longer impedes movement, and difficult terrain reduces water ring my 1 instead of 2', 5:'Character no longer suffers movement penalties regarless of terrain', 7:'Add 5 feet to the total of one Move Action per round.'}, description:'Pg. 139 Core Book'},
       { id:57, level:'Bugei', type:'Battle', sub_type:'', trait:'perception', ring:'water', emphases:{0:'Mass Combat', 1:'Skirmish'}, get mastery() { return mastery(this); }, masteries:{5:'Character adds Battle Skill Rank to Initiative Score durring skirmishes'}, description:'Pg. 139 Core Book'},
-      { id:58, level:'Bugei', type:'Defense', sub_type:'', trait:'reflexes', ring:'air', emphases:{}, get mastery() { return mastery(this); }, masteries:{3:'Character may retain result of previous Defense / Reflexes roll rather than make a new roll if the Full Defense Stance is being maintained in subsequent rounds', 5:'Characters Armor TN is considered 3 higher than in the Defense and Full Defense stances', 7:'One Simple Action may be taken while in the Full Defense Stance(no attacks may be made)'}, description:'Pg. 139 Core Book'},
+      { id:58, level:'Bugei', type:'Defense', sub_type:'', trait:'reflexes', ring:'air', get mastery() { return mastery(this); }, masteries:{3:'Character may retain result of previous Defense / Reflexes roll rather than make a new roll if the Full Defense Stance is being maintained in subsequent rounds', 5:'Characters Armor TN is considered 3 higher than in the Defense and Full Defense stances', 7:'One Simple Action may be taken while in the Full Defense Stance(no attacks may be made)'}, description:'Pg. 139 Core Book'},
       { id:59, level:'Bugei', type:'Horsemanship', sub_type:'', trait:'agility', ring:'fire', emphases:{0:'Gaijin Riding Horse', 1:'Rokugani Pony', 2:'Utaku Steed'}, get mastery() { return mastery(this); }, masteries:{3:'May utilize Full Attack Stance when on horseback', 5:'Mointing a horse is a Simple Action, Dismounting is a Free Action', 7:'Mounting a horse is a Free Action'}, description:'Pg. 139 Core Book'},
       { id:60, level:'Bugei', type:'Hunting', sub_type:'', trait:'perception', ring:'water', emphases:{0:'Survival', 1:'Tracking', 2:'Trailblazing'}, get mastery() { return mastery(this); }, masteries:{5:'1k0 Bonus to total of all Stealth Rolls made in wilderness environments'}, description:'Pg. 140 Core Book'},
       { id:61, level:'Bugei', type:'Iaijutsu', sub_type:'', trait:'reflexes', ring:'air', emphases:{0:'Assessment', 1:'Focus'}, get mastery() { return mastery(this); }, masteries:{3:'Readying a katana is a Free Action', 5:'During an Iaijutsu Duel, the character gains one Free Raise on his Iaijutsu(Focus) / Void roll during the Focus Stage', 7:'During the Assessment of an Iaijutsu Duel, the character gains a bonus of +2k2 to the total of all Focus Rolls if his Assessment roll exceeds his opponent\'s by 10 or more (instead of the normal +1k1)'}, description:'Pg. 139 Core Book'},
@@ -259,7 +262,7 @@
       { id:71, level:'Bugei', type:'Polearms', sub_type:'Weapon Skill', trait:'agility', ring:'fire', emphases:{0:'Bisento', 1:'Nagamaki', 2:'Naginata', 3:'Sasumata', 4:'Sodegarami'}, get mastery() { return mastery(this); }, masteries:{3:'During 1st round of skirmish, polearm gains +5 bonus to Initiative Score', 5:'Damage rolls vs. mounted or significantly larger opponents increased by +1k0', 7:'Polearms readied as a free action'}, description:'Pg. 143 Core Book'},
       { id:72, level:'Bugei', type:'Spears', sub_type:'Weapon Skill', trait:'agility', ring:'fire', emphases:{0:'Mai Chong', 1:'Khttps://github.com/hepaestus/L5R_Character_Sheet/blob/master/services/data-service.jsumade', 2:'Lance', 3:'Nage-yare', 4:'Yari'}, get mastery() { return mastery(this); }, masteries:{3:'During the first round of a skirmish, a character wielding a spear may ignore 3 points of Reduction when making melee attacks against her opponent.', 5:'Ranged attacks made using a spear increase their maximum range by 5\'', 7:'Spears may be readied as a free action.'}, description:'Pg. 142 Core Book'},
       { id:73, level:'Bugei', type:'Staves', sub_type:'Weapon Skill', trait:'agility', ring:'fire', emphases:{0:'Bo', 1:'Machi-kanshisha', 2:'Nunchaku', 3:'Sang Kauw', 4:'Tonfa'}, get mastery() { return mastery(this); }, masteries:{3:'Opponents\' armor bonuses are no longer doubled against staff attacks.', 5:'Use of a staff confers one Free Raise toward use of Knowdown Manuever', 7:'Staves that are large may be readied as a Free Action instead of a Simple Action. Staves that are small gain a bonus to damage rolls equal to +1K0.'}, description:'Pg. 142 Core Book'},
-      { id:74, level:'Bugei', type:'War Fan', sub_type:'Weapon Skill', trait:'agility', ring:'fire', emphases:{}, get mastery() { return mastery(this); }, masteries:{3:'Off-hand Penalties do not apply when using war fan.', 5:'When using war fan Armor TN is increased by +1', 7:'Armor TN is increased by +3.'}, description:'Pg. 142 Core Book'},
+      { id:74, level:'Bugei', type:'War Fan', sub_type:'Weapon Skill', trait:'agility', ring:'fire', get mastery() { return mastery(this); }, masteries:{3:'Off-hand Penalties do not apply when using war fan.', 5:'When using war fan Armor TN is increased by +1', 7:'Armor TN is increased by +3.'}, description:'Pg. 142 Core Book'},
       { id:75, level:'Merchant', type:'Animal Handling', sub_type:'', trait:'awareness', ring:'air', emphases:{0:'Dogs', 1:'Horses', 2:'Falcon'}, get mastery() { return mastery(this); }, masteries:{3:'Commonly domesticated animals such as dogs, horses, and falcons may be trained for use by others.', 5:'Trained animals may be commanded to attack a target of her choosing. The animal will flee for its life if badly wouded.', 7:'Animals trained by the character may be issued commands non-verbally.'}, description:'Pg. 143 Core Book'},
       { id:76, level:'Merchant', type:'Commerce', sub_type:'', trait:'intelligence', ring:'fire', emphases:{0:'Appraisal', 1:'Mathematics'}, get mastery() { return mastery(this); }, masteries:{5:'The character may increase or decrease the price of an item he is buying or selling by a maximum or 20%'}, description:'Pg. 143 Core Book'},
       { id:77, level:'Merchant', type:'Craft', sub_type:'(awareness)', trait:'awareness', ring:'air', emphases:{0:'Armorsmithing^', 1:'Blacksmithing', 2:'Boyer^', 3:'Brewing', 4:'Carpentry', 5:'Cartography', 6:'Cobling', 7:'Cooking', 8:'Farming', 9:'Fishing', 10:'Masonry', 11:'Mining', 12:'Poison*', 13:'Pottery', 14:'Shipbuilding', 15:'Tailoring', 16:'Weaponsmithing^', 17:'Weaving', 18:'Other'}, get mastery() { return mastery(this); }, masteries:{}, description:'(^ high skill)(* low skill)Pg. 143 Core Book'},
@@ -516,7 +519,7 @@
 
 
     var spellsMasterList = [
-      { id:0, name:'Sense', type:'', ring:'all', level: '1', range:'Personal', area_of_affect:'50\' radius from the caster', duration:'Instantaneous', raises: 'Range(+10\')', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the four standard elements. It allows for the caster to sense the presense, quantity, and rough location of the elemental spirits (not evil spirits known as <i>kansen</i> of that element within the range of the spell. This is most frequently applied when looking for spirits with which to Commune (See Commune), but can also can be useful as a crude basic location device. For example, a caster lost in the wilderness could cast Snese(Water) in hopes of locating the sourceof drinking water. Pg 166 Core Book' },
+      { id:0, name:'Sense', type:'', ring:'all', level: '1', range:'Personal', area_of_affect:'50\' radius from the caster', duration:'Instantaneous', raises: 'Range(+10\')', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the four standard elements. It allows for the caster to sense the presense, quantity, and rough location of the elemental spirits (not evil spirits known as <i>kansen</i> of that element within the range of the spell. This is most frequently applied when looking for spirits with which to Commune (See Commune), but can also can be useful as a crude basic location device. For example, a caster lost in the wilderness could cast Sense(Water) in hopes of locating the source of drinking water. Pg 166 Core Book' },
       { id:1, name:'Summon', type:'', ring:'all', level: '1', range:'30\'', area_of_affect:'1 cubic foot of summoned matterial', duration:'Permanent', raises: 'Range(+10\'), Quantity(+1 cubic foot), Composition of Material(1-4 raises as outlined below)', get roll() { return spellRoll(this); }, description:'This spell can be cast in any of the tour standard elements. It allows the caster to summon a modest quantity (one cubic foot) of the chosen element. The summoned matter appears (usually in a rough ball shape) in any open space within the spell\'s range. This cannot place the summoned material inside another physical object or living creature. The summoned element will behave in a normal and mundane matter; earth falls to the ground, water soaks anything it lands on, air blows away, and fire winks out unless there is something present for it to burn. In general it is impossible to use this spell effectively in combat, although clever shugenja may find a few modest combat uses. such as using Summon [Fire] to ignite a foe soaked in cooking oil. More commonly, the Spell\'s value is in simpler functions. such as summoning Water while in a desert, or summoning Fire to light a campfire without flint and tinder. Raises may be used with this spell to summon a more specfic type of the appropriate element, such as wood or iron with Earth, or tea with Water. The GM should choose how many Raises (generally anywhere from 1 to 4) this requires. However, these Raises <strong>cannot</strong> be used to create rare or precious materials (such as gold) or spiritually powerful substances (such as jade or crystal). Pg 166 Core Book' },
       { id:2, name:'Commune', type:'', ring:'all', level: '1', range:'20\'', area_of_affect:'self', duration:'Concentration', raises: 'See Desc.', get roll() { return spellRoll(this); }, description:'This spell can be cast in any element save Void. It allows the caster to speak with one of the local elemental kami, asking it a few questions, which is will answer honestly to the best of it\'s ability. Typically this spell will invoke the most active and energetic spirit of the chosen element in the area of effect, if all of the local spirits are quiescent, the GM may require the caster to call 1 or 2 Raises to "wake up" a local spirit enough to answer questions. A Spirit reached with Commune will answer two questions. The caster may Raise to get more questions (one per Raise). The caster may also Raise for clarity, to get a more accurate and informative answer to the questions. (Kami are notorious for their inabiiity to fully comprehend human behavior, and asking questions without Raises for clarity can often result in confusing, enigmatic, or incomplete answers.) Spirits do not forget anything, so theoretically a shugenja can ask a spirit about something that happened decades ago, however, they also do not experience time in the same way as mortals, so trying to ask about something from long ago will usually require Raises in order to make the caster\'s wishes clear to the spirit. The nature of the information which spirits can impart varies by element. Air spirits tend to be playful and easily distracted, conveying information as emotions or as riddles and jokes. Since they are more interested in feelings than in facts, and enjoy playing games with those who speak with them, commuting with an Air spirit can sometimes be very frustrating. Earth spirits are straightforward and matter of fact, often blunt, but are also often rather uninterested in the behavior of mortals, have a poor understanding of human emotion, and tend to be overly focused on obscure details such as the color of a piece of clothing or the weight of a horse. Fire spirits are irritable and tempermental, and are often angry at being summoned unless they are propitiated with an offering of something to burn. 0n the other hand, if a shugenja can please them they tend to offer the clearest and most accurate information. Water spirits communicate their knowledge through soundless visual images. This can be very helpful to a shugenja trying to investigate a past incident, but since the spirits cannot convey scent, sound, or emotion, the information they provide can often be incomplete or misleading. Pg 166 Core Book' },
       { id:3, name:'Blessed Wind', type:'Defense', ring:'air', level:'1', range:'Personal', area_of_affect:'10\' radius around the caster', duration:'Concentration', raises:'Special(you may target another spell with this spell with 3 raises)', get roll() { return spellRoll(this); }, description:'You summon a swirling aura of winds to protect you from ranged attacks. The buffeting winds deflect arrows and other projectiles. While you maintain your concentration, this spell adds +15 to your Armor TN versus all non-magical ranged attacks. Pg 167 Core Book' },
@@ -1034,20 +1037,5 @@
         }
       }
     };  
-
-    this.calculateAdvantagesDisadvantagesCost = function(obj) {
-      var points = obj;
-      console.log("Points : " + JSON.stringify(points));
-      //console.log("Clan : " + $scope.character.clan.name );
-      //console.log("Points Clan : " + points[$scope.character.clan.name.toLowerCase()]);
-      if ( points.all != null && points.all != 'var' ) {
-        character.experience_points -= points.all;
-      } else if ( points[character.clan.name.toLowerCase()] ) {
-        console.log("Found Clan Name");
-        character.experience_points -= points[character.clan.name.toLowerCase()];   
-      } else if ( points.else && points.else != 'var' ) {
-        character.experience_points -= points['else'];
-      }
-    };
 
   });//end dataservice

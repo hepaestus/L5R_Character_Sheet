@@ -355,7 +355,7 @@
           if(pointsValue != null) {
             console.log("Show points value: " + pointsValue);
             $scope.enteredPointsValue = pointsValue;
-            $scope.character.experience_points =- pointsValue;
+            $scope.character.experience_points -= pointsValue;
             if ( string == "advantage" ) {
               var index = $scope.getCharacterAdvantageIndexById(da_obj.id);
               $scope.character.advantages[index].points = pointsValue;            
@@ -426,9 +426,11 @@
       } else if ( points.else ) {
         cost = points['else'];
       }
-      console.log("Calc Point Cost : " + cost);
-      $scope.character.experience_points -= cost;
-      $scope.character = DataService.character($scope.character);
+      if ( cost ) {
+        console.log("Calc Point Cost : " + cost);
+        $scope.character.experience_points -= cost;
+        $scope.character = DataService.character($scope.character);
+      }
       return cost;
     };
 
@@ -473,8 +475,8 @@
             var ring = obj[key];
             $scope.character.spell_deficiency[ring] = true;
             break;
-          case 'key_words':
-            
+          case 'key_word':
+            $scope.character.key_word_bonus.push(obj[key]);
             break;
           case 'skills':
               for(var i=0; i < obj[key].length; i++ ) {
