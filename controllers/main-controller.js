@@ -174,7 +174,7 @@
     };
 
 
-    $scope.showSkillsListModal = function(message, searchText, filterBy, rank) {
+    $scope.showSkillsListModal = function(message, searchText, filterBy, rank, school_skill) {
       ModalService.showModal({
         templateUrl: "templates/skill_list.html",
         controller: "SkillsModalListController",
@@ -191,11 +191,11 @@
         modal.close.then(function(skillId) {
           if( skillId != null && ( skillId.rank == null || skillId.rank == undefined ) ) {
             console.log("Show Skill Id: " + skillId);
-            $scope.addASkill(skillId);
+            $scope.addASkill(skillId, null, null, school_skill);
             $scope.character = DataService.updateCharacter($scope.character);
           } else if ( skillId.id != null && skillId.rank != null ) {
             console.log("Show Skill Id: " + skillId.id + " Show Rank: " + skillId.rank );
-            $scope.addASkill(skillId.id, skillId.rank);
+            $scope.addASkill(skillId.id, skillId.rank, null, school_skill);
             $scope.character = DataService.updateCharacter($scope.character);
           } else {
             console.log("Error No SKill Added");
@@ -400,24 +400,36 @@
     };
     
    
-    $scope.calculateAdvantagesDisadvantagesCost = function(obj, string) {
+    $scope.calculateAdvantagesDisadvantagesCost = function(obj, string, no_modals_flag) {
       var points = obj.points;
       var cost = null;
       console.log("Points : " + JSON.stringify(points));
       if ( points.all == 'var' || points.else == 'var' ) {
         var entered_value = 0;
-        if ( string == 'advantage' ) {
-          entered_value = $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, [1,2,3,4,5,6,7,8], obj , string);
-        } else if ( string == 'disadvantage' ) {
-          entered_value = $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, [-1,-2,-3,-4,-5,-6,-7,-8], obj , string);
+        if ( ! no_modals_flag ) {
+          if ( string == 'advantage' ) {
+            entered_value = $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, [1,2,3,4,5,6,7,8], obj , string);
+          } else if ( string == 'disadvantage' ) {
+            entered_value = $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, [-1,-2,-3,-4,-5,-6,-7,-8], obj , string);
+          }
+          cost = entered_value;
+        } else {
+          cost = "Varies";
         }
-        cost = entered_value;
       } else if ( points.all != null && points['all'].toString().match(/:/) != null ) {
         var points_array = points.all.toString().split(':');
-        $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, points_array, obj ,string);
+        if ( ! no_modals_flag ) {
+          $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, points_array, obj ,string);
+        } else {
+          cost = points.all.toString();
+        }
       } else if ( points.else != null && points['else'].toString().match(/:/) != null ) {
         var points_array = points.else.toString().split(':');
-        $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, points_array, obj, string);
+        if ( ! no_modals_flag ) {
+          $scope.showEnterPointsModal("Choose a point value for your selection: " + obj.name, null, points_array, obj, string);
+        } else {
+          cost = points.else.toString();
+        }
       } else if ( points.all != null ) {
         cost = points.all;
       } else if ( points[$scope.character.clan.name.toLowerCase()] ) {
@@ -440,29 +452,41 @@
       for( key in obj ) {
         console.log("KEY : " + key + "  VALUE: " + obj[key]);
         switch(key) {
+          case 'void':
+            $scope.character.void +=  obj[key];
+            $scope.character.void_s +=  obj[key];
+            break;
           case 'stamina':
             $scope.character.stamina +=  obj[key];
+            $scope.character.stamina_s +=  obj[key];
             break;
           case 'willpower':
             $scope.character.willpower +=  obj[key];
+            $scope.character.willpower_s +=  obj[key];
             break;
           case 'reflexes':
             $scope.character.reflexes +=  obj[key];
+            $scope.character.reflexes_s +=  obj[key];
             break;
           case 'awareness':
             $scope.character.awareness +=  obj[key];
+            $scope.character.awareness_s +=  obj[key];
             break;
           case 'agility':
             $scope.character.agility +=  obj[key];
+            $scope.character.agility_s +=  obj[key];
             break;
           case 'intelligence':
             $scope.character.intelligence +=  obj[key];
+            $scope.character.intelligence_s +=  obj[key];
             break;
           case 'strength':
             $scope.character.strength +=  obj[key];
+            $scope.character.strength_s +=  obj[key];
             break;
           case 'perception':
             $scope.character.perception +=  obj[key];
+            $scope.character.perception_s +=  obj[key];
             break;
           case 'honor':
             $scope.character.honor +=  obj[key];
@@ -482,14 +506,15 @@
               for(var i=0; i < obj[key].length; i++ ) {
                 console.log("Add this skill: " + obj[key][i] );
                 var skill =  obj[key][i];
+                var school_skill = true;
                 if ( isFinite(skill) ) {
-                  $scope.addASkill(skill, 1);
+                  $scope.addASkill(skill, 1, null, school_skill);
                 } else if ( skill.match(/:/) ) {
                   var arr = skill.split(":");
                   var skill = parseInt(arr[0]);
                   var emp = (arr[1]) ? parseInt(arr[1]) : null;
                   var lvl = (arr[2]) ? parseInt(arr[2]) : 1;                  
-                  $scope.addASkill(skill, lvl, emp);
+                  $scope.addASkill(skill, lvl, emp, school_skill);
                 } else {
                   $scope.close(true,500);
                   //alert("You Also Get " + skill + " skill");
@@ -499,7 +524,7 @@
                   var filter = null;
                   var rank = 1;
                   console.log("showSkillsListModal message:" + message + "  searchText:" + searchText + "  filter:" + filter + "  rank:" + rank);
-                  $scope.showSkillsListModal(message, searchText, filter, rank);
+                  $scope.showSkillsListModal(message, searchText, filter, rank, school_skill);
                 }
               }
             break;
@@ -512,15 +537,16 @@
     };
 
 
-    $scope.addASkill = function(skill_id, rank, emp) {
-      console.log("Add A Skill:  id:" + skill_id + "  rank:" + rank + "  emp:" + emp);
+    $scope.addASkill = function(skill_id, rank, emp, school_skill_flag) {
+      console.log("Add A Skill:  id:" + skill_id + "  rank:" + rank + "  emp:" + emp + " School Skill:" + school_skill_flag);
       var skill = DataService.getSkillFromMasterList(skill_id);
       var lvl = ( rank )? rank : 0;
       var emph = ( emp != null || emp != undefined  ) ? emp : null;
+      var school_skill = ( school_skill_flag != null || school_skill_flag != undefined  ) ? school_skill_flag : false;
       if ( emph != null ) {
         emph = skill.emphases[emph];
       }
-      var new_skill = { id:skill_id, rank:lvl, rank_s:lvl, emphasis:emph, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
+      var new_skill = { id:skill_id, rank:lvl, rank_s:lvl, emphasis:emph, school_skill:school_skill_flag, get roll() { return (getSkillRoll(this.id, this.rank)); }, get mastery() { return skillMastery(this); } };
       if ( $scope.getCharacterSkillById(skill_id) === null) {
         $scope.character.skills.push(new_skill);
       }

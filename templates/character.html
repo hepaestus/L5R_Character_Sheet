@@ -116,9 +116,9 @@
           <tr>
               <th></th><th class="skill_name">Skill Name</th><th class="skill_rank">Rank</th><th class="skill_trait">Trait</th><th class="skill_roll">Roll</th><th class="skill_emphasis">Emphasis</th><th class="skill_mastery">Mastery Abilities</th><th class="skill_desc">Desc.</th><th class="skill_button"></th>
           </tr>
-          <tr ng-repeat="each in character.skills track by $index" ng-show="character.skills">
+          <tr ng-repeat="each in character.skills track by each.id" ng-show="character.skills">
               <!-- td class="skill_name">{{$index}}-{{each.id}}:{{ getSkill(each.id,'type')}} {{ getSkill(each.id,'sub_type')}} </td-->
-              <td class="small"><sup>{{$index + 1}}</sup></td>
+              <td class="small"><span ng-show="each.school_skill" class="glyphicon glyphicon-education"></span> <sub>{{$index + 1}}</sub></td>
               <td class="skill_name">{{ getSkill(each.id,'type')}} {{ getSkill(each.id,'sub_type')}} </td>
               <td class="skill_rank"><input name="skill_rank" ng-model="character.skills[$index].rank" type="number" min="0" ng-click="updateSkillRank(each.id)"/></td>
               <td>{{getSkill(each.id,'trait')}}</td>
@@ -126,10 +126,10 @@
               <td><a href="" class="small" ng-hide="each.emphasis || getSkill(each.id,'emphases') == null" ng-show="getSkill(each.id,'emphases')" ng-click="showEmphasesListModal(each.id)">Add</a><span ng-show="each.emphasis">{{each.emphasis}}</span></td>
               <td class="skill_mastery" style="line-height: 60%"><span class="small" ng-bind-html="each.mastery"></span></td>
 	          <td class="skill_desc" style="line-height: 60%"><span class="small">{{getSkill(each.id,'description')}}</span></td>
-	          <td class="skill_button"><button ng-click="removeSkill(each.id)"><span class="glyphhicon glyphicons-remove">X</span></button></td>
+	          <td class="skill_button"><button ng-hide="each.school_skill" ng-click="removeSkill(each.id)"><span class="glyphicon glyphicon-remove"></span></button></td>
           </tr>
           <tr>
-              <td colspan="8"><a href="" ng-click="showSkillsListModal()">Add a Skill</a></td>
+              <td colspan="9"><a href="" ng-click="showSkillsListModal()">Add a Skill</a></td>
           </tr>
           <tr ng-show="showEmphasesList"> 
               <td colspan="4">Emphasis List</td>

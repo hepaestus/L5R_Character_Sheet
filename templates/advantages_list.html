@@ -8,8 +8,9 @@
             <div class="modal-body">
                 <h4>Choose Your Advantages</h4>
                 <h4 ng-if="modalMesage">{{modalMessage}}</h4>
+                <label for="search">Search:</label><input name="filterBy" type="search" ng-model="filterBy"/>
                 <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="advantage in advantagesMasterList | filter:filterBy"><a href="" ng-click="selectAdvantage(advantage.id)">{{advantage.name}} - {{advantage.subtype}} - {{advantage.points}} - {{advantage.notes}}</a></li>
+                    <li class="list-group-item" ng-repeat="advantage in advantagesMasterList | filter:filterBy"><a href="" ng-click="selectAdvantage(advantage.id)">{{advantage.name}} - {{advantage.subtype}} - {{ calcCostBonus() }} - {{advantage.notes}}</a></li>
                 </ul>	
             </div>
             <div class="modal-footer">

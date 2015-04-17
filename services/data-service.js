@@ -12,6 +12,7 @@
       clan_id       : null,
       disadvantages : [],
       earth         : 2,
+      earth_s       : 2,
       experience_points: 40,
       experience_points_earned: 40,
       family_id     : null,

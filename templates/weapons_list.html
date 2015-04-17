@@ -8,6 +8,7 @@
             <div class="modal-body">
                 <h4>Choose Your Weapon</h4>
                 <h4 ng-if="modalMesage">{{modalMessage}}</h4>
+                <label for="search">Search:</label><input name="filterBy" type="search" ng-model="filterBy"/>
                 <ul class="list-group">
                     <li class="list-group-item" ng-repeat="weapon in weaponsMasterList | filter:filterBy"><a href="" ng-click="selectWeapon(weapon.id)">{{weapon.type}} - {{weapon.name}}</a></li>
                 </ul>	
