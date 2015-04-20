@@ -28,7 +28,7 @@ angular.module('myApp').controller('CharacterLoadController', ['$scope', 'charac
   $scope.loadSavedCharacter = function(index) {
     //console.log("Load Saved Character : " + index);
     var loadChar = LoadCharacterService.getSavedCharacter(index);
-    DataService.updateCharacter(loadChar);
+    return DataService.updateCharacter(loadChar);    
   };
     
 }]);

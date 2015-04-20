@@ -46,7 +46,6 @@
     "commit": "beb2c50f346296f082a6194b8fa9ea940c9f7848"
   },
   "_source": "https://github.com/dwmkerr/angular-modal-service.git",
-  "_target": "0.6.6",
-  "_originalSource": "angular-modal-service",
-  "_direct": true
+  "_target": "~0.6.3",
+  "_originalSource": "angular-modal-service"
 }

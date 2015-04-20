@@ -1,4 +1,4 @@
-  angular.module('myApp').controller('CharacterController', ['$scope', '$cookieStore','DataService', function($scope, $cookieStore, DataService) {
+  angular.module('myApp').controller('CharacterController', ['$scope', 'DataService', function($scope, DataService) {
 
     $scope.test = "Character Controller";
 

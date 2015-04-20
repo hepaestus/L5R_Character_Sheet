@@ -1,7 +1,7 @@
 'use strict';
 (function(){
     
-angular.module('myApp', [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap','angularModalService' ]);
+angular.module('myApp', [ 'ngRoute', 'ngSanitize', 'ngStorage', 'ui.bootstrap', 'angularModalService' ]);
 
   angular.module('myApp').config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/', {

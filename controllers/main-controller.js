@@ -1,9 +1,15 @@
-  angular.module('myApp').controller('MainController', ['$scope', '$cookieStore', 'ModalService', 'DataService', 'LoadCharacterService', function($scope, $cookieStore, ModalService, DataService, LoadCharacterService) {
+  angular.module('myApp').controller('MainController', ['$scope', 'ModalService', 'DataService', 'LoadCharacterService', function($scope, ModalService, DataService, LoadCharacterService) {
 
     $scope.test = "Main Controller";
     $scope.characterSize = DataService.characterSize(); 
     
     $scope.character = DataService.character();
+    $scope.dataServiceCharacter = DataService.character();
+
+    $scope.updateChar = function() {
+      $scope.dataServiceCharacter = DataService.character();
+      $scope.characterSize = DataService.characterSize(); 
+    };
     
     $scope.close = function(result) {
       console.log("MainController Result: " + result);
@@ -318,7 +324,6 @@
     
 
     $scope.loadCharacterModal = function(message, filterBy) {
-      console.log("Loaded Characters : " + $scope.saved_characters_array);
       ModalService.showModal({
         templateUrl: "templates/character_load.html",
         controller: "CharacterLoadController",
@@ -332,7 +337,7 @@
         modal.element.modal();
         modal.close.then(function(result) {
           console.log("loadCharacterModal Result: " + result);          
-          $scope.character = DataService.character();
+          $scope.character = DataService.updateCharacter( LoadChararacterService.getSavedCharacter() );
         });
       }); 
     };
@@ -372,7 +377,8 @@
         });
       }); 
     };
-    
+
+
     $scope.getCharacterAdvantageIndexById = function(id) {
       for( var i = 0; i < $scope.character.advantages.length; i++ ) {
         if( $scope.character.advantages[i].id == id ) {
@@ -381,6 +387,7 @@
       }
     };
 
+
     $scope.getCharacterDisadvantageIndexById = function(id) {
       for( var i = 0; i < $scope.character.disadvantages.length; i++ ) {
         if( $scope.character.disadvantages[i].id == id ) {
@@ -388,6 +395,7 @@
         }
       }
     };
+
 
     $scope.saveCharacter = function() {
       console.log("Save Current Character");
