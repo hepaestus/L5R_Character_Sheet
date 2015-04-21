@@ -5,6 +5,7 @@
       agility       : 2,
       agility_s     : 2,
       air           : 2,
+      air_s         : 2,
       armor         : { id:'', name:'', type:'', tn_bonus:0, reduction:0, price:'' },
       arrows        : [ { id:null, type:null, number:null, damage:null} , { id:null, type:null, number:null, damage:null}, { id:null, type:null, number:null, damage:null}, { id:null, type:null, number:null, damage:null} ],
       awareness     : 2,
@@ -57,6 +58,7 @@
       void          : 2,
       void_s        : 2,
       water         : 2,
+      water_s       : 2,
       weapon_one    : { id:null, name:null, type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
       weapon_two    : { id:null, name:null, type:null, attack_roll:null, damage_roll:null, bonus:null, notes:null },
       willpower     : 2,
@@ -828,8 +830,173 @@
       return character;
     }
 
-    this.updateCharacter = function(char_obj) {
-      character = char_obj;
+    this.updateCharacter = function(char_obj) {        
+      for( var prop in  char_obj ) {
+        switch(prop) {
+          case 'advantages':
+            character.advantages = char_obj.advantages;
+          break;
+          case 'agility':
+            character.agility = char_obj.agility;
+          break;
+          case 'agility_s':
+            character.agility_s = char_obj.agility_s;
+          break;
+          case 'air':
+            character.air = char_obj.air;
+          break;
+          case 'air_s':
+            character.air_s = char_obj.air_s;
+          break;
+          case 'armor':
+            character.armor = char_obj.armor;
+          break;
+          case 'arrows':
+            character.arrows = char_obj.arrows;
+          break;
+          case 'awareness':
+            character.awareness = char_obj.awareness;
+          break;
+          case 'awareness_s':
+            character.awareness_s = char_obj.awareness_s;
+          break;
+          case 'clan_id':
+            character.clan_id = char_obj.clan_id;
+          break;
+          case 'disdvantages':
+            character.disadvantages = char_obj.disadvantages;
+          break;
+          case 'earth':
+            character.earth = char_obj.earth; 
+          break;
+          case 'earth_s':
+            character.earth_s = char_obj.earth_s; 
+          break;
+          case 'experience_points':
+            character.experience_points = char_obj.experience_points; 
+          break;
+          case 'experience_points_earned':
+            character.experience_points_earned = char_obj.experience_points_earned; 
+          break;
+          case 'family_id':
+            character.family_id = char_obj.family_id; 
+          break;
+          case 'fire':
+            character.fire = char_obj.fire; 
+          break;
+          case 'fire_s':
+            character.fire_s = char_obj.fire_s; 
+          break;
+          case 'glory':
+            character.glory = char_obj.glory; 
+          break;
+          case 'healing_modifiers':
+            character.healing_modifiers = char_obj.healing_modifiers; 
+          break;
+          case 'honor':
+            character.honor = char_obj.honor; 
+          break;
+          case 'insight':
+            character.insight = char_obj.insight; 
+          break;
+          case 'insight_rank':
+            character.insight_rank = char_obj.insight_rank; 
+          break;
+          case 'intelligence':
+            character.intelligence = char_obj.intelligence; 
+          break;
+          case 'intelligence_s':
+            character.intelligence_s = char_obj.intelligence_s; 
+          break;
+          case 'key_word_bonus':
+            character.key_word_bonus = char_obj.key_word_bonus; 
+          break;
+          case 'kihos':
+            character.kihos = char_obj.kihos; 
+          break;
+          case 'last_saved':
+            character.last_saved = char_obj.last_saved; 
+          break;
+          case 'name':
+            character.name = char_obj.name; 
+          break;
+          case 'perception':
+            character.perception = char_obj.perception; 
+          break;
+          case 'perception':
+            character.perception_s = char_obj.perception_s; 
+          break;
+          case 'points_per_wound_level':
+            character.points_per_wound_level = char_obj.points_per_wound_level; 
+          break;
+          case 'reflexes':
+            character.reflexes = char_obj.reflexes; 
+          break;
+          case 'reflexes_s':
+            character.reflexes_s = char_obj.reflexes_s; 
+          break;
+          case 'school_id':
+            character.school_id = char_obj.school_id; 
+          break;
+          case 'skills':
+            character.skills = char_obj.skills; 
+          break;
+          case 'spell_affinity':
+            character.spell_affinity = char_obj.spell_affinity; 
+          break;
+          case 'spell_deficiency':
+            character.spell_deficiency = char_obj.spell_deficiency; 
+          break;
+          case 'spells':
+            character.spells = char_obj.spells; 
+          break;
+          case 'stamina':
+            character.stamina = char_obj.stamina; 
+          break;
+          case 'stamina_s':
+            character.stamina_s = char_obj.stamina_s; 
+          break;
+          case 'status':
+            character.status = char_obj.status; 
+          break;
+          case 'strength':
+            character.strength = char_obj.strength; 
+          break;
+          case 'strength_s':
+            character.strength_s = char_obj.strength_s; 
+          break;
+          case 'taint':
+            character.taint = char_obj.taint; 
+          break;
+          case 'void':
+            character.void = char_obj.void; 
+          break;
+          case 'void_s':
+            character.void_s = char_obj.void_s; 
+          break;
+          case 'water':
+            character.water = char_obj.water; 
+          break;
+          case 'water_s':
+            character.water_s = char_obj.water_s; 
+          break;
+          case 'weapon_one':
+            character.weapon_one = char_obj.weapon_one; 
+          break;
+          case 'weapon_two':
+            character.weapon_two = char_obj.weapon_two; 
+          break;
+          case 'willpower': 
+            character.willpower = char_obj.willpower;
+          break;
+          case 'willpower_s': 
+            character.willpower_s = char_obj.willpower_s;
+          break;
+          case 'wound_levels': 
+            character.wound_levels = char_obj.wound_levels;
+          break;
+        }
+      }
       return character;
     }
 
@@ -875,17 +1042,13 @@
 
 
     this.getSkillFromMasterList = function(skill_id, attr) {
-    //console.log("getSkillFromMasterList(" + skill_id + "," + attr + ")");
       for(var i=0; i < skillsMasterList.length; i++) {
         if ( skillsMasterList[i].id === skill_id ) {
           if (attr === null || attr === undefined) {
-            //console.log("Return skill: " + JSON.stringify(skillsMasterList[i]) );
             return skillsMasterList[i];
           } else if ( attr === 'mastery') {
-            //console.log("Get Mastery FOO: ");
             return skillsMasterList[i].mastery;
           } else {
-            //console.log("Return attr: " + skillsMasterList[i][attr] );
             return skillsMasterList[i][attr];
           }
         }

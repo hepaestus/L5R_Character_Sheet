@@ -1,4 +1,4 @@
-  angular.module('myApp').controller('SkillsController', ['$scope', 'DataService', 'ModalService', function($scope, DataService, ModalService) {
+  angular.module('myApp').controller('SkillsController', ['$scope', 'DataService', 'ModalService', '$timeout', function($scope, DataService, ModalService, $timeout) {
 
     $scope.test = "Skills Controller";
 
@@ -97,13 +97,22 @@
           if ( obj.rank >= x ) {
             text += "Level " + x + " : " + master_skill.masteries[x] + "<br />\n";
           }
-    }
+        }
         //console.log("Text: " + text);
         return text;
       } else {
         return 'none';
       }
     };
+
+    var rebuildSkills = function() {
+      for ( var i = 0; i < $scope.character.skills.length; i++) {
+        Object.defineProperty(scope.character.skills[i], 'roll', { get: function() {return (getSkillRoll(this.id, this.rank)); }});
+        Object.defineProperty(scope.character.skills[i], 'mastery', { get: function() { return (skillMastery(this)); }});
+      }
+    };
+    $scope.$watch('$scope.character.skills', rebuildSkills);
+
 
     $scope.getSkill = function(skill_id, attr) {
         return DataService.getSkillFromMasterList(skill_id, attr);

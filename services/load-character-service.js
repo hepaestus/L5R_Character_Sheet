@@ -9,7 +9,7 @@
 
     this.loadCharacters = function() {
       var saved_stored_characters_obj = $localStorage.characters;
-      console.log("Saved Stored Characters Array: " + JSON.stringify(saved_stored_characters_obj));
+      //console.log("Saved Stored Characters Array: " + JSON.stringify(saved_stored_characters_obj));
       if ( saved_stored_characters_obj ) {
         for ( var time in saved_stored_characters_obj) {
           var character = saved_stored_characters_obj[time];
@@ -23,26 +23,29 @@
 
 
     this.getSavedCharacter = function(index) {
-      console.log("Getting Character : " + JSON.stringify(saved_characters_array[index]));
+      //console.log("Getting Character : " + JSON.stringify(saved_characters_array[index]));      
       return DataService.updateCharacter( saved_characters_array[index] );
     };
 
 
     this.deleteSavedCharacter = function(character_date_string) {
-      var idx = stored_char_strings[character_date_string];
-      stored_char_strings.splice(idx,1);
+      for( var date in $localStorage.characters) {
+        if ( date == character_date_string ) {
+          delete $localStorage.characters[date];
+        }
+      }
     };
 
 
     this.saveCharacter = function(character) {
-      console.log("Save Character : " + DataService.character() );
+      //console.log("Save Character : " + DataService.character() );
       var d = new Date();
       var date_string = d.toString().replace(/:/g, "-");
       var date_string = date_string.toString().replace(/\(|\)/g, "");
       var date_string = date_string.toString().replace(/\s/g, "_");
       character.last_saved = date_string;
       console.log("Date : " + date_string );
-      var characters = {};
+      var characters = [];
       if ( $localStorage.characters ) {
         characters = $localStorage.characters;
       }

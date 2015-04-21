@@ -78,4 +78,12 @@
       return null;
     };
 
+    var rebuildSpells = function() {
+      for ( var i = 0; i < $scope.character.spells.length; i++) {
+        Object.defineProperty(scope.character.spells[i], 'roll', { get: function() { return spellRoll(this); }});
+      }
+    };
+    $scope.$watch('$scope.character.spells', rebuildSpells);
+
+
   }]);//end SpellsController
