@@ -9,6 +9,8 @@
     $scope.updateChar = function() {
       $scope.dataServiceCharacter = DataService.character();
       $scope.characterSize = DataService.characterSize(); 
+      console.log("Character: " + JSON.stringify($scope.character, null, '\t'));
+      console.log("Character Size: " + $scope.characterSize);
     };
     
     $scope.close = function(result) {

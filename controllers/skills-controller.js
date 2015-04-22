@@ -74,7 +74,7 @@
 
     var getSkillRoll = function(skill_id, skill_rank) {
       var skill = DataService.getSkillFromMasterList(skill_id);
-      //console.log("get Roll of skill : " + skill_id + " with rank of " + skill_rank);
+      console.log("get Roll of skill : " + skill_id + " with rank of " + skill_rank);
       if ( skill ) {
         //console.log("found skill : " + skill + " :: " + JSON.stringify(skill_rank));
         var trait = skill.trait;
@@ -87,7 +87,7 @@
     };
 
     var skillMastery = function(obj) {
-      //console.log("get Mastery of skill : " + obj.id + " with rank of " + obj.rank);
+      console.log("get Mastery of skill : " + obj.id + " with rank of " + obj.rank);
       var master_skill = DataService.getSkillFromMasterList(obj.id);
       if ( master_skill ) {
         //console.log("Master Skill: " + JSON.stringify(master_skill));
@@ -105,13 +105,14 @@
       }
     };
 
-    var rebuildSkills = function() {
-      for ( var i = 0; i < $scope.character.skills.length; i++) {
-        Object.defineProperty(scope.character.skills[i], 'roll', { get: function() {return (getSkillRoll(this.id, this.rank)); }});
-        Object.defineProperty(scope.character.skills[i], 'mastery', { get: function() { return (skillMastery(this)); }});
-      }
-    };
-    $scope.$watch('$scope.character.skills', rebuildSkills);
+    //var rebuildSkills = function() {
+    //  for ( var i = 0; i < $scope.character.skills.length; i++) {
+    //    console.log("Rebuild Skills : " + $scope.character.skills[i].id );
+    //    Object.defineProperty($scope.character.skills[i], 'roll', { get: function() {return (this.getSkillRoll(this.id, this.rank)); }});
+    //    Object.defineProperty($scope.character.skills[i], 'mastery', { get: function() { return (this.skillMastery(this)); }});
+    //  }
+    //};
+    //$scope.$watch($scope.character.skills, rebuildSkills);
 
 
     $scope.getSkill = function(skill_id, attr) {
@@ -172,7 +173,7 @@
     }
 
     $scope.updateSkillRank = function(id) {
-      //console.log("Before Skills : " + JSON.stringify($scope.character.skills) + " (updateSkillRank)");
+      console.log("Before Skills : " + JSON.stringify($scope.character.skills[id]) + " (updateSkillRank)");
       var skill = getCharacterSkillById(id);
       if ( skill != null && skill.id >= 0 ) {
         if ( skill.rank < skill.rank_s ) {
@@ -183,8 +184,19 @@
           var diff = skill.rank - skill.rank_s;
           $scope.character.experience_points -= skill.rank;
           $scope.character.insight += diff;
-        }
+        }  
+        var master_skill = DataService.getSkillFromMasterList(id);
+        var trait = master_skill.trait;
+        var ring  = master_skill.ring;
+        skill.roll = ( skill.rank + $scope.character[trait] ) + "K" + $scope.character[ring];
         skill.rank_s = skill.rank;
+        var text = null;
+        for(var x in master_skill.masteries ) {
+          if ( skill.rank >= x ) {
+            text += "Level " + x + " : " + master_skill.masteries[x] + "<br />\n";
+          }
+        }
+        skill.mastery = text;
         replaceCharacterSkillById(id, skill);
         $scope.updateInsightRank();
         $scope.updateWeapons();
