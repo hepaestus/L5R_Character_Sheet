@@ -1,4 +1,4 @@
-angular.module('myApp').controller('SkillsModalListController', ['$scope', '$element', 'skillsMasterList', 'close', 'modalMessage', 'filterBy', 'rank', 'skillSearchText', function($scope, $element, skillsMasterList, close, modalMessage, filterBy, rank, skillSearchText) {
+angular.module('myApp').controller('SkillsModalListController', ['$scope', '$element', 'skillsMasterList', 'close', 'modalMessage', 'filterBy', 'rank', 'skillSearchText', 'DataService', function($scope, $element, skillsMasterList, close, modalMessage, filterBy, rank, skillSearchText, DataService) {
 
   $scope.skillsMasterList = skillsMasterList;
   $scope.modalMessage = modalMessage;
@@ -7,8 +7,6 @@ angular.module('myApp').controller('SkillsModalListController', ['$scope', '$ele
   $scope.filterBy = filterBy;
   $scope.selectedSkillId = null;
   $scope.selectedSkillRank = null;
-
-  console.log("SkillsModalListController Rank: " + $scope.rank + " Message: " + $scope.modalMessage + " FilterBy: " + $scope.filterBy + " skillSearchText:" + $scope.skillSearchText );
 
   $scope.done = function() {
     close($scope.selectedSkillId, 500); 
@@ -19,16 +17,20 @@ angular.module('myApp').controller('SkillsModalListController', ['$scope', '$ele
   };
 
   $scope.selectSkill = function(skillId, rank) {
-    console.log("Select Skill :" + skillId + " Rank: " + rank);
-    $scope.selectedSkillId = skillId;
-    $scope.selectedSkillRank = rank;
-    $element.modal('hide'); // Let bootstrap know we are done with the modal
-    if ( $scope.selectedSkillRank == null ) {
-      console.log("Rank is null Close as Skill id");
-      close($scope.selectedSkillId, 500);
+    if ( ! DataService.doesCharacterHaveSkill( skillId) ) {    
+      //console.log("Select Skill :" + skillId + " Rank: " + rank);
+      $scope.selectedSkillId = skillId;
+      $scope.selectedSkillRank = rank;
+      $element.modal('hide'); // Let bootstrap know we are done with the modal
+      if ( $scope.selectedSkillRank == null ) {
+        //console.log("Rank is null Close as Skill id");
+        close($scope.selectedSkillId, 500);
+      } else {
+        //console.log("Rank is NOT null Close with OBJECT");
+        close({id:$scope.selectedSkillId, rank:$scope.selectedSkillRank}, 500);
+      }
     } else {
-      console.log("Rank is NOT null Close with OBJECT");
-      close({id:$scope.selectedSkillId, rank:$scope.selectedSkillRank}, 500);
+      console.log("You already have that skill.");
     }
   };
 

@@ -1,5 +1,7 @@
 /* app css stylesheet */
 
+@media all (max-width:1250px) { }
+
 body { 
     margin: 10px;
 }
@@ -207,6 +209,10 @@ section.spell_deficiency input {
   margin-right: 20px;
 }
 
+div.spell-section div.row {
+    height: 100%;
+}
+
 div.spell-section {
     margin: 20px;
 }
@@ -220,11 +226,13 @@ div.spell-section .begin {
     border-left: 1px solid black; 
 }
 div.spell-section div {
+    height: 100%;
     font-size: 85%;
 }
 div.spell-section div.header{
     font-size: 85%;
     font-weight: bold;
+    min-height: 100%;    
 }
 
 div.spell-section.all div.header{
@@ -265,3 +273,4 @@ div.ring input {
 #water_ring { width: 100px; }
 #void_ring { width: 100px; }
 *****/
+

@@ -1,4 +1,5 @@
-
+<div class="container">
+    
   <header>
       <h1>Spells</h1>
   </header>
@@ -38,7 +39,7 @@
     <div class="spell-section {{getSpell(each.id, 'ring')}}" ng-repeat="each in character.spells">
       <div class="row">
           <div class="col-xs-2 header right">Name</div>
-          <div class="col-xs-10 value end"><strong>{{getSpell(each.id,'name')}}</strong> <span ng-if="getSpell(each.id,'type')">({{getSpell(each.id,'type')}})</span></div>
+          <div class="col-xs-10 value end"><strong>{{getSpell(each.id,'name')}}</strong> <span ng-if="getSpell(each.id,'type')">({{getSpell(each.id,'type')}})</span><button type="button" class="pull-right btn btn-default btn-xs" ng-click="removeSpell(each.id)"><span class="glyphicon glyphicon-remove"></span></button></div>
       </div>
       <div class="row">
           <div class="col-xs-2 header right">Lvl</div>
@@ -68,3 +69,5 @@
       </div>
     </div>
   </div>
+
+</div>

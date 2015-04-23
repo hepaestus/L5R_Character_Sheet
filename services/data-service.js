@@ -1041,6 +1041,16 @@
     }
 
 
+    this.doesCharacterHaveSkill= function(skill_id) {
+      for( var i = 0; i < character.skills.length; i++ ) {
+        if ( character.skills[i].id == skill_id ) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+
     this.getSkillFromMasterList = function(skill_id, attr) {
       for(var i=0; i < skillsMasterList.length; i++) {
         if ( skillsMasterList[i].id === skill_id ) {
