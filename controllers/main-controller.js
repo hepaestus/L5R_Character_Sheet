@@ -533,8 +533,11 @@
                   var searchText = skill.replace(/\+. /, "");
                   var filter = null;
                   var rank = 1;
-                  //console.log("showSkillsListModal message:" + message + "  searchText:" + searchText + "  filter:" + filter + "  rank:" + rank);
-                  $scope.showSkillsListModal(message, null, filter, rank, school_skill);
+                  if ( searchText.match(/ |any|or/ig)) {
+                    searchText = null;
+                  }
+                  console.log("showSkillsListModal message:" + message + "  searchText:" + searchText + "  filter:" + filter + "  rank:" + rank);
+                  $scope.showSkillsListModal(message, searchText, filter, rank, school_skill);
                 }
               }
             break;
