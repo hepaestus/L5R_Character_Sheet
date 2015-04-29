@@ -8,13 +8,14 @@
             <div class="modal-body">
                 <h4>Choose A Skill</h4>
                 <h5 ng-if="modalMessage">{{modalMessage}}</h5>
-                <label for="search">Search:</label><input name="skillSearchText" type="skillSearchText" ng-model="skillSearchText"/>
-                <!-- label for="type_high">High:</label><input name="type_high" type="radio" value="high" ng-model="skillSearchType.sub_type"/>
-                <label for="type_bugei">Bugei:</label><input name="type_bugei" type="radio" value="bugei" ng-model="skillSearchType.sub_type"/>
-                <label for="type_merchant">Merchant:</label><input name="type_merchant" value="merchant" type="radio" ng-model="skillSearchType.sub_type"/>
-                <label for="type_low">Low:</label><input name="type_low" type="radio" value="low" ng-model="skillSearchType.sub_type"/ -->
+                <label for="search">Search:</label><input name="skillSearchText" type="skillSearchText" ng-model="skillSearchText"/><br/>
+                <label for="type_high">All:</label><input type="radio" checked="checked" value="" ng-model="skillSearchLevel.level"/>
+                <label for="type_high">High:</label><input type="radio" value="high" ng-model="skillSearchLevel.level"/>
+                <label for="type_bugei">Bugei:</label><input type="radio" value="bugei" ng-model="skillSearchLevel.level"/>
+                <label for="type_merchant">Merchant:</label><input type="radio" value="merchant" ng-model="skillSearchLevel.level"/>
+                <label for="type_low">Low:</label><input name="type_low" type="radio" value="low" ng-model="skillSearchLevel.level"/>
                 <ul class="list-group">                  
-                    <li class="list-group-item" ng-repeat="each in skillsMasterList | filter:skillSearchText | filter:skillSearchType | filter:filterBy">
+                    <li class="list-group-item" ng-repeat="each in skillsMasterList | filter:skillSearchText | filter:skillSearchLevel | filter:filterBy ">
                     <a href="" ng-click="selectSkill(each.id, rank)">{{each.type}} {{each.sub_type}}</a>
                     </li>
                 </ul>

@@ -137,4 +137,15 @@
       $scope.character = DataService.updateCharacter($scope.character);
     }
 
+    $scope.getWounds = function(current_level) {
+      var wounds_per_lvl = $scope.character.points_per_wound_level;
+      var wounds = $scope.character.wounds;
+      var total_wounds = $scope.character.wound_levels * wounds;
+      if ( current_level <= $scope.character.wound_levels ) {
+        return ( total_wounds - ( (current_level - 1) * wounds )) + " to " + ( total_wounds - current_level * wounds );
+      } else {
+        return "Dead"; 
+      }
+    };
+
   }]);//end CharacterController

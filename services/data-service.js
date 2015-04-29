@@ -192,10 +192,10 @@
       // id:, level, type, subtype, trait, ring, rank, roll, emphasis, emphases{}, get mastery(), masteries{}, description
       //{ id:1000, level:'Debug', type:'Debug', sub_type:'debug', trait:'void', ring:'void', emphases:{0:'E Zero', 1:'E One', 2:'E Two'}, get mastery() { return mastery(this); }, masteries:{ 3:'M Three', 5:'M Five', 7:'M Seven'}, description:'debug description'},
       { id:0, level:'High', type:'Artisan', sub_type:'', trait:'awareness', ring:'air', emphases: {0:'Bonsai', 1:'Gardening', 2:'Ikebana', 3:'Origami', 4:'Painting', 5:'Poetry', 6:'Sculpture', 7:'Tattooing'}, description:'Pg. 135 Core Book'},
-      { id:1, level:'High', type:'Artisan', sub_type:'Origami', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
-      { id:2, level:'High', type:'Artisan', sub_type:'Bonsai', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
-      { id:3, level:'High', type:'Artisan', sub_type:'Gardening', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
-      { id:4, level:'High', type:'Artisan', sub_type:'Ikebana', trait:'awareness', ring:'air', description:'(flower aranging) Pg. 135 Core Book'},
+      { id:1, level:'High', type:'Artisan', sub_type:'Bonsai', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
+      { id:2, level:'High', type:'Artisan', sub_type:'Gardening', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
+      { id:3, level:'High', type:'Artisan', sub_type:'Ikebana', trait:'awareness', ring:'air', description:'(flower aranging) Pg. 135 Core Book'},
+      { id:4, level:'High', type:'Artisan', sub_type:'Origami', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
       { id:5, level:'High', type:'Artisan', sub_type:'Painting', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
       { id:6, level:'High', type:'Artisan', sub_type:'Poetry', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
       { id:7, level:'High', type:'Artisan', sub_type:'Sculpture', trait:'awareness', ring:'air', description:'Pg. 135 Core Book'},
@@ -213,6 +213,7 @@
       { id:19, level:'High', type:'Games', sub_type:'Sadane', trait:'awareness', ring:'air', description:'Pg. 136 Core Book'},
       { id:20, level:'High', type:'Games', sub_type:'Shoji', trait:'intelligence', ring:'fire', description:'Pg. 136 Core Book'},
       { id:21, level:'High', type:'Investigation', sub_type:'', trait:'perception', ring:'water', emphases:{0:'Interrogation', 1:'Notice', 2:'Search'}, get mastery() { return mastery(this); }, masteries:{3:'Second attempt without increase in TN',5:'+5 bonus to any contested roll unsing Investigation',7:'A third attempt to use Search emphasis even if second attempt fails may be made'}, description:'Pg. 136 Core Book'},
+      { id:95, level:'High', type:'Lore', sub_type:'', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
       { id:22, level:'High', type:'Lore', sub_type:'Anatomy', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
       { id:23, level:'High', type:'Lore', sub_type:'Architecture', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
       { id:24, level:'High', type:'Lore', sub_type:'Bushido', trait:'intelligence', ring:'fire', description:'Pg. 137 Core Book'},
@@ -240,7 +241,7 @@
       { id:46, level:'High', type:'Perform', sub_type:'Drums', trait:'agility', ring:'fire', description:'Pg. 137 Core Book'},
       { id:47, level:'High', type:'Perform', sub_type:'Flute', trait:'agility', ring:'fire', description:'Pg. 137 Core Book'},
       { id:48, level:'High', type:'Perform', sub_type:'Oratory', trait:'awareness', ring:'air', description:'Pg. 137 Core Book'},
-      { id:49, level:'High', type:'Perform', sub_type:'Puppeteer', trait:'agility', ring:'fire', description:'Pg. 137 Core Book'},
+      { id:49, level:'High', type:'Perform', sub_type:'Puppeteering', trait:'agility', ring:'fire', description:'Pg. 137 Core Book'},
       { id:50, level:'High', type:'Perform', sub_type:'Samisen', trait:'agiltity', ring:'fire', description:'Pg. 137 Core Book'},
       { id:51, level:'High', type:'Perform', sub_type:'Song', trait:'awareness', ring:'air', description:'Pg. 137 Core Book'},
       { id:52, level:'High', type:'Perform', sub_type:'Story Telling', trait:'awareness', ring:'air', description:'Pg. 137 Core Book'},
@@ -284,6 +285,7 @@
       { id:91, level:'Low', type:'Sleight of Hand*', sub_type:'', trait:'agility', ring:'fire', emphases:{0:'Conceal', 1:'Escape', 2:'Pick Pocket', 3:'Prestidigitation'}, get mastery() { return mastery(this); }, masteries:{5:'May use Conceal Emphasis to conceal small weapons.'}, description:'Pg. 145 Core Book'},
       { id:92, level:'Low', type:'Stealth*', sub_type:'', trait:'agility', ring:'fire', emphases:{0:'Ambush', 1:'Shadowing', 2:'Sneaking', 3:'Spell Casting'}, get mastery() { return mastery(this); }, masteries:{3:'Simple Move Actions while using Stealth allow character to move a distance equal to her Water x5.', 5:'Simple Move Actions while using Stealth allow character to move a distance equal to her Water x10.', 7:'A character using stealth may make Free Move Actions as normal.'}, description:'Pg. 143 Core Book'},
       { id:93, level:'Low', type:'Temptation*', sub_type:'Social Skill', trait:'awareness', ring:'air', emphases:{0:'Bribery', 1:'Seduction'}, get mastery() { return mastery(this); }, masteries:{5:'Character gains +5 Bonus to the total of any contested Roll using Temptation.'}, description:'Pg. 143 Core Book'},
+      // 94,95
     ];
 
 
