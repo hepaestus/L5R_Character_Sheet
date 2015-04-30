@@ -87,7 +87,7 @@
       //{id:17, name:'Oriole', bonus:''},	    
       //{id:18, name:'Ox', bonus:''},	    
       //{id:19, name:'Sparrow', bonus:''},	    
-      //{id:20, name:'Spider', bonus:''},	    
+      {id:20, name:'Spider', bonus:''},	    
       //{id:21, name:'Firefly', bonus:''},	    
     ];
    
@@ -129,6 +129,11 @@
       {id:33, name:'Moto', clan:'Unicorn', bonus:{ agility:1 } },
       {id:34, name:'Shinjo', clan:'Unicorn', bonus:{ reflexes:1 } },
       {id:35, name:'Utaku', clan:'Unicorn', bonus:{ stamina:1 } },
+      {id:36, name:'Chuda', clan:'Spider', bonus:{ intelligence:1 } },
+      {id:37, name:'Diagotsu', clan:'Spider', bonus:{ stamina:1 } },
+      {id:38, name:'Goju', clan:'Spider', bonus:{ agility:1 } },
+      {id:39, name:'Spider Monks', clan:'Spider', bonus:{ reflexes:1 } },
+
     ];
 
 
@@ -173,6 +178,13 @@
       {id:29, name:'Iuchi Shugenja', clan:'Unicorn', bonus:{ perception:1, honor:5.5, affinity:'water', deficiency:'fire', skills:[57,'10:0',59,39,43,54,'+1 high or bugei'], techniques:{1:'Spirit of the Wind. pg 131'}, key_word:'Travel' } },
       {id:30, name:'Ide Emissary', clan:'Unicorn', bonus:{ awareness:1, honor:5.5, skills:[10,76,11,'13:1',59,'53:0','+1 high or perform'], techniques:{1:'The Heart Speaks. pg 131', 2:'Peircing the Veils', 3:'The Heart Listens', 4:'Answering the Heart', 5:'The Immovable Hand of Peace'} } },
       {id:31, name:'Utaku Battle Maiden', clan:'Unicorn', bonus:{ reflexes:1, honor:6.5, skills:[57,58,'59::2',66,53,'+1 high or bugei'], techniques:{1:'Riding in Harmony. pg 132', 2:'The Void of War', 3:'Sensing the Breeze', 4:'Wind Never Stops', 5:'Otaku\'s Blessing'} } },
+
+      {id:32, name:'Diagotsu Bushi', clan:'Spider', bonus:{ strength:1, honor:1.5, skills:[60,90,62,'66:0',68,36,'+1 low or bugei'], techniques:{1:'The Way of the Spider. pg 212', 2:'Aura of Blood', 3:'Aushura\'s Wing', 4:'Devouring Wrath', 5:'Inhuman Assault'} } },
+      {id:33, name:'Chuda Shugenja', clan:'Spider', bonus:{ willpower:1, honor:0.5, affinity:'', deficiency:'', skills:['10:0',60,32,36,54,92,'+1 any'], techniques:{1:'Blood Like Water .pg 213'} } },
+      {id:34, name:'Diagotsu Courtier', clan:'Spider', bonus:{ perception:1, honor:1, skills:[9,'11:1',13,43,'53:1',93,'+1 high'], techniques:{1:'Insidious Whispers. pg 213', 2:'Cracks In The Wall', 3:'Darkness Cannot Be Trapped', 4:'The Touch Of Sin', 5:'The Embrace of Darkness'} } },
+      {id:35, name:'Spider Monks', clan:'Spider', bonus:{ agility:1, honor:1.5, skills:[56,'62::2',39,43,71,'+1 any'], techniques:{1:'The Dark Path. pg 215', 2:'Drawing in the Strike', 3:'Speed of Darkness', 4:'Guarded By Chi', 5:'Darkness Unleashed'} } }, 
+
+      //{id:36, name:'', clan:'', bonus:{ reflexes:0, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'pg 212', 2:'', 3:'', 4:'', 5:''} } },
     ];
 
 
