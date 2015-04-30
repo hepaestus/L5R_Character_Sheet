@@ -608,8 +608,39 @@
       }
     };
 
+
     $scope.getSkill = function(skill_id, attr) {
         return DataService.getSkillFromMasterList(skill_id, attr);
+    };
+
+
+    $scope.removeAdvantage = function(advantage_id) {
+      for( var i=0; i < $scope.character.advantages.length; i++) {
+        if ( $scope.character.advantages[i].id == advantage_id ) {
+          var point_cost = $scope.character.advantages[i].points;
+          console.log("Point Cost: " + point_cost);
+          console.log("Exp Points: " + $scope.character.experience_points);
+          $scope.character.experience_points += point_cost;
+          $scope.character.advantages.splice(i,1);
+          $scope.character = DataService.updateCharacter($scope.character);
+          console.log("Exp Points: " + $scope.character.experience_points);
+        }
+      }
+    };
+
+
+    $scope.removeDisadvantage = function(disadvantage_id) {
+      for( var i=0; i < $scope.character.disadvantages.length; i++) {
+        if ( $scope.character.disadvantages[i].id == disadvantage_id ) {
+          var point_cost = $scope.character.disadvantages[i].points;
+          console.log("Point Cost: " + point_cost);
+          console.log("Exp Points: " + $scope.character.experience_points);
+          $scope.character.experience_points += point_cost;
+          $scope.character.disadvantages.splice(i,1);
+          $scope.character = DataService.updateCharacter($scope.character);
+          console.log("Exp Points: " + $scope.character.experience_points);
+        }
+      }
     };
 
   }]);//end main controller

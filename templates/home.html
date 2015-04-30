@@ -16,12 +16,12 @@
           </li>
           <li>Add your <a href="" ng-click="showAdvantagesListModal()">Advantages</a>
             <ul ng-show="character.advantages.length > 0">
-                <li ng-repeat="a in character.advantages"><strong>{{a.name}}</strong> ({{a.subtype}}) : Cost {{a.points * -1}} : {{a.notes}}</li>
+                <li ng-repeat="a in character.advantages"><strong>{{a.name}}</strong> ({{a.subtype}}) : Cost {{a.points * -1}} : {{a.notes}} <button class="btn btn-xs"><span class="glyphicon glyphicon-remove" ng-click="removeAdvantage(a.id)"></span></button></li>
             </ul>
           </li>
           <li>Add your <a href="" ng-click="showDisadvantagesListModal()">Disadvantages</a>
              <ul ng-show="character.disadvantages.length > 0">
-                 <li ng-repeat="d in character.disadvantages"><strong>{{d.name}}</strong> ({{d.subtype}}) : Bonus {{d.points * -1}} : {{d.notes}}</li>
+                 <li ng-repeat="d in character.disadvantages"><strong>{{d.name}}</strong> ({{d.subtype}}) : Bonus {{d.points * -1}} : {{d.notes}} <button class="btn btn-xs"><span class="glyphicon glyphicon-remove" ng-click="removeDisadvantage(d.id)"></span></button></li>
              </ul>
           </li>
           <li>Go to the <a href="#character">Character Sheet</a></li>
