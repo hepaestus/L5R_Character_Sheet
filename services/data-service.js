@@ -27,6 +27,7 @@
       get healing() { return ( this.stamina * 2 + this.insight_rank ); },
       get initiative() { return ((this.insight_rank + this.reflexes) + "K" + this.reflexes); },
       get school() { return getSchool(); },
+      get techniques() { return getTechniques(); },
       get wounds() { return ( ((this.earth * this.points_per_wound_level) * this.insight_rank)); },
       glory         : 0,
       healing_modifiers:0,
@@ -55,6 +56,7 @@
       strength      : 2,
       strength_s    : 2,
       taint         : 0,      
+      school_techniques: [],
       void          : 2,
       void_s        : 2,
       water         : 2,
@@ -139,52 +141,52 @@
 
     var schoolsMasterList = [
       // id, name, clan, bonus{ various attributes, skills[ array of numbers or a string in the form "skill_id:empahasis_id:rank", or a string describing other skills, and finally techniques 
-      {id:0, name:'Hida Bushi', clan:'Crab', bonus:{ stamina:1, honor:3.5, skills:[56, 58, 65, 90, 66, 36, '+1 bugei'], techniques:{1:'The Way of the Crab Pg. 106', 2:'The Mountain Does Not Move. Pg. 106', 3:'Two Pincers, One Mind. Pg. 106', 4:'Devastating Blow. Pg. 106', 5:'The Mountain Does Not Fall. Pg. 107' } } },
-      {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['10:0','36::2',39,54,'+1 weapon'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow. Pg. 107'} } },
-      {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['76:0',11,58,13,90,'53:1','+1 merchant'], techniques:{1:'The Way of the Carp. pg. 107', 2:'Do As We Say. pg. 108', 3:'Treasures of the Carp. pg 108', 4:'Wiles of the Carp. pg 108', 5:'What is Yours is Mine. pg 108'} } },
-      {id:3, name:'Hirumi Bushi', clan:'Crab', bonus:{ willpower:1, honor:4.5, skills:[56,60,'66:0',68,36,92,'+1 Any'], techniques:{1:'Torch Flame Flickers. pg 108', 2:'Wolf\'s Little Lesson. pg 108', 3:'Hummingbird Wings. pg 108', 4:'Shark Smells Blood. pg 108', 5:'Daylight Wastes No Movement. pg 108'} } },
+      {id:0, name:'Hida Bushi', clan:'Crab', bonus:{ stamina:1, honor:3.5, skills:[56, 58, 65, 90, 66, 36, '+1 bugei'], techniques:{1:'The Way of the Crab (pg 106)', 2:'The Mountain Does Not Move', 3:'Two Pincers, One Mind', 4:'Devastating Blow', 5:'The Mountain Does Not Fall' } } },
+      {id:1, name:'Kuni Shugenja', clan:'Crab', bonus:{ willpower:1, honor:2.5, skills:['10:0','36::2',39,54,'+1 weapon'], affinity:'earth', deficiency:'air', techniques:{1:'Gaze Into Shadow (pg 107)'}, key_word:'Jade' } },
+      {id:2, name:'Yasuki Courtier', clan:'Crab', bonus:{ perception:1, honor:2.5, skills:['76:0',11,58,13,90,'53:1','+1 merchant'], techniques:{1:'The Way of the Carp (pg 107)', 2:'Do As We Say', 3:'Treasures of the Carp', 4:'Wiles of the Carp', 5:'What is Yours is Mine'} } },
+      {id:3, name:'Hirumi Bushi', clan:'Crab', bonus:{ willpower:1, honor:4.5, skills:[56,60,'66:0',68,36,92,'+1 Any'], techniques:{1:'Torch Flame Flickers (pg 108)', 2:'Wolf\'s Little Lesson', 3:'Hummingbird Wings', 4:'Shark Smells Blood', 5:'Daylight Wastes No Movement'} } },
 
-      {id:4, name:'Kakita Bushi', clan:'Crane', bonus:{ reflexes:1, honor:6.5, skills:[13,'61:1',68,55,53,66,'+1 high or bugei'], techniques:{1:'The Way Of the Crane. pg 109', 2:'Speed of Lightning', 3:'First and Last Strike', 4:'One Strike Two Cuts', 5:'Strike Without No Thought'} } },
-      {id:5, name:'Asahina Shugenja', clan:'Crane', bonus:{ awareness:1, honor:6.5, affinity:'air', deficiency:'fire', skills:['10:0',13,39,43,54,'+1 high','+1 artisan'], techniques:{1:'The Souls Grace. pg 110'}, key_word:'Defense' } },
-      {id:6, name:'Doji Courtier', clan:'Crane', bonus:{ awareness:1, honor:6.5, skills:[10,'11:1','13:2',52,55,'+1 Artisan or Perform'], techniques:{1:'The Sould of Honor. pg 110', 2:'Speaking in Silence', 3:'The Perfect Gift', 4:'Voice of Honor', 5:'The Gift of the Lady'} } },
-      {id:7, name:'Daidoji Iron Warriors', clan:'Crane', bonus:{ agility:1, honor:6.5, skills:[57,'58::2','66:0',68,'+1 any'], techniques:{1:'The Force of Honor. pg 111', 2:'The Shield of Faith', 3:'Strike Beneath the Veil', 4:'Vigilance of Mind', 5:'To Tread on the Sword'} } },
+      {id:4, name:'Kakita Bushi', clan:'Crane', bonus:{ reflexes:1, honor:6.5, skills:[13,'61:1',68,55,53,66,'+1 high or bugei'], techniques:{1:'The Way Of the Crane (pg 109)', 2:'Speed of Lightning', 3:'First and Last Strike', 4:'One Strike Two Cuts', 5:'Strike Without No Thought'} } },
+      {id:5, name:'Asahina Shugenja', clan:'Crane', bonus:{ awareness:1, honor:6.5, affinity:'air', deficiency:'fire', skills:['10:0',13,39,43,54,'+1 high','+1 artisan'], techniques:{1:'The Souls Grace (pg 110)'}, key_word:'Defense' } },
+      {id:6, name:'Doji Courtier', clan:'Crane', bonus:{ awareness:1, honor:6.5, skills:[10,'11:1','13:2',52,55,'+1 Artisan or Perform'], techniques:{1:'The Soul of Honor (pg 110)', 2:'Speaking in Silence', 3:'The Perfect Gift', 4:'Voice of Honor', 5:'The Gift of the Lady'} } },
+      {id:7, name:'Daidoji Iron Warriors', clan:'Crane', bonus:{ agility:1, honor:6.5, skills:[57,'58::2','66:0',68,'+1 any'], techniques:{1:'The Force of Honor (pg 111)', 2:'The Shield of Faith', 3:'Strike Beneath the Veil', 4:'Vigilance of Mind', 5:'To Tread on the Sword'} } },
 
-      {id:8, name:'Mirumoto Bushi', clan:'Dragon', bonus:{ stamina:1, honor:4.5, skills:[58,61,'66:0',37,43,39,'+1 bugei or high'], techniques:{1:'Way of the Dragon. pg 113', 2:'The Calm in Midst of Thunder', 3:'Strong and Swift', 4:'Furious Retaliation', 5:'The Heart of the Dragon'} } },
-      {id:9, name:'Tamori Shugenja', clan:'Dragon', bonus:{ stamina:1, honor:4.5, affinity:'earth', deficiency:'air', skills:[56,'10:0',58,39,12,42,54], techniques:{1:'Flesh of the Elements. pg 113', key_word:'Craft'} } },
-      {id:10, name:'Kisuki Investigator', clan:'Dragon', bonus:{ perception:1, honor:5.5, skills:[11,'13:2','21:0',66,43,53,'+1 lore'], techniques:{1:'Kitsuki\'s Method. pg 114', 2:'Wisdom the Wind Brings', 3:'Know the Rythym of the Heart', 4:'Finding the Path', 5:'The Eyes Betray the Heart'} } },
-      {id:11, name:'Togashi Tattooed Order', clan:'Dragon', bonus:{ void:1, honor:4.5, skills:[56,58,'78:19',62,'+1 lore','+1 non-low'], techniques:{1:'Blood of the Kami. pg 114', 2:'Body of Stone', 3:'Blessing of the Kami', 4:'Will of Stone', 5:'Touch of the Kami'} } },
+      {id:8, name:'Mirumoto Bushi', clan:'Dragon', bonus:{ stamina:1, honor:4.5, skills:[58,61,'66:0',37,43,39,'+1 bugei or high'], techniques:{1:'Way of the Dragon (pg 113)', 2:'The Calm in Midst of Thunder', 3:'Strong and Swift', 4:'Furious Retaliation', 5:'The Heart of the Dragon'} } },
+      {id:9, name:'Tamori Shugenja', clan:'Dragon', bonus:{ stamina:1, honor:4.5, affinity:'earth', deficiency:'air', skills:[56,'10:0',58,39,12,42,54], techniques:{1:'Flesh of the Elements (pg 113)', key_word:'Craft'} } },
+      {id:10, name:'Kisuki Investigator', clan:'Dragon', bonus:{ perception:1, honor:5.5, skills:[11,'13:2','21:0',66,43,53,'+1 lore'], techniques:{1:'Kitsuki\'s Method (pg 114)', 2:'Wisdom the Wind Brings', 3:'Know the Rythym of the Heart', 4:'Finding the Path', 5:'The Eyes Betray the Heart'} } },
+      {id:11, name:'Togashi Tattooed Order', clan:'Dragon', bonus:{ void:1, honor:4.5, skills:[56,58,'78:19',62,'+1 lore','+1 non-low'], techniques:{1:'Blood of the Kami (pg 114)', 2:'Body of Stone', 3:'Blessing of the Kami', 4:'Will of Stone', 5:'Touch of the Kami'} } },
 
-      {id:12, name:'Akodo Bushi', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:['57:0',58,66,68,31,53,'+1 high or bugei'], techniques:{1:'The Way of the Lion. pg 117', 2:'Strength of Purity', 3:'Strength of my Ancestors', 4:'Triumph Before Battle', 5:'Akodo\'s Final Lesson'} } },
-      {id:13, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:0',13,31,39,54,'+1 high or bugei'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors. pg 118'}, key_word:'Battle'} },
-      {id:14, name:'Ikoma Bard', clan:'Lion', bonus:{ intelligence:1, honor:6.5, skills:[11,13,'31:3',52,'53:0','+1 high','+1 bugei'], techniques:{1:'The Herald of Glory. pg 118', 2:'The Heart of the Lion', 3:'The Voice of the Ancestors', 4:'The Strength of Tradition', 5:'Every Lion is your Brother'} } },
-      {id:15, name:'Matsu Berserker', clan:'Lion', bonus:{ strength:1, honor:6.5, skills:[57,62,'66:0',68,31,'+1 bugei','+1 bugei'], techniques:{1:'The Lion\'s Roar. pg 119', 2:'Matsu\'s Fury', 3:'The Lion\'s Charge', 4:'Matsu\'s Courage', 5:'The Lion\'s Victory'} } },
+      {id:12, name:'Akodo Bushi', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:['57:0',58,66,68,31,53,'+1 high or bugei'], techniques:{1:'The Way of the Lion (pg 117)', 2:'Strength of Purity', 3:'Strength of my Ancestors', 4:'Triumph Before Battle', 5:'Akodo\'s Final Lesson'} } },
+      {id:13, name:'Kitsu Shugenja', clan:'Lion', bonus:{ perception:1, honor:6.5, skills:[57,'10:0',13,31,39,54,'+1 high or bugei'], affinity:['water'], deficiency:['fire'], techniques:{1:'Eyes of the Ancestors (pg 118)'}, key_word:'Battle'} },
+      {id:14, name:'Ikoma Bard', clan:'Lion', bonus:{ intelligence:1, honor:6.5, skills:[11,13,'31:3',52,'53:0','+1 high','+1 bugei'], techniques:{1:'The Herald of Glory (pg 118)', 2:'The Heart of the Lion', 3:'The Voice of the Ancestors', 4:'The Strength of Tradition', 5:'Every Lion is your Brother'} } },
+      {id:15, name:'Matsu Berserker', clan:'Lion', bonus:{ strength:1, honor:6.5, skills:[57,62,'66:0',68,31,'+1 bugei','+1 bugei'], techniques:{1:'The Lion\'s Roar (pg 119)', 2:'Matsu\'s Fury', 3:'The Lion\'s Charge', 4:'Matsu\'s Courage', 5:'The Lion\'s Victory'} } },
 
-      {id:16, name:'Yoritomo Bushi', clan:'Mantis', bonus:{ strength:1, honor:3.5, skills:[76,58,'62:1',66,'67:2','+1 sailing','+1 any'], techniques:{1:'The Way of the Mantis', 2:'Voice of the Storm', 3:'Strike of the Mantis', 4:'The Rolling Wave', 5:'Hand of Osano-Wo'} } },
-      {id:17, name:'Moshi Shugeja', clan:'Mantis', bonus:{ awareness:1, honor:4.5, affinity:'air', deficiency:'earth', skills:['10:0',12,39,43,54,'+1 high or bugei','+1 high or bugei'], techniques:{1:'Favor of the Sun. pg 121'}, key_word:'Thunder' } },
-      {id:18, name:'Yoritomo Courtier', clan:'Mantis', bonus:{ willpower:1, honor:2.5, skills:['76:0',11,58,13,'90:1',53,'+1 merchant or lore'], techniques:{1:'Duty Before Honor', 2:'Storm Heart', 3:'Command The Winds', 4:'Will of the Storm', 5:'Strength in All Things'} } },
-      {id:19, name:'Tsuruchi Archer', clan:'Mantis', bonus:{ reflexes:1, honor:3.5, skills:[56,58,60,21,'68:2:2','+1 bugei or high'], techniques:{1:'Always Be Ready. pg 122', 2:'The Arrows Know the Way', 3:'The Wasp\'s Sting', 4:'Flight of No Mind', 5:'Tsuruchi\'s Eye'} } },
+      {id:16, name:'Yoritomo Bushi', clan:'Mantis', bonus:{ strength:1, honor:3.5, skills:[76,58,'62:1',66,'67:2','+1 sailing','+1 any'], techniques:{1:'The Way of the Mantis (pg 120)', 2:'Voice of the Storm', 3:'Strike of the Mantis', 4:'The Rolling Wave', 5:'Hand of Osano-Wo'} } },
+      {id:17, name:'Moshi Shugeja', clan:'Mantis', bonus:{ awareness:1, honor:4.5, affinity:'air', deficiency:'earth', skills:['10:0',12,39,43,54,'+1 high or bugei','+1 high or bugei'], techniques:{1:'Favor of the Sun (pg 121)'}, key_word:'Thunder' } },
+      {id:18, name:'Yoritomo Courtier', clan:'Mantis', bonus:{ willpower:1, honor:2.5, skills:['76:0',11,58,13,'90:1',53,'+1 merchant or lore'], techniques:{1:'Duty Before Honor (pg 121)', 2:'Storm Heart', 3:'Command The Winds', 4:'Will of the Storm', 5:'Strength in All Things'} } },
+      {id:19, name:'Tsuruchi Archer', clan:'Mantis', bonus:{ reflexes:1, honor:3.5, skills:[56,58,60,21,'68:2:2','+1 bugei or high'], techniques:{1:'Always Be Ready (pg 122)', 2:'The Arrows Know the Way', 3:'The Wasp\'s Sting', 4:'Flight of No Mind', 5:'Tsuruchi\'s Eye'} } },
       
-      {id:20, name:'Shiba Bushi', clan:'Phoenix', bonus:{ agility:1, honor:5.5, skills:[58,66,68,'43:1',72,39,'+1 high or bugei'], techniques:{1:'The Way of the Phoenix. pg 123', 2:'Dancing With the Elements', 3:'One With the Wind', 4:'Move With the Wind', 5:'Touch the Wind'} } },
-      {id:21, name:'Isawa Shugenja', clan:'Phoenix', bonus:{ intelligence:1, honor:4.5, affinity:'', skills:['10:0',39,'+1 lore',42,54,'+1 high'], techniques:{1:'Isawa\'s Gift. pg 124'} } },
-      {id:22, name:'Asako Loremaster', clan:'Phoenix', bonus:{ intelligence:1, honor:6.5, skills:[11,'13:2',31,'39:0',43,53,'+1 lore'], techniques:{1:'Temple of the Soul. pg 125', 2:'From the Ashes', 3:'Voice of the Universe', 4:'Invincible Mind', 5:'Wisdom of the Ages'} } },
-      {id:23, name:'Agasha Shugenja', clan:'Phoenix', bonus:{ intelligence:1, honor:4.5, affinity:'fire', deficiency:'water', skills:['10:0','+1 craft',58,13,39,54,'+1 high or bugei'], techniques:{1:'Elements of All Things'} } },
+      {id:20, name:'Shiba Bushi', clan:'Phoenix', bonus:{ agility:1, honor:5.5, skills:[58,66,68,'43:1',72,39,'+1 high or bugei'], techniques:{1:'The Way of the Phoenix (pg 123)', 2:'Dancing With the Elements', 3:'One With the Wind', 4:'Move With the Wind', 5:'Touch the Wind'} } },
+      {id:21, name:'Isawa Shugenja', clan:'Phoenix', bonus:{ intelligence:1, honor:4.5, affinity:'', skills:['10:0',39,'+1 lore',42,54,'+1 high'], techniques:{1:'Isawa\'s Gift (pg 124)'} } },
+      {id:22, name:'Asako Loremaster', clan:'Phoenix', bonus:{ intelligence:1, honor:6.5, skills:[11,'13:2',31,'39:0',43,53,'+1 lore'], techniques:{1:'Temple of the Soul (pg 125)', 2:'From the Ashes', 3:'Voice of the Universe', 4:'Invincible Mind', 5:'Wisdom of the Ages'} } },
+      {id:23, name:'Agasha Shugenja', clan:'Phoenix', bonus:{ intelligence:1, honor:4.5, affinity:'fire', deficiency:'water', skills:['10:0','+1 craft',58,13,39,54,'+1 high or bugei'], techniques:{1:'Elements of All Things (pg 125)'} } },
 
-      {id:24, name:'Bayushi Bushi', clan:'Scorpion', bonus:{ intelligence:1, honor:2.5, skills:['11:1',58,13,61,66,53,'+1 any'], techniques:{1:'The Way of the Scorpion. pg 126', 2:'Pincers and Tail', 3:'Strike at the Tail', 4:'Strike from Above, Strike From Below', 5:'The Pincers Hold, The Tail Strikes'} } },
-      {id:25, name:'Soshi Shugenja', clan:'Scorpion', bonus:{ awareness:1, honor:2.5, affinity:'air', deficiency:'earth', skills:['10:0',11,13,39,54,92,'+1 any'], techniques:{1:'The Kami\'s Whisper. pg 127'}, key_word:'Illusion'} },
-      {id:26, name:'Bayushi Courtier', clan:'Scorpion', bonus:{ awareness:1, honor:2.5, skills:[10,'11:0',13,21,'53:1',93,'+1 high'], techniques:{1:'Weakness is My Strength. pg 127', 2:'Shallow Waters', 3:'Secrets Are Birthmarks', 4:'Scrutiny\'s Sweet Sting', 5:'No More Masks'} } },
-      {id:27, name:'Shosuro Infiltrator', clan:'Scorpion', bonus:{ reflexes:1, honor:1.5, skills:[9,56,70,53,'92:2','+1 any'], techniques:{1:'The Path of Shadows. pg 129', 2:'Strike From Darkness', 3:'Steel Within Silk', 4:'Whisper of Steel', 5:'The Final Silence'} } },
+      {id:24, name:'Bayushi Bushi', clan:'Scorpion', bonus:{ intelligence:1, honor:2.5, skills:['11:1',58,13,61,66,53,'+1 any'], techniques:{1:'The Way of the Scorpion (pg 126)', 2:'Pincers and Tail', 3:'Strike at the Tail', 4:'Strike from Above, Strike From Below', 5:'The Pincers Hold, The Tail Strikes'} } },
+      {id:25, name:'Soshi Shugenja', clan:'Scorpion', bonus:{ awareness:1, honor:2.5, affinity:'air', deficiency:'earth', skills:['10:0',11,13,39,54,92,'+1 any'], techniques:{1:'The Kami\'s Whisper (pg 127)'}, key_word:'Illusion'} },
+      {id:26, name:'Bayushi Courtier', clan:'Scorpion', bonus:{ awareness:1, honor:2.5, skills:[10,'11:0',13,21,'53:1',93,'+1 high'], techniques:{1:'Weakness is My Strength (pg 127)', 2:'Shallow Waters', 3:'Secrets Are Birthmarks', 4:'Scrutiny\'s Sweet Sting', 5:'No More Masks'} } },
+      {id:27, name:'Shosuro Infiltrator', clan:'Scorpion', bonus:{ reflexes:1, honor:1.5, skills:[9,56,70,53,'92:2','+1 any'], techniques:{1:'The Path of Shadows (pg 129)', 2:'Strike From Darkness', 3:'Steel Within Silk', 4:'Whisper of Steel', 5:'The Final Silence'} } },
 
-      {id:28, name:'Moto Bushi', clan:'Unicorn', bonus:{ strength:1, honor:3.5, skills:[56,58,59,60,'66:4','+1 bugei','+1 any'], techniques:{1:'The Way of the Unicorn. pg 130', 2:'Shinsei\'s Smile', 3:'Desert Wind Strike', 4:'The Charge of Madness', 5:'Moto Cannot Yield'} } },
-      {id:29, name:'Iuchi Shugenja', clan:'Unicorn', bonus:{ perception:1, honor:5.5, affinity:'water', deficiency:'fire', skills:[57,'10:0',59,39,43,54,'+1 high or bugei'], techniques:{1:'Spirit of the Wind. pg 131'}, key_word:'Travel' } },
-      {id:30, name:'Ide Emissary', clan:'Unicorn', bonus:{ awareness:1, honor:5.5, skills:[10,76,11,'13:1',59,'53:0','+1 high or perform'], techniques:{1:'The Heart Speaks. pg 131', 2:'Peircing the Veils', 3:'The Heart Listens', 4:'Answering the Heart', 5:'The Immovable Hand of Peace'} } },
-      {id:31, name:'Utaku Battle Maiden', clan:'Unicorn', bonus:{ reflexes:1, honor:6.5, skills:[57,58,'59::2',66,53,'+1 high or bugei'], techniques:{1:'Riding in Harmony. pg 132', 2:'The Void of War', 3:'Sensing the Breeze', 4:'Wind Never Stops', 5:'Otaku\'s Blessing'} } },
+      {id:28, name:'Moto Bushi', clan:'Unicorn', bonus:{ strength:1, honor:3.5, skills:[56,58,59,60,'66:4','+1 bugei','+1 any'], techniques:{1:'The Way of the Unicorn (pg 130)', 2:'Shinsei\'s Smile', 3:'Desert Wind Strike', 4:'The Charge of Madness', 5:'Moto Cannot Yield'} } },
+      {id:29, name:'Iuchi Shugenja', clan:'Unicorn', bonus:{ perception:1, honor:5.5, affinity:'water', deficiency:'fire', skills:[57,'10:0',59,39,43,54,'+1 high or bugei'], techniques:{1:'Spirit of the Wind (pg 131)'}, key_word:'Travel' } },
+      {id:30, name:'Ide Emissary', clan:'Unicorn', bonus:{ awareness:1, honor:5.5, skills:[10,76,11,'13:1',59,'53:0','+1 high or perform'], techniques:{1:'The Heart Speaks (pg 131)', 2:'Peircing the Veils', 3:'The Heart Listens', 4:'Answering the Heart', 5:'The Immovable Hand of Peace'} } },
+      {id:31, name:'Utaku Battle Maiden', clan:'Unicorn', bonus:{ reflexes:1, honor:6.5, skills:[57,58,'59::2',66,53,'+1 high or bugei'], techniques:{1:'Riding in Harmony (pg 132)', 2:'The Void of War', 3:'Sensing the Breeze', 4:'Wind Never Stops', 5:'Otaku\'s Blessing'} } },
 
-      {id:32, name:'Diagotsu Bushi', clan:'Spider', bonus:{ strength:1, honor:1.5, skills:[60,90,62,'66:0',68,36,'+1 low or bugei'], techniques:{1:'The Way of the Spider. pg 212', 2:'Aura of Blood', 3:'Aushura\'s Wing', 4:'Devouring Wrath', 5:'Inhuman Assault'} } },
+      {id:32, name:'Diagotsu Bushi', clan:'Spider', bonus:{ strength:1, honor:1.5, skills:[60,90,62,'66:0',68,36,'+1 low or bugei'], techniques:{1:'The Way of the Spider (pg 212)', 2:'Aura of Blood', 3:'Aushura\'s Wing', 4:'Devouring Wrath', 5:'Inhuman Assault'} } },
       {id:33, name:'Chuda Shugenja', clan:'Spider', bonus:{ willpower:1, honor:0.5, affinity:'', deficiency:'', skills:['10:0',60,32,36,54,92,'+1 any'], techniques:{1:'Blood Like Water .pg 213'} } },
-      {id:34, name:'Diagotsu Courtier', clan:'Spider', bonus:{ perception:1, honor:1, skills:[9,'11:1',13,43,'53:1',93,'+1 high'], techniques:{1:'Insidious Whispers. pg 213', 2:'Cracks In The Wall', 3:'Darkness Cannot Be Trapped', 4:'The Touch Of Sin', 5:'The Embrace of Darkness'} } },
-      {id:35, name:'Spider Monks', clan:'Spider', bonus:{ agility:1, honor:1.5, skills:[56,'62::2',39,43,71,'+1 any'], techniques:{1:'The Dark Path. pg 215', 2:'Drawing in the Strike', 3:'Speed of Darkness', 4:'Guarded By Chi', 5:'Darkness Unleashed'} } }, 
+      {id:34, name:'Diagotsu Courtier', clan:'Spider', bonus:{ perception:1, honor:1, skills:[9,'11:1',13,43,'53:1',93,'+1 high'], techniques:{1:'Insidious Whispers (pg 213)', 2:'Cracks In The Wall', 3:'Darkness Cannot Be Trapped', 4:'The Touch Of Sin', 5:'The Embrace of Darkness'} } },
+      {id:35, name:'Spider Monks', clan:'Spider', bonus:{ agility:1, honor:1.5, skills:[56,'62::2',39,43,71,'+1 any'], techniques:{1:'The Dark Path (pg 215)', 2:'Drawing in the Strike', 3:'Speed of Darkness', 4:'Guarded By Chi', 5:'Darkness Unleashed'} } }, 
 
-      //{id:36, name:'', clan:'', bonus:{ reflexes:0, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'pg 212', 2:'', 3:'', 4:'', 5:''} } },
+      //{id:36, name:'', clan:'', bonus:{ reflexes:0, honor:0, affinity:'', deficiency:'', skills:[], techniques:{1:'pg ###', 2:'', 3:'', 4:'', 5:''} } },
     ];
 
 
@@ -769,7 +771,7 @@
       { id:62, name:'Voice', subtype:'Physical', points:{ all:3 }, notes:'pg 155' },
       { id:63, name:'Wary', subtype:'Mental', points:{ all:3 }, notes:'pg 155' },
       { id:64, name:'Way of the Land', subtype:'Mental', points:{ else:2, unicorn:1 }, notes:'pg 155' },
-      { id:65, name:'Wealthy', subtype:'Material', points:{ else:1, crane:-1, unicorn:-1, imperial:-1 }, notes:'pg 155' },
+      { id:65, name:'Wealthy', subtype:'Material', points:{ else:'var', crane:'var-1', unicorn:'var-1', imperial:'var-1' }, notes:'pg 155' },
     ];
 
 
@@ -979,6 +981,9 @@
           case 'strength_s':
             character.strength_s = char_obj.strength_s; 
           break;
+          case 'school_techniques':
+            character.school_techniques = char_obj.school_techniques; 
+          break;
           case 'taint':
             character.taint = char_obj.taint; 
           break;
@@ -1174,6 +1179,17 @@
         }
       }
       return "(error - school " + school_id + " not found)";
+    };
+
+
+    var getTechniques = function() {
+      var techs = [];
+      for( var i = 0; i < character.school_techniques.length; i++ ) {
+        if ( i < character.insight_rank ) {
+          techs.push(character.school_techniques[i]); 
+        }
+      }
+      return techs;
     };
 
 
