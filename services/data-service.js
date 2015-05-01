@@ -1065,6 +1065,26 @@
     };
 
 
+    this.doesCharacterHaveAdvantage= function(adv_id) {
+      for( var i = 0; i < character.advantages.length; i++ ) {
+        if ( character.advantages[i].id == adv_id ) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+
+    this.doesCharacterHaveDisadvantage= function(dadv_id) {
+      for( var i = 0; i < character.disadvantages.length; i++ ) {
+        if ( character.disadvantages[i].id == dadv_id ) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+
     this.getSkillFromMasterList = function(skill_id, attr) {
       for(var i=0; i < skillsMasterList.length; i++) {
         if ( skillsMasterList[i].id === skill_id ) {
