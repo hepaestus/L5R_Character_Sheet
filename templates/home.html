@@ -7,47 +7,63 @@
       <header><h2>How To Use</h2></header>
       <ol>
           <li><a href="" ng-click="showClansListModal()">Choose your Clan</a> <span ng-if="character.clan.name"> : <strong>{{character.clan.name}}</strong></span></li>
+
           <li><a href="" ng-click="showFamiliesListModal(null,character.clan.name)">Choose your Family</a> <span ng-if="character.family.name"> : <strong>{{character.family.name}}</strong></span></li>
+
           <li><a href="" ng-click="showSchoolsListModal(null,character.clan.name)">Choose your School</a> <span ng-if="character.school.name"> : <strong>{{character.school.name}}</strong></span>         
             <h5 ng-show="character.skills.length > 0">School Skills:</h5>
             <ul ng-show="character.skills.length > 0">
                 <li ng-repeat="each in character.skills track by $index" ng-show="each.school_skill == true"><strong>{{getSkill(each.id,'type')}}</strong> {{ getSkill(each.id,'sub_type')}} {{ getSkill(each.id, 'description') }}</li>
             </ul>
+
+            <h5 ng-show="character.techniques.length > 0">School Techniques:</h5>
+            <ol ng-show="character.techniques.length > 0">
+                <li ng-repeat="technique in character.techniques"><strong>{{technique}}</strong></li>
+            </ol>
           </li>
+
           <li>Add your <a href="" ng-click="showAdvantagesListModal()">Advantages</a>
             <ul ng-show="character.advantages.length > 0">
-                <li ng-repeat="a in character.advantages"><strong>{{a.name}}</strong> ({{a.subtype}}) : Cost {{a.points * -1}} : {{a.notes}}</li>
+                <li ng-repeat="a in character.advantages"><strong>{{a.name}}</strong> ({{a.subtype}}) : Cost {{a.points * -1}} : {{a.notes}} <button class="btn btn-xs"><span class="glyphicon glyphicon-remove" ng-click="removeAdvantage(a.id)"></span></button></li>
             </ul>
           </li>
+
           <li>Add your <a href="" ng-click="showDisadvantagesListModal()">Disadvantages</a>
              <ul ng-show="character.disadvantages.length > 0">
-                 <li ng-repeat="d in character.disadvantages"><strong>{{d.name}}</strong> ({{d.subtype}}) : Bonus {{d.points * -1}} : {{d.notes}}</li>
+                 <li ng-repeat="d in character.disadvantages"><strong>{{d.name}}</strong> ({{d.subtype}}) : Bonus {{d.points * -1}} : {{d.notes}} <button class="btn btn-xs"><span class="glyphicon glyphicon-remove" ng-click="removeDisadvantage(d.id)"></span></button></li>
              </ul>
           </li>
+
           <li>Go to the <a href="#character">Character Sheet</a></li>
+
           <li>On the Character Sheet: Choose your Name
             <ul ng-show="character.name">
                 <li><strong>{{character.family.name}} {{character.name}}</strong></li>
             </ul>
           </li>
+
           <li>On the Character Sheet: Update your Rings</li>
+
           <li><a href="" ng-click="showSkillsListModal()">Add your Skills and Emphases</a>
             <h5 ng-show="character.skills.length > 0">Additional Skills:</h5>
             <ul ng-show="character.skills.length > 0">
                 <li ng-repeat="each in character.skills track by $index" ng-show="! each.school_skill"><strong>{{getSkill(each.id,'type')}}</strong> {{ getSkill(each.id,'sub_type')}} {{ getSkill(each.id, 'description') }}</li>
             </ul>
           </li>
+
           <li><a href="" ng-click="showArmorListModal()">Add your Armor</a>
             <ul ng-show="character.armor.name">
               <li><strong>{{character.armor.name}}</strong> {{character.armor.notes}}</li>          
             </ul>
           </li>
+
           <li>On the Character Sheet: Add your Weapons and Arrows
              <ul ng-show="character.weapon_one || character.weapon_two">
                  <li ng-show="character.weapon_one.name"><strong>{{character.weapon_one.name}}</strong> {{character.weapon_one.notes}} </li>
                  <li ng-show="character.weapon_two.name"><strong>{{character.weapon_two.name}}</strong> {{character.weapon_two.notes}} </li>
              </ul>
           </li>
+
           <li ng-controller="SpellsController">If you are a Shugenja, go to the <a href="#spell">Spells Sheet</a> and add your spells
              <ul ng-show="character.spells">
                  <li ng-repeat="spell in character.spells track by spell.id"><strong>{{ getSpell(spell.id, 'name') }}</strong> {{ getSpell(spell.id, 'notes') }} </li>

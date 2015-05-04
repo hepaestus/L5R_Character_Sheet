@@ -373,7 +373,7 @@
             $scope.character = DataService.character($scope.character);
             return parseInt(pointsValue);            
           } else {
-            console.log("No Disadvantage Id");
+            console.log("No Dis/Advantage Id");
             return null;
           }
         });
@@ -514,7 +514,7 @@
             break;
           case 'skills':
               for(var i=0; i < obj[key].length; i++ ) {
-                console.log("Add this skill: " + obj[key][i] );
+                //console.log("Add this skill: " + obj[key][i] );
                 var skill =  obj[key][i];
                 var school_skill = true;
                 if ( isFinite(skill) ) {
@@ -533,12 +533,22 @@
                   var searchText = skill.replace(/\+. /, "");
                   var filter = null;
                   var rank = 1;
+                  if ( searchText.match(/ |any|or/ig)) {
+                    searchText = null;
+                  }
                   console.log("showSkillsListModal message:" + message + "  searchText:" + searchText + "  filter:" + filter + "  rank:" + rank);
                   $scope.showSkillsListModal(message, searchText, filter, rank, school_skill);
                 }
               }
             break;
           case 'techniques':
+            var school = DataService.getSchoolFromMasterList($scope.character.school_id);
+            console.log("Techniques: " + JSON.stringify(school.bonus.techniques));
+            var techniques = school.bonus.techniques;
+            for( var id in techniques ) {
+              console.log("Push Tech: " + techniques[id] );
+              $scope.character.school_techniques.push(techniques[id]);
+            }
             // Add these to the character at each level and display them on the character sheet somewhere.
             break;
         }
@@ -548,7 +558,7 @@
 
 
     $scope.addASkill = function(skill_id, rank, emp, school_skill_flag) {
-      console.log("Add A Skill:  id:" + skill_id + "  rank:" + rank + "  emp:" + emp + " School Skill:" + school_skill_flag);
+      //console.log("Add A Skill:  id:" + skill_id + "  rank:" + rank + "  emp:" + emp + " School Skill:" + school_skill_flag);
       var skill = DataService.getSkillFromMasterList(skill_id);
       var lvl = ( rank )? rank : 0;
       var emph = ( emp != null || emp != undefined  ) ? emp : null;
@@ -605,8 +615,40 @@
       }
     };
 
+
     $scope.getSkill = function(skill_id, attr) {
         return DataService.getSkillFromMasterList(skill_id, attr);
     };
+
+
+    $scope.removeAdvantage = function(advantage_id) {
+      for( var i=0; i < $scope.character.advantages.length; i++) {
+        if ( $scope.character.advantages[i].id == advantage_id ) {
+          var point_cost = $scope.character.advantages[i].points;
+          console.log("Point Cost: " + point_cost);
+          console.log("Exp Points: " + $scope.character.experience_points);
+          $scope.character.experience_points += point_cost;
+          $scope.character.advantages.splice(i,1);
+          $scope.character = DataService.updateCharacter($scope.character);
+          console.log("Exp Points: " + $scope.character.experience_points);
+        }
+      }
+    };
+
+
+    $scope.removeDisadvantage = function(disadvantage_id) {
+      for( var i=0; i < $scope.character.disadvantages.length; i++) {
+        if ( $scope.character.disadvantages[i].id == disadvantage_id ) {
+          var point_cost = $scope.character.disadvantages[i].points;
+          console.log("Point Cost: " + point_cost);
+          console.log("Exp Points: " + $scope.character.experience_points);
+          $scope.character.experience_points += point_cost;
+          $scope.character.disadvantages.splice(i,1);
+          $scope.character = DataService.updateCharacter($scope.character);
+          console.log("Exp Points: " + $scope.character.experience_points);
+        }
+      }
+    };
+
 
   }]);//end main controller

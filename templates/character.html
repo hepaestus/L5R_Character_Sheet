@@ -4,8 +4,8 @@
 
 
       <div class="info">
-        <button ng-click="saveCharacter()">Save Changes Locally</button>
-        <button ng-click="loadCharacterModal()">Load Character</button>
+        <!-- button ng-click="saveCharacter()">Save Changes Locally</button>
+        <button ng-click="loadCharacterModal()">Load Character</button -->
         <!-- button ng-click="show()">Show a Modal</button -->
         <br/>
         <table class="info-table">
@@ -30,7 +30,7 @@
           <tr>
             <td><label class="line right">Exp.&nbsp;Points</label></td>
             <td><input class="line experience_points" name="experience_points" type="number" ng-model="character.experience_points"/></td>
-            <td><label class="line right">Tota&nbsp;Earned</label></td>
+            <td><label class="line right">Total&nbsp;Earned</label></td>
             <td><input class="line experience_points_earned" name="experience_points_earned" type="number" ng-model="character.experience_points_earned"></td>
 	      </tr>
         </table>
@@ -256,28 +256,28 @@
          <th>Wound Level</th><th>Penalties</th><th>Total</th><th>Current</th>
        </tr>
        <tr>
-           <th class="left">Healthy (+0)</th><td><input name="stats_healthy_penalties" type="text"/></td><td><input name="stats_healthy_total" type="text"/></td><td><input name="stats_health_current" type="text"/></td>
+           <th class="left">Healthy (+0)</th><td><input name="stats_healthy_penalties" type="text" ng-value="getWounds(1)"/></td><td><input name="stats_healthy_total" type="text"/></td><td><input name="stats_health_current" type="text"/></td>
        </tr>
        <tr>
-           <th class="left">Nicked (+3)</th><td><input name="stats_nicked_penalties" type="text"/></td><td><input name="stats_nicked_total" type="text"/></td><td><input name="stats_nicked_current" type="text"/></td>
+           <th class="left">Nicked (+3)</th><td><input name="stats_nicked_penalties" type="text" ng-value="getWounds(2)"/></td><td><input name="stats_nicked_total" type="text"/></td><td><input name="stats_nicked_current" type="text"/></td>
        </tr>
        <tr>
-           <th class="left">Grazed (+5)</th><td><input name="stats_grazed_penalties" type="text"/></td><td><input name="stats_grazed_total" type="text"/></td><td><input name="stats_grazed_current" type="text"/></td>
+           <th class="left">Grazed (+5)</th><td><input name="stats_grazed_penalties" type="text" ng-value="getWounds(3)"/></td><td><input name="stats_grazed_total" type="text"/></td><td><input name="stats_grazed_current" type="text"/></td>
        </tr>
        <tr>
-           <th class="left">Hurt (+10)</th><td><input name="stats_hurt_penalties" type="text"/></td><td><input name="stats_hurt_total" type="text"/></td><td><input name="stats_hurt_current" type="text"/></td>
+           <th class="left">Hurt (+10)</th><td><input name="stats_hurt_penalties" type="text" ng-value="getWounds(4)"/></td><td><input name="stats_hurt_total" type="text"/></td><td><input name="stats_hurt_current" type="text"/></td>
        </tr>
        <tr>
-           <th class="left">Injured (+15)</th><td><input name="stats_injured_penalties" type="text"/></td><td><input name="stats_injured_total" type="text"/></td><td><input name="stats_injured_current" type="text"/></td>
+           <th class="left">Injured (+15)</th><td><input name="stats_injured_penalties" type="text" ng-value="getWounds(5)"/></td><td><input name="stats_injured_total" type="text"/></td><td><input name="stats_injured_current" type="text"/></td>
        </tr>
        <tr>
-           <th class="left">Crippled (+20)</th><td><input name="stats_crippled_penalties" type="text"/></td><td><input name="stats_crippled_total" type="text"/></td><td><input name="stats_crippled_current" type="text"/></td>
+           <th class="left">Crippled (+20)</th><td><input name="stats_crippled_penalties" type="text" ng-value="getWounds(6)"/></td><td><input name="stats_crippled_total" type="text"/></td><td><input name="stats_crippled_current" type="text"/></td>
        </tr>
        <tr>
-           <th class="left">Down (+40)<br/><span>Must Spend Void to act</span></th><td><input name="stats_down_penalties" type="text"/></td><td><input name="stats_down_total" type="text"/></td><td><input name="stats_down_current" type="text"/></td>
+           <th class="left">Down (+40)<br/><span>Must Spend Void to act</span></th><td><input name="stats_down_penalties" type="text" ng-value="getWounds(7)"/></td><td><input name="stats_down_total" type="text"/></td><td><input name="stats_down_current" type="text"/></td>
        </tr>
        <tr>
-           <th class="left">Out<br/><span>Cannot Act</span></th><td><input name="stats_out_penalties" type="text"/></td><td><input name="stats_out_total" type="text"/></td><td><input name="stats_out_current" type="text"/></td>
+           <th class="left">Out<br/><span>Cannot Act</span></th><td><input name="stats_out_penalties" type="text" ng-value="getWounds(8)"/></td><td><input name="stats_out_total" type="text"/></td><td><input name="stats_out_current" type="text"/></td>
        </tr>
        <tr>
            <th colspan="4">Rate Of Wound Heal</th>
