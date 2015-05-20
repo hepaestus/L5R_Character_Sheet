@@ -120,7 +120,7 @@
       {id:22, name:'Agasha', clan:'Phoenix', bonus:{ perception:1 } },
       {id:23, name:'Asako', clan:'Phoenix', bonus:{ awareness:1 } },
       {id:24, name:'Isawa', clan:'Phoenix', bonus:{ willpower:1 } },
-      {id:25, name:'Shiwa', clan:'Phoenix', bonus:{ perception:1 } },
+      {id:25, name:'Shiba', clan:'Phoenix', bonus:{ perception:1 } },
       {id:26, name:'Bayushi', clan:'Scorpion', bonus:{ agility:1 } },
       {id:27, name:'Shosuro', clan:'Scorpion', bonus:{ awareness:1 } },
       {id:28, name:'Soshi', clan:'Scorpion', bonus:{ intelligence:1 } },
