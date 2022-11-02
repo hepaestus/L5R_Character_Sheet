@@ -10,7 +10,7 @@
 
           <li><a href="" ng-click="showFamiliesListModal(null,character.clan.name)">Choose your Family</a> <span ng-if="character.family.name"> : <strong>{{character.family.name}}</strong></span></li>
 
-          <li><a href="" ng-click="showSchoolsListModal(null,character.clan.name)">Choose your School</a> <span ng-if="character.school.name"> : <strong>{{character.school.name}}</strong></span>         
+          <li><a href="" ng-click="showSchoolsListModal(null,character.clan.name)">Choose your School</a> <span ng-if="character.school.name"> : <strong>{{character.school.name}}</strong></span>
             <h5 ng-show="character.skills.length > 0">School Skills:</h5>
             <ul ng-show="character.skills.length > 0">
                 <li ng-repeat="each in character.skills track by $index" ng-show="each.school_skill == true"><strong>{{getSkill(each.id,'type')}}</strong> {{ getSkill(each.id,'sub_type')}} {{ getSkill(each.id, 'description') }}</li>
@@ -53,7 +53,7 @@
 
           <li><a href="" ng-click="showArmorListModal()">Add your Armor</a>
             <ul ng-show="character.armor.name">
-              <li><strong>{{character.armor.name}}</strong> {{character.armor.notes}}</li>          
+              <li><strong>{{character.armor.name}}</strong> {{character.armor.notes}}</li>
             </ul>
           </li>
 
@@ -64,7 +64,7 @@
              </ul>
           </li>
 
-          <li ng-controller="SpellsController">If you are a Shugenja, go to the <a href="#spell">Spells Sheet</a> and add your spells
+          <li ng-controller="SpellsController">If you are a Shugenja, go to the <a href="#spells">Spells Sheet</a> and add your spells
              <ul ng-show="character.spells">
                  <li ng-repeat="spell in character.spells track by spell.id"><strong>{{ getSpell(spell.id, 'name') }}</strong> {{ getSpell(spell.id, 'notes') }} </li>
              </ul>
